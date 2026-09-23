@@ -1,17 +1,22 @@
 {
   "expo": {
-    "name": "BLNK-website",
-    "slug": "BLNK-website",
+    "name": "BLNK Media",
+    "slug": "blnk-website",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "scheme": "blnk",
+    "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "backgroundColor": "#f2efe6",
+    "primaryColor": "#e0341b",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "name.blnk.website"
     },
     "android": {
+      "package": "name.blnk.website",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#111111",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
@@ -19,7 +24,25 @@
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "favicon": "./assets/favicon.png"
-    }
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/favicon.png",
+      "name": "BLNK Media",
+      "shortName": "BLNK",
+      "themeColor": "#f2efe6",
+      "backgroundColor": "#f2efe6"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#f2efe6",
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 200
+        }
+      ],
+      "expo-image"
+    ]
   }
 }
