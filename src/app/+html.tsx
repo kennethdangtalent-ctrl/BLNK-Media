@@ -13,7 +13,7 @@ a { -webkit-tap-highlight-color: transparent; text-underline-offset: 0.18em; tex
 ::-webkit-scrollbar-track { background: #efeee9; }
 ::-webkit-scrollbar-thumb { background: #5c0d12; border: 3px solid #efeee9; }
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { transition-duration: 0s !important; animation-duration: 0s !important; scroll-behavior: auto !important; }
+  :not([data-motionsafe], [data-motionsafe] *), :not([data-motionsafe], [data-motionsafe] *)::before, :not([data-motionsafe], [data-motionsafe] *)::after { transition-duration: 0s !important; animation-duration: 0s !important; scroll-behavior: auto !important; }
 }
 `;
 
