@@ -1,0 +1,128 @@
+import { Image as Photo } from 'expo-image';
+import { Image, StyleSheet, View } from 'react-native';
+
+import { Barcode } from './Barcode';
+import { Display, Mono, Serif } from './Type';
+import type { CaseStudy } from '@/content/business';
+import { ToneProvider, type ToneName } from '@/theme/tone';
+import { color } from '@/theme/tokens';
+
+/** Cover colors in case order: accent red, paper, deck sand. Ink text on all three. */
+const COVERS: readonly { bg: string; tone: ToneName }[] = [
+  { bg: color.accent, tone: 'accent' },
+  { bg: color.paper, tone: 'light' },
+  { bg: color.deck, tone: 'light' },
+];
+
+export function coverFor(index: number) {
+  return COVERS[index % COVERS.length];
+}
+
+/**
+ * A case study as a BLNK magazine cover: masthead and issue line, the cover shot, a "cover story"
+ * kicker, the brand as the headline, the creator as the cover line, and a barcode. Sized by the caller:
+ * `brandSize` is shared across a row so covers read as a set.
+ */
+export function CaseCover({
+  item,
+  index,
+  brandSize,
+  pad,
+  minHeight,
+}: {
+  item: CaseStudy;
+  index: number;
+  brandSize: number;
+  pad: number;
+  minHeight: number;
+}) {
+  const cover = coverFor(index);
+  const mast = Math.max(40, Math.round(brandSize * 0.8));
+  return (
+    <ToneProvider tone={cover.tone}>
+      <View style={[styles.cover, { backgroundColor: cover.bg, padding: pad, minHeight }]}>
+        <View style={styles.masthead}>
+          <Display size={mast} lh={0.8} ls={0.01} upper={false} color={color.ink}>
+            BLNK
+          </Display>
+          <View style={styles.issue}>
+            {[item.label, 'RESULTS SOON', 'BLNK.NAME'].map((line) => (
+              <Mono key={line} size={9} weight={600} ls={0.16} align="right" color={color.ink}>
+                {line}
+              </Mono>
+            ))}
+          </View>
+        </View>
+        <CoverImage item={item} />
+        <View style={styles.story}>
+          <Mono size={10} weight={600} ls={0.2} color={color.ink}>
+            COVER STORY
+          </Mono>
+          <Display size={brandSize} lh={0.85} ls={-0.01} color={color.ink}>
+            {item.brand}
+          </Display>
+          <View style={styles.foot}>
+            <Serif italic size={Math.max(22, Math.round(brandSize * 0.4))} lh={1} color={color.ink} style={styles.shrink}>
+              × {item.creator}
+            </Serif>
+            <Barcode width={54} height={26} />
+          </View>
+        </View>
+      </View>
+    </ToneProvider>
+  );
+}
+
+/**
+ * The cover shot. A photo fills a framed panel; a sticker sits on the cover color, tilted,
+ * over a hard accent shadow cut to its outline (the same treatment as the roster).
+ */
+function CoverImage({ item }: { item: CaseStudy }) {
+  const image = item.coverImage;
+  if (!image) return <View style={styles.imageArea} />;
+  if (image.style === 'photo') {
+    return (
+      <View style={[styles.imageArea, styles.photoFrame]}>
+        <Photo
+          source={image.source}
+          style={StyleSheet.absoluteFill}
+          contentFit="cover"
+          contentPosition={{ top: `${image.focus ?? 30}%`, left: '50%' }}
+          accessibilityLabel={`Photo of ${item.creator}`}
+        />
+      </View>
+    );
+  }
+  return (
+    <View style={[styles.imageArea, styles.stickerArea]}>
+      <View style={styles.sticker}>
+        <Image aria-hidden source={image.source} tintColor={color.ink} resizeMode="contain" style={[styles.fill, styles.stickerShadow]} />
+        <Image source={image.source} resizeMode="contain" accessibilityLabel={`${item.creator} sticker`} style={[styles.fill, styles.stickerTilt]} />
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  cover: { justifyContent: 'space-between', gap: 18 },
+  imageArea: { flexGrow: 1, minHeight: 150 },
+  photoFrame: { borderWidth: 2, borderColor: color.ink, overflow: 'hidden', backgroundColor: color.plate },
+  stickerArea: { alignItems: 'center', justifyContent: 'center' },
+  sticker: { width: '78%', aspectRatio: 1, maxHeight: 220 },
+  fill: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' },
+  stickerShadow: { transform: [{ translateX: 7 }, { translateY: 7 }, { rotate: '-6deg' }] },
+  stickerTilt: { transform: [{ rotate: '-6deg' }] },
+  masthead: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    gap: 12,
+    paddingBottom: 12,
+    borderBottomWidth: 2,
+    borderColor: color.ink,
+  },
+  issue: { gap: 2, paddingTop: 4 },
+  story: { gap: 10 },
+  foot: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 },
+  shrink: { flexShrink: 1 },
+});

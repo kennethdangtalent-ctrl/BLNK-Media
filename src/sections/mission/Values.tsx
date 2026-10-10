@@ -4,13 +4,14 @@ import { Band } from '@/components/Band';
 import { Grid } from '@/components/Grid';
 import { SectionHead } from '@/components/SectionHead';
 import { Display, Mono, Serif } from '@/components/Type';
-import { mission } from '@/content/home';
+import { mission } from '@/content/mission';
 import { useLayout } from '@/theme/layout';
 import { fitWords } from '@/theme/metrics';
 import { useTone } from '@/theme/tone';
 import { color } from '@/theme/tokens';
 
-export function Mission() {
+/** The four values and the pull quote, as they stood on Issue 001 before the mission got its own page. */
+export function Values() {
   const L = useLayout();
   const cols = L.isDesktop ? 4 : L.isTablet ? 2 : 1;
   const gap = L.isDesktop ? Math.round(40 * L.s) : 32;
@@ -18,7 +19,7 @@ export function Mission() {
   const titleSize = Math.min(...mission.values.map((value) => fitWords(value.title, colW, L.fl(44, 34))));
 
   return (
-    <Band tone="light" id="mission" label="Mission" ruleBottom>
+    <Band tone="light" label="Mission">
       <View style={{ gap: L.fl(72, 48) }}>
         <SectionHead eyebrow={mission.head.eyebrow} title={mission.head.title} dek={mission.head.dek} />
         <Grid cols={cols} gap={gap} rowGap={L.fl(48, 36)}>

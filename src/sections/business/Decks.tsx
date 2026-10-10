@@ -40,16 +40,18 @@ function DeckCard({ deck, titleSize }: { deck: Deck; titleSize: number }) {
     <View role="article" aria-label={deck.title} style={styles.card}>
       <View style={styles.cover}>
         {deck.cover ? (
-          <Image source={deck.cover} style={StyleSheet.absoluteFill} resizeMode="cover" accessibilityLabel={`${deck.title} cover`} />
+          <Image source={deck.cover} style={styles.fill} resizeMode="cover" accessibilityLabel={`${deck.title} cover`} />
         ) : (
           <>
             <DotGrid color={color.dotOnDeck} />
             <Tag label={deck.coverLabel} tint={color.ink} border={color.ink} fill={color.tagOnDeck} style={styles.bottom} />
           </>
         )}
-        <Mono size={11} weight={600} ls={0.16}>
-          PDF
-        </Mono>
+        <View style={[styles.pdf, deck.cover ? styles.pdfOnImage : null]}>
+          <Mono size={11} weight={600} ls={0.16} color={color.ink}>
+            PDF
+          </Mono>
+        </View>
       </View>
       <Mono size={12} weight={600} ls={0.16} color={tone.mute}>
         {deck.label}
@@ -79,4 +81,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   bottom: { alignSelf: 'flex-end' },
+  pdf: { marginLeft: 'auto' },
+  // Over a cover image the label sits on a paper chip so it reads on dark pages too.
+  pdfOnImage: { backgroundColor: color.paper, borderWidth: 1, borderColor: color.ink, paddingHorizontal: 8, paddingVertical: 3 },
+  // Explicit size: without it react-native-web sizes a required image to its intrinsic pixels.
+  fill: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' },
 });

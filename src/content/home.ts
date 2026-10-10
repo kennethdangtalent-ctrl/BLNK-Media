@@ -1,6 +1,7 @@
 /* Issue 001 copy, verbatim from the "BLNK.name — Desktop" board. Bracketed text is a placeholder the board ships with. */
 import { mailto } from './site';
 import type { IconName } from '@/components/Icons';
+import type { PhotoSubject } from '@/components/PhotoSlot';
 
 export type SectionCopy = { eyebrow: string; title: string; dek: string };
 
@@ -16,27 +17,18 @@ export type Social = {
 
 export type Stat = { value: string; label: string };
 
-export type Creator = {
+/** A roster creator. Picture fields (`photo`, `photoStyle`, `photoFocus`, `logo`) come from `PhotoSubject`; the slot is 480 × 320. */
+export type Creator = PhotoSubject & {
   n: string;
-  name: string;
   kicker: string;
   hook: string;
   body: string;
   stats: readonly [Stat, Stat, Stat];
   socials: readonly Social[];
-  photoLabel: string;
-  /** `photo: require('../../assets/creators/novapovie.jpg')`. */
-  photo?: number;
-  /**
-   * `'fill'` (default) fills the 480 × 320 slot and needs a full-size original.
-   * `'print'` mounts the photo as a small square instant print, which suits small or square images.
-   */
-  photoStyle?: 'fill' | 'print';
-  /** Vertical crop point for a filled `photo`, in percent from the top. Selfies read best around 25. Default 30. */
-  photoFocus?: number;
-  /** A die-cut logo or avatar (transparent PNG) shown on the halftone plate when there is no photo. */
-  logo?: number;
 };
+
+/** One creator on the rotating cover. */
+export type CoverSlide = { name: string; line: string; photo: number; photoFocus?: number };
 
 export const cover: {
   eyebrow: string;
@@ -44,8 +36,11 @@ export const cover: {
   lede: string;
   cta: { label: string; href: string };
   brands: { label: string; href: string };
-  /** `photo` fills the cover card (a portrait suits its 3:4 shape); `photoFocus` is the crop point from the top, in percent. */
-  card: { meta: readonly string[]; photoLabel: string; photo?: number; photoFocus?: number; badge: string; line: string; credits: string };
+  /**
+   * The cover card rotates through `slides` every 5 seconds. A slide's `photo` fills the card and needs a
+   * full-size portrait, 800 px wide or more (`photoFocus` is the crop point from the top, in percent).
+   */
+  card: { meta: readonly string[]; slides: readonly CoverSlide[] };
 } = {
   eyebrow: 'A CREATOR MANAGEMENT HOUSE · TWITCH FIRST',
   title: 'We sign the\ncreators\nbefore the\nalgorithm\ndoes.',
@@ -54,10 +49,13 @@ export const cover: {
   brands: { label: 'Brands & sponsors → business@BLNK.name', href: mailto() },
   card: {
     meta: ['Nº 001', 'SEP 2026', 'BLNK.NAME'],
-    photoLabel: '[COVER PHOTO — NOVAPOVIE]',
-    badge: 'COVER · NOVAPOVIE',
-    line: 'Idol auditions, live from Austin.',
-    credits: 'PHOTO: [CREDIT]\nINSIDE: FUMIBEAN · M0RALS_ · JACKYPOOWOO · CLOYYD',
+    slides: [
+      { name: 'NovaPovie', photo: require('../../assets/creators/novapovie-cover.jpg'), photoFocus: 20, line: 'Lifestyle, live and unscripted.' },
+      { name: 'fumibean', photo: require('../../assets/creators/fumibean.jpg'), photoFocus: 30, line: 'An artist on and off stream.' },
+      { name: 'm0rals_', photo: require('../../assets/creators/m0rals-cover.jpg'), line: 'Roblox creator. The sweet one.' },
+      { name: 'jackypoowoo', photo: require('../../assets/creators/jackypoowoo-cover.jpg'), line: 'Filmmaker on stream. Film nerd off it.' },
+      { name: 'cloyyd', photo: require('../../assets/creators/cloyyd-cover.jpg'), line: 'IRL meets gaming. The chat plays too.' },
+    ],
   },
 };
 
@@ -76,13 +74,13 @@ export const roster: readonly Creator[] = [
   {
     n: '01',
     name: 'NovaPovie',
-    kicker: 'PARTNER · AUSTIN, TX · JUST CHATTING / IRL',
-    hook: 'Auditioning to be a K-pop idol. On stream. Until it works.',
-    body: "Four nights a week from Austin — JYP audition arcs, Omegle chaos, a first day in Shibuya streamed live, and a chat that shows up in Kai Cenat's replies.",
+    kicker: 'PARTNER · LIFESTYLE / IRL',
+    hook: 'Lifestyle creator. Entertainer first.',
+    body: 'NovaPovie turns everyday life into appointment viewing: IRL streams, travel days and high-energy Just Chatting, carried by a big personality and genuinely creative formats. Her audience shows up for her, which makes her a natural fit for lifestyle, beauty and consumer brands.',
     stats: [
       { value: '11.5K', label: 'TWITCH FOLLOWERS' },
-      { value: '1.9K', label: 'PEAK LIVE VIEWERS' },
-      { value: '4×/WK', label: 'TUE · THU · FRI · SAT, 7PM CT' },
+      { value: '100K', label: 'YOUTUBE SUBSCRIBERS' },
+      { value: 'PARTNER', label: 'TWITCH STATUS' },
     ],
     socials: [
       { label: 'TWITCH', icon: 'twitch', platform: 'Twitch', href: 'https://www.twitch.tv/novapovie' },
@@ -98,8 +96,8 @@ export const roster: readonly Creator[] = [
     n: '02',
     name: 'fumibean',
     kicker: "PARTNER · STREAMER UNIVERSITY '26 · JUST CHATTING / IRL",
-    hook: 'Got into Streamer University. Then got picked for the team.',
-    body: 'Cozy drawing streams, anime tier lists, Subaru Saturdays IRL — and one of the four students Ludwig chose for Team Streamer University at the 2026 Streamer Games.',
+    hook: 'Streamer University alum. Artist on and off stream.',
+    body: 'A Streamer University alumna and 2026 Streamer Games competitor, fumibean pairs anime-driven content with live illustration her community watches come together stroke by stroke. A strong partner for anime, art-supply and gaming campaigns.',
     stats: [
       { value: '31K', label: 'TWITCH FOLLOWERS' },
       { value: 'TOP 4', label: "TEAM STREAMER U · STREAMER GAMES '26" },
@@ -112,22 +110,27 @@ export const roster: readonly Creator[] = [
       { label: 'INSTAGRAM', icon: 'instagram', platform: 'Instagram', href: 'https://www.instagram.com/fumibean/' },
     ],
     photoLabel: '[PHOTO — FUMIBEAN]',
+    photo: require('../../assets/creators/fumibean.jpg'),
+    photoStyle: 'print',
+    // The die-cut sticker (assets/creators/fumibun-sticker.png) shows instead if `photo` is removed.
     logo: require('../../assets/creators/fumibun-sticker.png'),
   },
   {
     n: '03',
     name: 'm0rals_',
-    kicker: 'AFFILIATE · GEOMETRY DASH / ROBLOX',
-    hook: 'Day 299 on one Geometry Dash level. Still going.',
-    body: "Rhythm-platformer grinder with a Roblox side quest, Monday-night regulars, and a bio that's just a kaomoji.",
+    kicker: 'AFFILIATE · ROBLOX',
+    hook: 'Roblox creator. The sweet one.',
+    body: 'm0rals_ builds his channel around Roblox: co-op sessions, community games and the warm, welcoming presence his viewers know him for. That reputation as the sweet guy earns a loyal, positive audience, and his short clips carry it well beyond the stream.',
     stats: [
       { value: '1.8K', label: 'TWITCH FOLLOWERS' },
-      { value: 'DAY 299', label: 'ONE LEVEL, STILL GOING' },
+      { value: '10M+', label: 'VIEWS ON TIKTOK' },
       { value: 'AFFILIATE', label: 'TWITCH STATUS' },
     ],
     socials: [
       { label: 'TWITCH', icon: 'twitch', platform: 'Twitch', href: 'https://www.twitch.tv/m0rals_' },
-      { label: 'YOUTUBE [LINK]', icon: 'youtube' },
+      { label: 'TIKTOK', icon: 'tiktok', platform: 'TikTok', href: 'https://www.tiktok.com/@m0rals1' },
+      { label: 'INSTAGRAM', icon: 'instagram', platform: 'Instagram', href: 'https://www.instagram.com/m0ralslive/' },
+      { label: 'YOUTUBE', icon: 'youtube', platform: 'YouTube', href: 'https://www.youtube.com/@M0rals' },
     ],
     photoLabel: '[PHOTO — M0RALS_]',
     photo: require('../../assets/creators/m0rals.png'),
@@ -136,17 +139,16 @@ export const roster: readonly Creator[] = [
   {
     n: '04',
     name: 'jackypoowoo',
-    kicker: 'AFFILIATE · IRL / JUST CHATTING',
-    hook: 'Twelve-hour sleepover camping streams. On purpose.',
-    body: 'Paddleboarding on the Fourth, Valorant solo queue at 2 a.m., cozy games at midnight. Treats the chat like a group chat.',
+    kicker: 'AFFILIATE · SHORT FILM / IRL',
+    hook: 'Filmmaker on stream. Film nerd off it.',
+    body: "jackypoowoo brings a filmmaker's eye to streaming: writing, shooting and cutting short films, and talking craft with a community that loves cinema as much as he does. A natural partner for camera, tech and creative-tool brands.",
     stats: [
       { value: '5K', label: 'TWITCH FOLLOWERS' },
-      { value: '12H 45M', label: 'LONGEST STREAM · IRL CAMPING' },
+      { value: 'APPLE', label: 'FEATURED IN AN APPLE AD' },
       { value: 'AFFILIATE', label: 'TWITCH STATUS' },
     ],
     socials: [
       { label: 'TWITCH', icon: 'twitch', platform: 'Twitch', href: 'https://www.twitch.tv/jackypoowoo' },
-      { label: '[+ SOCIALS]', dashed: true },
     ],
     photoLabel: '[PHOTO — JACKYPOOWOO]',
     photo: require('../../assets/creators/jackypoowoo.png'),
@@ -155,17 +157,19 @@ export const roster: readonly Creator[] = [
   {
     n: '05',
     name: 'cloyyd',
-    kicker: 'AFFILIATE · IRL / MINECRAFT / YOUTUBE',
-    hook: 'Rock climbing on stream. Freestyling over the Streamer Awards.',
-    body: 'Twitch by night, YouTube by day — every stream title ends in NEW VIDEO. Minecraft when it rains.',
+    kicker: 'AFFILIATE · IRL / GAMING',
+    hook: 'IRL meets gaming. The chat plays too.',
+    body: 'cloyyd blends IRL streams and gaming around challenges his community helps shape, from rock climbing to Minecraft runs, so viewers take part instead of just watching. That interactivity travels: his short-form clips reach far past the live audience.',
     stats: [
       { value: '1.3K', label: 'TWITCH FOLLOWERS' },
-      { value: '74', label: 'PEAK VIEWERS, LAST 30 DAYS' },
+      { value: '5M+', label: 'SHORT-FORM VIEWS' },
       { value: 'AFFILIATE', label: 'TWITCH STATUS' },
     ],
     socials: [
       { label: 'TWITCH', icon: 'twitch', platform: 'Twitch', href: 'https://www.twitch.tv/cloyyd' },
-      { label: 'YOUTUBE [LINK]', icon: 'youtube' },
+      { label: 'TIKTOK', icon: 'tiktok', platform: 'TikTok', href: 'https://www.tiktok.com/@cloyyd' },
+      { label: 'INSTAGRAM', icon: 'instagram', platform: 'Instagram', href: 'https://www.instagram.com/cloyyd/' },
+      { label: 'YOUTUBE', icon: 'youtube', platform: 'YouTube', href: 'https://www.youtube.com/@Cloyydd' },
     ],
     photoLabel: '[PHOTO — CLOYYD]',
     photo: require('../../assets/creators/cloyyd.png'),
@@ -173,47 +177,10 @@ export const roster: readonly Creator[] = [
   },
 ];
 
-export const mission: {
-  head: SectionCopy;
-  values: readonly { label: string; title: string; body: string }[];
-  quote: string;
-  cite: string;
-} = {
-  head: {
-    eyebrow: '02 — THE MISSION',
-    title: 'The mission.',
-    dek: 'Four things we look for. None of them is a follower count.',
-  },
-  values: [
-    {
-      label: '01 — BELIEF',
-      title: 'Great creators come from anywhere.',
-      body: "A seven-viewer Geometry Dash grind is a cover story that hasn't been shot yet.",
-    },
-    {
-      label: '02 — BOLDNESS',
-      title: 'Start before you feel ready.',
-      body: 'We look for people already streaming the schedule, not people planning to.',
-    },
-    {
-      label: '03 — RANGE',
-      title: 'There is no blueprint.',
-      body: 'K-pop auditions, rock climbing, sleepover camping, cozy drawing. Every channel on this page is a different sport.',
-    },
-    {
-      label: '04 — CONVICTION',
-      title: 'Show up. Keep going.',
-      body: 'Consistency beats a viral clip. We back the ones who stream through the dead nights.',
-    },
-  ],
-  quote: 'Every name on this cover was a DM once.',
-  cite: '— BLNK MEDIA',
-};
-
 export const apply = {
-  eyebrow: '03 — APPLICATIONS',
+  eyebrow: '02 — APPLICATIONS',
   title: 'Issue 002\nis being cast.',
-  body: 'Applications for the next cover close [DATE]. [N] spots on the roster. Every one gets read.',
+  body: 'Applications for the next cover close soon. 5 spots on the roster. Every one gets read.',
   primary: { label: 'APPLY → BUSINESS@BLNK.NAME', href: mailto('BLNK Roster Application') },
   secondary: { label: 'BRAND PARTNERSHIPS', href: '/business' },
   sendLabel: 'WHAT TO SEND',

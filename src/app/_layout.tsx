@@ -5,6 +5,8 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect, type ReactNode } from 'react';
 import { Platform, StyleSheet, View, type ViewStyle } from 'react-native';
 
+import { BlinkIntro } from '@/components/BlinkIntro';
+import { CookieNotice } from '@/components/CookieNotice';
 import { LayoutProvider, useLayout } from '@/theme/layout';
 import { color, fontSources } from '@/theme/tokens';
 import { webStyle } from '@/theme/web';
@@ -34,6 +36,8 @@ export default function RootLayout() {
         ) : (
           <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: color.paper } }} />
         )}
+        <CookieNotice />
+        <BlinkIntro />
       </Shell>
       <StatusBar style="dark" />
     </LayoutProvider>

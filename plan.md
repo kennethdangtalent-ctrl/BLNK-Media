@@ -226,6 +226,86 @@ Each task is additive. Revert the files touched.
 
 ---
 
+### Phase F5: The Mission page (`/mission`)
+- **Status:** Completed 2026-09-23.
+- **Goal:** "The mission" moves off `/` onto its own route, `/mission`. The route carries the company thesis, the existing four values and pull quote, and a founder bio (photo, name, CEO, Marketing — Cal Poly, bio).
+- **Rationale:** The thesis is a statement to brands, capital and future hires, not only to applicants. A route of its own gives it a shareable URL, its own Open Graph card and room for the thesis to be read in full. That room does not fit between the roster and the application call to action.
+
+#### Observations (F5)
+- `src/sections/home/Mission.tsx` is the whole current mission. It holds `SectionHead`, a 4 / 2 / 1 value `Grid` and a `Quote`, all fed by `mission` in `src/content/home.ts:176-211`.
+- `src/components/Masthead.tsx:15-19` hard-codes MISSION as an in-page section of `/`. It links to `/?s=mission` from other routes and scrolls in place on `/` (lines 65-73). `Current` is `'home' | 'business' | 'other'` (line 13).
+- `src/components/Page.tsx:110-123` jumps to `?s=` or `#hash` targets. An id that no longer exists stays pending for `SETTLE_MS` and then drops silently, so old `/?s=mission` links would land at the top of `/`, not on the mission.
+- `src/components/Footer.tsx` switches its third link on `variant: 'home' | 'business'`. `footer.notes` in `src/content/site.ts:36-42` is keyed the same way.
+- Per-route meta comes from `meta` in `src/content/site.ts:16-29` through `PageHead`. Static output writes one HTML file per route (plan F1 decision), so `/mission` gets `dist/mission.html` with no config change.
+- A photo pattern already exists. `PhotoSlot` and `Print` in `src/sections/home/Roster.tsx:154-205` mount a square photo as a tilted instant print on the dot-grid plate, with the dashed `Tag` placeholder when no photo exists. They are local to that file today.
+- Section numbering is in the copy. The `apply.eyebrow` is `'03 — APPLICATIONS'` and becomes `02` once the mission leaves `/`.
+
+#### Requirements (abbreviated, per the proportionality rule)
+- **Functional:**
+  - `/mission` renders the masthead with MISSION current, then a thesis hero, a value chain, the four values and the quote, the founder, and the footer.
+  - The value chain is "Creator talent → Media → Brand partnerships → Technology → Capital". It renders as a 5-step row on desktop, and a numbered vertical list on tablet and phone.
+  - `/` no longer renders `Mission`. `/?s=mission` and `/#mission` redirect to `/mission`, so shared links keep working.
+  - Masthead MISSION is a route link to `/mission` from every page, with `aria-current` on `/mission`. ROSTER and APPLY behave as before.
+- **Load, performance, availability, consistency:** not applicable. The page is static, and the web JS budget (≤ 1.5 MB) still holds. One new route adds about 10 KB of code plus one founder image of ≤ 150 KB (resized before commit).
+- **Fault model:** no founder photo yields the dashed `[PHOTO — FOUNDER]` placeholder, the same pattern the roster uses. A missing bio field does not happen: the fields are compile-time constants.
+- **Non-goals:** no CMS, no team page beyond one founder, no new animation primitives, and no copy edits to the thesis beyond typographic quotes and dashes.
+
+#### Gates
+- Estimation gate: not applicable. The site is static, with no data path.
+- Architecture gate: not applicable. The change is one new route inside the existing Expo Router app.
+- Design gate: not applicable. There is no persistence, concurrency or retry.
+- Systems gate: not applicable. There is no file I/O or process work.
+- Security gate: not applicable at record depth. There is no input and no new outbound URL. The F1 rule still applies: `/mission` is an internal constant, and no URL is built from input.
+
+#### Tasks
+- [x] 5.1 — `src/content/mission.ts` (new):
+  - `thesis`: an eyebrow, a headline, and the paragraphs verbatim from the brief. Lead with "BLNK exists to build the infrastructure and brand layer for the next generation of internet creators."
+  - `chain`: the five steps, each with an index label.
+  - `values` and `quote`: moved from `home.ts:176-211`, with the eyebrows renumbered.
+  - `founder`: `{ name, role: 'CEO', school: 'Marketing — Cal Poly', bio, photo?, photoLabel }`.
+  - Delete `mission` from `home.ts`, and change `apply.eyebrow` to `'02 — APPLICATIONS'`.
+- [x] 5.2 — `src/content/site.ts`:
+  - `meta.mission` (title `BLNK Media — The Mission`, a description drawn from the thesis lead, path `/mission`).
+  - `masthead.mission` (issue `Nº 001 — THE MISSION`, badge `APPLICATIONS OPEN`).
+  - `footer.notes.mission`.
+- [x] 5.3 — Extract `PhotoSlot` and `Print` from `src/sections/home/Roster.tsx` into `src/components/PhotoSlot.tsx`. The props become generic (`name`, `photo`, `photoStyle`, `photoFocus`, `logo`, `photoLabel`) so `Creator` and `founder` both satisfy them. Roster imports it. No visual change.
+- [x] 5.4 — `src/sections/mission/`:
+  - `Thesis.tsx`: a light band. `SectionHead` carries eyebrow `THE THESIS` and title `The thesis.`. The lead sentence is `Serif italic` at the quote size (72 → 40). Body paragraphs are `Mono` 15, `maxCh={64}`. "BLNK starts with talent." and "But talent management is only the entry point." are set as `Display` pull lines.
+  - `Chain.tsx`: an ink band. Desktop is 5 equal columns with 3 px accent top rules, `→` between steps, and one fitted `Display` size across all five. Tablet and phone are a vertical numbered list.
+  - `Values.tsx`: the current `Mission.tsx` body (grid plus `Quote`), moved and fed from `mission.ts`.
+  - `Founder.tsx`: a dark band, laid out like a roster card (photo column 480·s | text; stacked on phone). It shows `PhotoSlot`, name as `Display level={3}`, `CEO` and `MARKETING — CAL POLY` as `Mono` 12/600 kicker lines, and the bio as `Mono` 15, `maxCh={60}`.
+- [x] 5.5 — `src/app/mission.tsx`: `PageHead {...meta.mission}` and a `Page` with `Masthead current="mission"`. `Main` holds Thesis, Chain, Values, Founder. `Footer variant="mission"`.
+- [x] 5.6 — `src/components/Masthead.tsx`:
+  - `Current` gains `'mission'`, and `SECTIONS` loses `mission`.
+  - A `NavLink label="MISSION" href="/mission"` sits between ROSTER and APPLY, with `current` set on `/mission`.
+  - `copy` picks `masthead.mission` there.
+- [x] 5.7 — `src/components/Footer.tsx`: `variant` gains `'mission'`. That variant renders both ISSUE 001 (`dismissTo`) and BUSINESS.
+- [x] 5.8 — `src/app/index.tsx`: remove `<Mission />` and its import. If `s === 'mission'`, return `<Redirect href="/mission" />` from `expo-router`. The `#mission` hash is handled in `Page`'s focus effect with `router.replace('/mission')` when the hash is `mission`. Delete `src/sections/home/Mission.tsx`.
+- [x] 5.9 — Founder photo: save it to `assets/team/founder.png` (square, ≥ 600 px, ≤ 150 KB). Until it arrives, the `[PHOTO — FOUNDER]` placeholder ships.
+- [x] 5.10 — `README.md`: add `/mission` to the route list, and note where thesis and founder copy live.
+
+#### Verification
+- [x] `npx tsc --noEmit` and `npx expo lint` exit 0.
+- [x] `npx expo export --platform web` writes `dist/mission.html`, whose `<title>` is `BLNK Media — The Mission` and whose `og:url` ends in `/mission`.
+- [x] Browser at 1440, 820 and 390 on `/mission`: `document.documentElement.scrollWidth <= innerWidth`, no console errors, and every thesis paragraph and all five chain steps appear in `get_page_text`.
+- [x] `/?s=mission` and `/#mission` end on `/mission` (`location.pathname`).
+- [x] `/` no longer contains "The mission." Its section order is Cover, Marquee, Roster, Apply, and the Apply eyebrow reads `02 — APPLICATIONS`.
+- [x] Masthead MISSION has `aria-current="page"` on `/mission` only. ROSTER from `/mission` lands on `/` scrolled to the roster within ±2 px.
+- [x] The roster renders identically after the `PhotoSlot` extraction: captures of the roster band at 1440 before and after show all five prints at the same tilts.
+- [x] Web JS stays ≤ 1.5 MB minified.
+
+#### Risks
+| Risk | Likelihood | Impact | Mitigation |
+|---|---|---|---|
+| The `PhotoSlot` extraction changes roster rendering | Low | Visual regression on `/` | Before and after captures in verification |
+| Old `/?s=mission` links drop users at the top of `/` | Medium without the redirect | A broken shared link | The 5.8 redirect, verified |
+| The long thesis at 390 px reads as a wall of text | Medium | Readability | `maxCh`, pull lines, and the chain graphic break it up. Checked in the 390 capture |
+
+#### Rollback
+Revert the F5 commit. The route is additive, and the only edits to existing files are Masthead, Footer, index, Roster (the extraction), `home.ts` and `site.ts`. They are all in one commit.
+
+---
+
 ## Verbatim Execution Plan
 > Follow this plan verbatim. Trust the file references. Do not re-verify unless conflicts arise.
 
@@ -234,6 +314,7 @@ Each task is additive. Revert the files touched.
 3. F3.1–3.6, then F3 verification, then log.
 4. F4.1–4.6, then F4 verification, then log.
 5. Review with `/review-uncommitted` over `src/` for dead code, platform leaks (`window` / `document` only behind a web check and never during render), and any URL not sourced from `src/content`.
+6. F5.1–5.10 in order, then F5 verification, then log. Blocked on the F5 open questions below.
 
 ## Open Questions (proceeding on stated assumptions)
 - Placeholder copy (`[DATE]`, `[N]`, `[RATE]`, `[LOGO]`, photo slots) ships verbatim, as in the boards.
@@ -242,6 +323,13 @@ Each task is additive. Revert the files touched.
 - On `/business`, the board's nav links point to the top of Issue 001. The build points them at the matching section instead.
 - No deployment target is chosen. `dist/` is host-agnostic (Cloudflare Pages, Netlify and Vercel all serve `business.html` at `/business`).
 
+### F5: needs answers before `implement F5`
+- **Founder name.** It is needed for the bio heading.
+- **Founder photo.** A file is needed; square and at least 600 px is best. Without it, the placeholder ships.
+- **Bio text.** Up to about 60 words works best at this layout.
+- **Campus.** "Cal Poly" could be San Luis Obispo or Pomona. The line reads `MARKETING — CAL POLY` unless a campus is given.
+- **The four values and the quote.** They move to `/mission` with the thesis (assumed). The alternative keeps a short teaser on `/` that links to `/mission`.
+
 ## Replan Log
 | Date | Trigger | Change |
 |---|---|---|
@@ -249,3 +337,4 @@ Each task is additive. Revert the files touched.
 | 2026-09-22 | F4 lint: `react-hooks/set-state-in-effect` flagged the hydration flag. | `useHydrated` and the web reduced-motion query now use `useSyncExternalStore` with a server snapshot, which is the React 19 idiom for hydration-dependent values. |
 | 2026-09-22 | F4 production check: Expo Router ships a developer sitemap at `/_sitemap`. | `src/app/_sitemap.tsx` renders the branded not-found page instead. |
 | 2026-09-22 | The user supplied creator images (fumibean logo in chat; photos for NovaPovie, m0rals_, jackypoowoo and cloyyd pending as files). | Added `expo-image` (the Simplicity Pass deferred it until photos arrived) for focal-point photo crops via `contentPosition`. Creators gained `photoFocus` and `logo`. A logo renders as a tilted die-cut sticker with an accent shadow cut to its outline. Web JS is now 1,277 KB minified (338 KB gzip). |
+| 2026-09-23 | The user asked for "the mission" to become its own page, with a company thesis and a founder bio. | Added Phase F5: a `/mission` route, the mission removed from `/` with a redirect for old links, masthead MISSION becomes a route link, and `PhotoSlot` is extracted for reuse. All gates are not applicable. Archived in `History/mission-page-2026-09-23-0002.md`. |

@@ -4,18 +4,21 @@ import { Frame } from './Band';
 import { A, NavLink } from './Link';
 import { Badge } from './Marks';
 import { useSections } from './Page';
-import { Display, Mono } from './Type';
+import { Mono } from './Type';
+import { Wordmark } from './Wordmark';
 import { masthead } from '@/content/site';
 import { useLayout } from '@/theme/layout';
 import { ToneProvider } from '@/theme/tone';
 import { color } from '@/theme/tokens';
 
-type Current = 'home' | 'business' | 'other';
+type Current = 'home' | 'business' | 'mission' | 'other';
 
-const SECTIONS = [
-  { id: 'roster', label: 'ROSTER' },
-  { id: 'mission', label: 'MISSION' },
-  { id: 'apply', label: 'APPLY' },
+/** Nav items in order. `section` items are bands on Issue 001; `route` items are pages of their own. */
+const NAV = [
+  { kind: 'section', id: 'roster', label: 'ROSTER' },
+  { kind: 'route', id: 'mission', label: 'MISSION', href: '/mission' },
+  { kind: 'section', id: 'apply', label: 'APPLY' },
+  { kind: 'route', id: 'business', label: 'BUSINESS', href: '/business' },
 ] as const;
 
 /**
@@ -26,7 +29,7 @@ export function Masthead({ current }: { current: Current }) {
   const L = useLayout();
   const sections = useSections();
   const onHome = current === 'home';
-  const copy = current === 'business' ? masthead.business : masthead.home;
+  const copy = current === 'business' || current === 'mission' ? masthead[current] : masthead.home;
 
   const stay = (action: () => void) => (event: GestureResponderEvent) => {
     event.preventDefault();
@@ -45,9 +48,8 @@ export function Masthead({ current }: { current: Current }) {
         const tint = hovered || pressed ? color.accent : color.ink;
         return (
           <>
-            <Display size={40} lh={1} ls={0.02} upper={false} color={tint}>
-              BLNK
-            </Display>
+            {/* On hover the letters take the accent and the blink flips to ink, so the mark stays visible. */}
+            <Wordmark size={40} color={tint} markColor={hovered || pressed ? color.ink : color.accent} open={hovered || pressed} />
             <Mono size={11} weight={600} ls={0.2} color={tint}>
               MEDIA
             </Mono>
@@ -62,21 +64,25 @@ export function Masthead({ current }: { current: Current }) {
       role="navigation"
       aria-label="Sections"
       style={[styles.nav, L.isPhone ? styles.navSpread : { columnGap: L.isDesktop ? 40 : 32 }]}>
-      {SECTIONS.map((item) => (
-        <NavLink
-          key={item.id}
-          label={item.label}
-          href={`/?s=${item.id}`}
-          dismissTo={!onHome}
-          onPress={onHome ? stay(() => sections?.scrollTo(item.id)) : undefined}
-        />
-      ))}
-      <NavLink
-        label="BUSINESS"
-        href="/business"
-        current={current === 'business'}
-        onPress={current === 'business' ? stay(() => sections?.scrollToTop()) : undefined}
-      />
+      {NAV.map((item) =>
+        item.kind === 'section' ? (
+          <NavLink
+            key={item.id}
+            label={item.label}
+            href={`/?s=${item.id}`}
+            dismissTo={!onHome}
+            onPress={onHome ? stay(() => sections?.scrollTo(item.id)) : undefined}
+          />
+        ) : (
+          <NavLink
+            key={item.id}
+            label={item.label}
+            href={item.href}
+            current={current === item.id}
+            onPress={current === item.id ? stay(() => sections?.scrollToTop()) : undefined}
+          />
+        ),
+      )}
     </View>
   );
 

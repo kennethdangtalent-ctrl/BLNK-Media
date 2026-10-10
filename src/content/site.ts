@@ -23,20 +23,45 @@ export const meta = {
   business: {
     title: 'BLNK Media — Business',
     description:
-      'Clients, sponsors, case studies, decks and rates. Everything a brand team needs to say yes to a BLNK campaign, on one page.',
+      'Clients, sponsors, case studies, decks and services. Everything a brand team needs to say yes to a BLNK campaign, on one page.',
     path: '/business',
+  },
+  mission: {
+    title: 'BLNK Media — The Mission',
+    description:
+      'BLNK exists to build the infrastructure and brand layer for the next generation of internet creators. The thesis, the mission and the founder.',
+    path: '/mission',
+  },
+  privacy: {
+    title: 'BLNK Media — Privacy Policy',
+    description: "How BLNK Media handles your information. No tracking cookies, no analytics, and we don't sell your data.",
+    path: '/privacy',
+  },
+  terms: {
+    title: 'BLNK Media — Terms of Service',
+    description: 'The terms for using blnk.name.',
+    path: '/terms',
   },
 } as const;
 
 export const masthead = {
   home: { issue: 'Nº 001 — THE CREATOR ISSUE', badge: 'APPLICATIONS OPEN' },
   business: { issue: 'Nº 001 — THE BUSINESS PAGES', badge: 'NOW BOOKING' },
+  mission: { issue: 'Nº 001 — THE MISSION', badge: 'APPLICATIONS OPEN' },
 } as const;
 
 export const footer = {
   copyright: '© 2026 BLNK Media. Managed by Ken.',
   notes: {
-    home: 'Follower counts from public Twitch trackers, September 2026. Photos: [TO BE SHOT].',
-    business: 'Brand names are the property of their owners. Logos: [TO BE SUPPLIED].',
+    home: 'Follower counts from public trackers, September 2026.',
+    business: 'Brand names and logos are the property of their owners.',
+    mission: 'The thesis, as written by the founder, September 2026.',
+    legal: 'Questions about these pages? Email business@BLNK.name.',
+    case: 'Campaign results are added when each campaign wraps.',
   },
+  legal: [
+    { label: 'PRIVACY', href: '/privacy' },
+    { label: 'TERMS', href: '/terms' },
+    { label: 'COOKIES', href: '/privacy#cookies' },
+  ],
 } as const;

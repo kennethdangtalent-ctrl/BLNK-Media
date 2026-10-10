@@ -1,4 +1,6 @@
-import { useLocalSearchParams } from 'expo-router';
+import { Redirect, useLocalSearchParams, useRouter } from 'expo-router';
+import { useEffect } from 'react';
+import { Platform } from 'react-native';
 
 import { Footer } from '@/components/Footer';
 import { Main, Page } from '@/components/Page';
@@ -8,12 +10,22 @@ import { meta } from '@/content/site';
 import { Apply } from '@/sections/home/Apply';
 import { Cover } from '@/sections/home/Cover';
 import { Marquee } from '@/sections/home/Marquee';
-import { Mission } from '@/sections/home/Mission';
 import { Roster } from '@/sections/home/Roster';
 
-/** Issue 001: the creator-facing front page. `?s=roster|mission|apply` scrolls to a section. */
+/** The mission used to be a band on this page. Links shared before it moved still arrive as `?s=mission` or `#mission`. */
+const MOVED = 'mission';
+
+/** Issue 001: the creator-facing front page. `?s=roster|apply` scrolls to a section. */
 export default function IssueOne() {
   const { s } = useLocalSearchParams<{ s?: string }>();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (Platform.OS === 'web' && window.location.hash === `#${MOVED}`) router.replace('/mission');
+  }, [router]);
+
+  if (s === MOVED) return <Redirect href="/mission" />;
+
   return (
     <>
       <PageHead {...meta.home} />
@@ -23,7 +35,6 @@ export default function IssueOne() {
           <Cover />
           <Marquee />
           <Roster />
-          <Mission />
           <Apply />
         </Main>
         <Footer variant="home" />

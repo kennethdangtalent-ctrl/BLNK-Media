@@ -1,3 +1,5 @@
+import { useLocalSearchParams } from 'expo-router';
+
 import { Footer } from '@/components/Footer';
 import { Main, Page } from '@/components/Page';
 import { PageHead } from '@/components/PageHead';
@@ -8,15 +10,16 @@ import { Brief } from '@/sections/business/Brief';
 import { Cases } from '@/sections/business/Cases';
 import { Clients } from '@/sections/business/Clients';
 import { Decks } from '@/sections/business/Decks';
-import { RateCard } from '@/sections/business/RateCard';
+import { Services } from '@/sections/business/Services';
 import { Sponsors } from '@/sections/business/Sponsors';
 
-/** The business pages: clients, sponsors, case studies, decks and rates for brand teams. */
+/** The business pages: clients, sponsors, case studies, decks and services for brand teams. `?s=cases` scrolls to a section. */
 export default function Business() {
+  const { s } = useLocalSearchParams<{ s?: string }>();
   return (
     <>
       <PageHead {...meta.business} />
-      <Page>
+      <Page section={typeof s === 'string' ? s : undefined}>
         <Masthead current="business" />
         <Main>
           <BizHero />
@@ -24,7 +27,7 @@ export default function Business() {
           <Sponsors />
           <Cases />
           <Decks />
-          <RateCard />
+          <Services />
           <Brief />
         </Main>
         <Footer variant="business" />

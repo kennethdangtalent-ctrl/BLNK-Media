@@ -7,7 +7,7 @@ import { mailto } from './site';
 export const bizHero = {
   eyebrow: '04 — THE BUSINESS PAGES',
   title: 'Put your brand\non the cover.',
-  lede: 'Clients, sponsors, case studies, decks and rates. Everything a brand team needs to say yes, on one page.',
+  lede: 'Clients, sponsors, case studies, decks and services. Everything a brand team needs to say yes, on one page.',
   cta: { label: 'START A BRIEF →', href: mailto('BLNK Brand Brief') },
   back: { label: '← Back to Issue 001', href: '/' },
   kit: {
@@ -27,6 +27,8 @@ export type Client = {
   logoLabel: string;
   /** Drop a logo in with `logo: require('../../assets/logos/pesito.png')`. */
   logo?: ImageSourcePropType;
+  /** Width ÷ height of `logo`. Wide wordmarks get a wider slot at the same height. Default 1. */
+  logoAspect?: number;
   kicker: string;
   name: string;
   line: string;
@@ -44,6 +46,7 @@ export const clients: { head: SectionCopy; items: readonly Client[] } = {
     {
       n: '01',
       logoLabel: '[LOGO]',
+      logo: require('../../assets/logos/pesito.png'),
       kicker: 'PARTNER · FINTECH · PRE-LAUNCH',
       name: 'Pesito',
       line: 'One Wallet for families across the Americas',
@@ -53,29 +56,13 @@ export const clients: { head: SectionCopy; items: readonly Client[] } = {
     {
       n: '02',
       logoLabel: '[LOGO]',
+      logo: require('../../assets/logos/rising-founders.png'),
+      logoAspect: 325 / 75,
       kicker: 'PARTNER · FOUNDER PROGRAM · 23 AND UNDER',
       name: 'J Rising Founder',
       line: 'An early chance for extraordinary founders.',
       body: 'Free, remote, three months. No fee, no equity.',
       link: { label: 'RISINGFOUNDER.NET ↗', href: 'https://risingfounder.net/' },
-    },
-    {
-      n: '03',
-      logoLabel: '[LOGO]',
-      kicker: 'B2B CLIENT · [INDUSTRY]',
-      name: '[Client]',
-      line: '[One line on what BLNK did for them.]',
-      body: '[Scope · creators involved · dates]',
-      link: { label: '[CLIENT-URL] ↗' },
-    },
-    {
-      n: '04',
-      logoLabel: 'YOUR LOGO',
-      kicker: 'THIS SLOT IS OPEN',
-      name: 'Next.',
-      line: 'The next company on this page is reading it right now.',
-      body: 'Creator casting, campaign management, or a roster of your own. Start with a brief.',
-      link: { label: 'START A BRIEF →', href: mailto('BLNK B2B Brief') },
     },
   ],
 };
@@ -83,67 +70,82 @@ export const clients: { head: SectionCopy; items: readonly Client[] } = {
 export const sponsors: {
   head: SectionCopy;
   logoLabel: string;
-  items: readonly { name: string; with: string; logo?: ImageSourcePropType }[];
+  items: readonly { name: string; logo?: ImageSourcePropType }[];
 } = {
   head: {
     eyebrow: 'SPONSORS OUR CREATORS HAVE WORKED WITH',
     title: 'The brands.',
-    dek: 'Already on a BLNK stream. Each tile names the creators they worked with.',
+    dek: 'Already on a BLNK stream.',
   },
   logoLabel: '[LOGO]',
   items: [
-    { name: 'GFuel', with: 'WITH: [CREATOR HANDLES]' },
-    { name: 'Red Bull', with: 'WITH: [CREATOR HANDLES]' },
-    { name: 'Streamer University', with: 'WITH: [CREATOR HANDLES]' },
-    { name: 'CapCity', with: 'WITH: [CREATOR HANDLES]' },
+    { name: 'GFuel', logo: require('../../assets/logos/gfuel.png') },
+    { name: 'Red Bull', logo: require('../../assets/logos/red-bull.png') },
+    { name: 'Streamer University', logo: require('../../assets/logos/streamer-university.png') },
+    { name: 'CapCity', logo: require('../../assets/logos/capcity.png') },
   ],
 };
 
 export type CaseStudy = {
+  /** URL segment for the case's own page: /cases/<slug>. */
+  slug: string;
   label: string;
-  title: string;
-  objective: string;
+  brand: string;
+  creator: string;
+  /**
+   * The picture in the middle of the magazine cover. `photo` fills a framed panel (cropped toward
+   * `focus`, percent from the top); `sticker` sits on the cover color like a die-cut decal.
+   */
+  coverImage?: { source: ImageSourcePropType; style: 'photo' | 'sticker'; focus?: number };
+  /** One line on what the brand wanted. Optional: the card leaves the line out until it is known. */
+  objective?: string;
   rows: readonly (readonly [term: string, value: string])[];
   cta: { label: string; href: string };
 };
 
 export const cases: { head: SectionCopy; items: readonly CaseStudy[] } = {
   head: {
-    eyebrow: 'CASE STUDIES',
-    title: 'The receipts.',
-    dek: 'What happened when a brand put money behind a BLNK stream.',
+    eyebrow: 'PAST CAMPAIGNS',
+    title: 'Case studies.',
+    dek: 'What happens when a brand works with a BLNK creator. Pick a cover to read the story.',
   },
   items: [
     {
+      slug: 'gfuel',
       label: 'CASE 01',
-      title: '[Brand] × [Creator]',
-      objective: '[The objective, in one line.]',
+      brand: 'GFuel',
+      creator: 'fumibean',
+      coverImage: { source: require('../../assets/creators/fumibean.jpg'), style: 'photo', focus: 30 },
       rows: [
-        ['FORMAT', '[FORMAT]'],
-        ['REACH', '[VIEWS / IMPRESSIONS]'],
-        ['RESULT', '[RESULT]'],
+        ['FORMAT', 'TBD'],
+        ['REACH', 'TBD'],
+        ['RESULT', 'TBD'],
       ],
       cta: { label: 'REQUEST THE FULL CASE →', href: mailto('BLNK Case Study 01') },
     },
     {
+      slug: 'razer',
       label: 'CASE 02',
-      title: '[Brand] × [Creator]',
-      objective: '[The objective, in one line.]',
+      brand: 'Razer',
+      creator: 'NovaPovie',
+      coverImage: { source: require('../../assets/creators/novapovie-cover.jpg'), style: 'photo', focus: 25 },
       rows: [
-        ['FORMAT', '[FORMAT]'],
-        ['REACH', '[VIEWS / IMPRESSIONS]'],
-        ['RESULT', '[RESULT]'],
+        ['FORMAT', 'TWITCH · TIKTOK'],
+        ['REACH', 'TBD'],
+        ['RESULT', 'TBD'],
       ],
       cta: { label: 'REQUEST THE FULL CASE →', href: mailto('BLNK Case Study 02') },
     },
     {
+      slug: 'anadaseat',
       label: 'CASE 03',
-      title: '[Brand] × [Creator]',
-      objective: '[The objective, in one line.]',
+      brand: 'AnadaSeat',
+      creator: 'NovaPovie',
+      coverImage: { source: require('../../assets/creators/novapovie-cover.jpg'), style: 'photo', focus: 45 },
       rows: [
-        ['FORMAT', '[FORMAT]'],
-        ['REACH', '[VIEWS / IMPRESSIONS]'],
-        ['RESULT', '[RESULT]'],
+        ['FORMAT', 'YOUTUBE'],
+        ['REACH', 'TBD'],
+        ['RESULT', 'TBD'],
       ],
       cta: { label: 'REQUEST THE FULL CASE →', href: mailto('BLNK Case Study 03') },
     },
@@ -171,6 +173,7 @@ export const decks: { head: SectionCopy; items: readonly Deck[] } = {
       title: 'BLNK Media Kit — Nº 001',
       body: 'Roster, reach, formats and rates. The one deck to send a brand team first.',
       coverLabel: '[DECK COVER]',
+      cover: require('../../assets/decks/media-kit.jpg'),
       cta: { label: 'REQUEST THE DECK →', href: mailto('BLNK Media Kit request') },
     },
     {
@@ -178,6 +181,7 @@ export const decks: { head: SectionCopy; items: readonly Deck[] } = {
       title: 'Creator one-sheets',
       body: 'One page per creator: audience, schedule, past sponsors, three clips. NovaPovie, fumibean, m0rals_, jackypoowoo, cloyyd.',
       coverLabel: '[DECK COVER]',
+      cover: require('../../assets/decks/creator-one-sheets.jpg'),
       cta: { label: 'REQUEST THE ONE-SHEETS →', href: mailto('BLNK Creator one-sheets request') },
     },
     {
@@ -185,44 +189,55 @@ export const decks: { head: SectionCopy; items: readonly Deck[] } = {
       title: 'Campaign proposal',
       body: "The shape of a BLNK proposal, brief to report — so your team knows what they're signing before the first call.",
       coverLabel: '[DECK COVER]',
+      cover: require('../../assets/decks/campaign-proposal.jpg'),
       cta: { label: 'REQUEST AN EXAMPLE →', href: mailto('BLNK Proposal example request') },
     },
   ],
 };
 
-export type Rate = { n: string; name: string; desc: string; rate: string };
+export type Service = { n: string; name: string; desc: string };
 
-export const rates: { head: SectionCopy; groups: readonly { label: string; rows: readonly Rate[] }[] } = {
+export const services: {
+  head: SectionCopy;
+  groups: readonly { label: string; rows: readonly Service[] }[];
+  /** Closing line under the list. */
+  note: string;
+} = {
   head: {
-    eyebrow: 'FORMATS & SERVICES',
-    title: 'Rate card.',
-    dek: 'Brand formats and B2B services. Numbers on request.',
+    eyebrow: 'WHAT WE DO',
+    title: 'Services.',
+    dek: 'What we do for brands, and for the creators we sign.',
   },
   groups: [
     {
       label: 'FOR BRANDS',
       rows: [
-        { n: '01', name: 'Sponsored stream', desc: 'A dedicated segment or a full stream, led by the creator in their own voice.', rate: '[RATE]' },
-        { n: '02', name: 'Short-form package', desc: 'Clips cut from the stream for TikTok, Shorts and Reels.', rate: '[RATE]' },
-        { n: '03', name: 'IRL integration', desc: 'Your product out in the world on a live IRL stream.', rate: '[RATE]' },
-        { n: '04', name: 'Issue takeover', desc: 'Every creator on the roster. One campaign. One month.', rate: '[RATE]' },
+        { n: '01', name: 'Sponsored streams', desc: "A dedicated segment or full stream, in the creator's own voice." },
+        { n: '02', name: 'Short-form', desc: 'Clips for TikTok, Shorts and Reels.' },
+        { n: '03', name: 'Long-form', desc: 'Your brand built into a YouTube video.' },
+        { n: '04', name: 'Issue takeover', desc: 'Every creator on the roster. One campaign, one month.' },
+        { n: '05', name: 'Creator campaigns', desc: 'We find the creators, run the campaign and report the results.' },
+        { n: '06', name: 'Social media', desc: "We run your brand's socials. Analytics included." },
       ],
     },
     {
-      label: 'FOR COMPANIES — B2B',
+      label: 'FOR CREATORS',
       rows: [
-        { n: '05', name: 'Creator casting', desc: 'We find, vet and book the creators for your campaign — on the roster or off it.', rate: '[RATE]' },
-        { n: '06', name: 'Campaign management', desc: 'Brief to report, end to end. One contact, every creator.', rate: '[RATE]' },
-        { n: '07', name: 'Roster build-out', desc: 'For companies starting a creator program of their own. We build it the way we built ours.', rate: '[RATE]' },
+        { n: '07', name: 'Brand deals', desc: 'We pitch, negotiate and close sponsorships that fit your channel.' },
+        { n: '08', name: 'Brand building', desc: 'Positioning, content strategy and a media kit that sells you.' },
+        { n: '09', name: 'Content support', desc: 'Editing and clipping, so every stream turns into short-form.' },
+        { n: '10', name: 'Growth & analytics', desc: "Monthly reports on what's working and where to grow next." },
+        { n: '11', name: 'The business side', desc: 'Contracts, invoices and scheduling, handled.' },
       ],
     },
   ],
+  note: "Every project is scoped to you. Send a brief and we'll reply within 1 business day.",
 };
 
 export const brief = {
   eyebrow: 'BOOKING',
   title: 'Start\na brief.',
-  body: 'Send the product, a budget range, and the creator you have in mind. We reply within [X] days.',
+  body: 'Send the product, a budget range, and the creator you have in mind. We reply within 1 business day.',
   primary: { label: 'BUSINESS@BLNK.NAME →', href: mailto('BLNK Brand Brief') },
   secondary: { label: 'BACK TO ISSUE 001', href: '/' },
 } as const;

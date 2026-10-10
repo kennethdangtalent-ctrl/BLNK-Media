@@ -7,7 +7,7 @@ import { SectionHead } from '@/components/SectionHead';
 import { Display, Mono, Serif } from '@/components/Type';
 import { clients, type Client } from '@/content/business';
 import { useLayout } from '@/theme/layout';
-import { fitWords } from '@/theme/metrics';
+import { fitLines } from '@/theme/metrics';
 import { useTone } from '@/theme/tone';
 import { color } from '@/theme/tokens';
 
@@ -16,7 +16,8 @@ export function Clients() {
   const cols = L.isPhone ? 1 : 2;
   const gap = L.isDesktop ? Math.round(48 * L.s) : 32;
   const colW = (L.inner - (cols - 1) * gap) / cols;
-  const nameSize = Math.min(...clients.items.map((client) => fitWords(client.name, colW, L.fl(88, 52), -0.005)));
+  // One size for every name, fitted so each sits on a single line and the cards stay level.
+  const nameSize = Math.min(...clients.items.map((client) => fitLines(client.name, colW, L.fl(88, 52), -0.005)));
 
   return (
     <Band tone="dark" id="clients" label="Clients and partners">
@@ -38,7 +39,7 @@ function ClientCard({ client, nameSize }: { client: Client; nameSize: number }) 
   return (
     <View role="article" aria-label={client.name} style={styles.card}>
       <View style={styles.top}>
-        <LogoSlot label={client.logoLabel} logo={client.logo} name={client.name} />
+        <LogoSlot label={client.logoLabel} logo={client.logo} aspect={client.logoAspect ?? 1} name={client.name} />
         <Display aria-hidden size={L.fl(56, 44)} lh={0.85} upper={false} color={color.accent}>
           {client.n}
         </Display>
@@ -55,20 +56,31 @@ function ClientCard({ client, nameSize }: { client: Client; nameSize: number }) 
       <Mono size={L.fl(15, 14)} lh={1.65} color={tone.mute} maxCh={52}>
         {client.body}
       </Mono>
-      {client.link.href ? (
-        <ULink href={client.link.href}>{client.link.label}</ULink>
-      ) : (
-        <Mono size={12} weight={600} ls={0.14} color={tone.mute}>
-          {client.link.label}
-        </Mono>
-      )}
+      <View style={styles.foot}>
+        {client.link.href ? (
+          <ULink href={client.link.href}>{client.link.label}</ULink>
+        ) : (
+          <Mono size={12} weight={600} ls={0.14} color={tone.mute}>
+            {client.link.label}
+          </Mono>
+        )}
+      </View>
     </View>
   );
 }
 
-function LogoSlot({ label, logo, name }: { label: string; logo?: ImageSourcePropType; name: string }) {
+/** Logos share one 96 px row. A square mark fills it; a wide wordmark keeps its shape, capped at LOGO_MAX_W. */
+const LOGO_H = 96;
+const LOGO_MAX_W = 260;
+
+function LogoSlot({ label, logo, aspect, name }: { label: string; logo?: ImageSourcePropType; aspect: number; name: string }) {
   if (logo) {
-    return <Image source={logo} style={styles.logo} resizeMode="contain" accessibilityLabel={`${name} logo`} />;
+    const width = Math.min(LOGO_MAX_W, LOGO_H * aspect);
+    return (
+      <View style={[styles.logoRow, { width }]}>
+        <Image source={logo} style={{ width, height: width / aspect }} resizeMode="contain" accessibilityLabel={`${name} logo`} />
+      </View>
+    );
   }
   return (
     <View style={[styles.logo, styles.logoSlot]}>
@@ -80,9 +92,12 @@ function LogoSlot({ label, logo, name }: { label: string; logo?: ImageSourceProp
 }
 
 const styles = StyleSheet.create({
-  card: { gap: 20, borderTopWidth: 3, borderColor: color.paper, paddingTop: 24 },
+  // Fills its grid cell so the links pin to a shared baseline across the row.
+  card: { flexGrow: 1, gap: 20, borderTopWidth: 3, borderColor: color.paper, paddingTop: 24 },
+  foot: { marginTop: 'auto' },
   top: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
-  logo: { width: 96, height: 96 },
+  logo: { width: LOGO_H, height: LOGO_H },
+  logoRow: { height: LOGO_H, justifyContent: 'center', flexShrink: 1 },
   logoSlot: {
     borderWidth: 1,
     borderStyle: 'dashed',

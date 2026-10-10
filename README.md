@@ -6,7 +6,8 @@ It is a build of the Claude Design file `BLNK-site.html`, which has two 1440 px 
 
 | Route | Board | What it is |
 |---|---|---|
-| `/` | BLNK.name — Desktop | Issue 001: cover, roster of five creators, mission, applications |
+| `/` | BLNK.name — Desktop | Issue 001: cover, roster of five creators, applications |
+| `/mission` | (built from the same tokens) | The thesis, the long game, the four values, the founder |
 | `/business` | BLNK.name/business — Desktop | Clients, sponsors, case studies, media decks, rate card, booking |
 
 At 1440 px the pages match the boards. Tablet and phone layouts use the same tokens and type.
@@ -41,7 +42,7 @@ npx expo start --web
 npm run export
 ```
 
-This writes a static site to `dist/`, with one HTML file per route (`index.html`, `business.html`). Every page carries its own title, description, Open Graph tags and canonical URL. To preview the production build locally:
+This writes a static site to `dist/`, with one HTML file per route (`index.html`, `mission.html`, `business.html`). Every page carries its own title, description, Open Graph tags and canonical URL. To preview the production build locally:
 
 ```bash
 npm run serve
@@ -61,15 +62,17 @@ npx expo-doctor
 
 | Path | What it holds |
 |---|---|
-| `src/content/home.ts` | Every string on Issue 001: cover, roster, stats, socials, mission, applications |
+| `src/content/home.ts` | Every string on Issue 001: cover, roster, stats, socials, applications |
+| `src/content/mission.ts` | The Mission page: thesis, the five-step chain, the four values and quote, and the founder bio |
 | `src/content/business.ts` | Every string on the business page: clients, sponsors, cases, decks, rates |
 | `src/content/site.ts` | Email, domain, mailto subjects, page metadata, footer notes |
 | `src/theme/tokens.ts` | Colors, fonts, rules and motion timings from the boards |
 | `src/theme/layout.tsx` | Breakpoints (phone < 768, tablet < 1100, desktop), gutters and fluid sizes |
 | `src/theme/metrics.ts` | Big Shoulders glyph widths, used to size headlines so they never overflow a column |
 | `src/components/` | Shared pieces: type, links and buttons, masthead, footer, bands, grid, dot grid |
-| `src/sections/home/`, `src/sections/business/` | One file per section of each page |
-| `src/app/` | Routes (`index.tsx`, `business.tsx`), the root layout and the web HTML shell |
+| `src/sections/home/`, `src/sections/mission/`, `src/sections/business/` | One file per section of each page |
+| `src/app/` | Routes (`index.tsx`, `mission.tsx`, `business.tsx`), the root layout and the web HTML shell |
+| `assets/team/` | The founder portrait (`kenneth-dang.jpg`, 800 × 1200) |
 | `assets/fonts/` | Big Shoulders Display, IBM Plex Mono and Instrument Serif, with their OFL licenses |
 
 ## Editing content
@@ -95,7 +98,9 @@ The magazine cover takes `cover.card.photo` and `cover.card.photoFocus` the same
 
 ## How it behaves
 
-- **Navigation.** ROSTER, MISSION and APPLY scroll to their section on Issue 001. From other pages they open `/?s=<section>`, which lands on that section; `/#roster` style links work too.
+- **Navigation.** ROSTER and APPLY scroll to their section on Issue 001. From other pages they open `/?s=<section>`, which lands on that section; `/#roster` style links work too. MISSION and BUSINESS are pages of their own. Old links to the mission band (`/?s=mission`, `/#mission`) redirect to `/mission`.
+
+**The founder photo.** `founder.photo` in `src/content/mission.ts` fills a 4:5 portrait slot, and `photoFocus` sets the crop point from the top. Use a full-size portrait at least 800 px wide.
 - **Links.** Social and client links open in the system browser on native and in a new tab on web. Email links open the mail app with the subject filled in.
 - **Motion.** A 48-second marquee, a staggered entrance on both heroes, a hard-shadow lift on buttons, and cards that square up on hover or press. On iOS and Android the motion runs on the UI thread with Reanimated. On the web the same motion is plain CSS (`*.web.tsx` files), which keeps Reanimated out of the web bundle. Everything stops when the device asks for reduced motion.
 - **Web scrolling.** The document scrolls on the web, not an inner container, so browser gestures, anchors and the mobile toolbar behave normally.

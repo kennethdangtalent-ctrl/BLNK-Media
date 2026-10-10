@@ -1,12 +1,9 @@
-import { Image as Photo } from 'expo-image';
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Band } from '@/components/Band';
-import { DotGrid } from '@/components/DotGrid';
 import { Chip, ULink } from '@/components/Link';
-import { Tag } from '@/components/Marks';
+import { PhotoSlot } from '@/components/PhotoSlot';
 import { SectionHead } from '@/components/SectionHead';
-import { TiltCard } from '@/components/TiltCard';
 import { Display, Mono, Serif } from '@/components/Type';
 import { roster, rosterHead, type Creator, type Social, type Stat } from '@/content/home';
 import { useLayout, type Layout } from '@/theme/layout';
@@ -97,7 +94,7 @@ function RosterCard({
           style={[styles.numeral, { top: -Math.round(numeral * 0.23) }]}>
           {creator.n}
         </Display>
-        <PhotoSlot creator={creator} height={photoH} tilt={tilt} />
+        <PhotoSlot subject={creator} height={photoH} tilt={tilt} />
       </View>
 
       <View style={[styles.body, columns.stacked ? styles.bodyStacked : styles.bodyBeside]}>
@@ -143,87 +140,6 @@ function socialLabel(name: string, social: Social) {
 /** Hand-placed angles, one per card in order, so the pasted-up pictures read as a collage. */
 const TILTS = [4, -5, 3, -4, 5];
 
-/** Hard accent shadow under a tilted print or sticker: 7 px down and right, at the same angle. */
-const shadowAt = (tilt: number) => ({ transform: [{ translateX: 7 }, { translateY: 7 }, { rotate: `${tilt}deg` }] });
-
-/**
- * The creator's picture. A full-size photo fills the slot, cropped toward `photoFocus` so
- * selfies keep their faces. A small photo is mounted as a print, and a logo as a die-cut
- * sticker, on the halftone plate. Otherwise the board's dashed placeholder stays.
- */
-function PhotoSlot({ creator, height, tilt }: { creator: Creator; height: number; tilt: number }) {
-  if (creator.photo && creator.photoStyle !== 'print') {
-    return (
-      <View style={[styles.photo, { height }]}>
-        <Photo
-          source={creator.photo}
-          style={StyleSheet.absoluteFill}
-          contentFit="cover"
-          contentPosition={{ top: `${creator.photoFocus ?? 30}%`, left: '50%' }}
-          accessibilityLabel={`Photo of ${creator.name}`}
-        />
-      </View>
-    );
-  }
-  return (
-    <View style={[styles.photo, { height }]}>
-      <DotGrid color={color.dotOnPlate} />
-      {creator.photo ? (
-        <Print source={creator.photo} width={Math.round(height * 0.66)} tilt={tilt} name={creator.name} />
-      ) : creator.logo ? (
-        <Sticker source={creator.logo} size={Math.round(height * 0.74)} tilt={tilt} label={`${creator.name} logo`} />
-      ) : (
-        <Tag label={creator.photoLabel} tint={color.paper} border={color.dashOnInk} fill={color.tagOnPlate} style={styles.tagBottom} />
-      )}
-    </View>
-  );
-}
-
-/** A square photo mounted like an instant print: paper border, a deeper foot with the handle, and an accent block shadow. */
-function Print({ source, width, tilt, name }: { source: number; width: number; tilt: number; name: string }) {
-  const edge = Math.max(5, Math.round(width * 0.035));
-  const foot = Math.round(width * 0.15);
-  const image = width - 2 * edge;
-  const height = edge + image + foot;
-  return (
-    <View style={styles.stickerLayer}>
-      <View style={{ width, height }}>
-        <View aria-hidden style={[styles.printShadow, { width, height }, shadowAt(tilt)]} />
-        <TiltCard rotate={tilt}>
-          <View style={[styles.print, { width, height, paddingTop: edge, paddingHorizontal: edge }]}>
-            <Photo source={source} style={{ width: image, height: image }} contentFit="cover" accessibilityLabel={`Photo of ${name}`} />
-            <View style={[styles.printFoot, { height: foot }]}>
-              <Mono size={Math.max(9, Math.round(width * 0.048))} weight={600} ls={0.16} upper color={color.ink} numberOfLines={1}>
-                {name}
-              </Mono>
-            </View>
-          </View>
-        </TiltCard>
-      </View>
-    </View>
-  );
-}
-
-/** A die-cut logo stuck on at an angle over a hard accent shadow cut to its outline. Hover or press lifts it. */
-function Sticker({ source, size, tilt, label }: { source: number; size: number; tilt: number; label: string }) {
-  return (
-    <View style={styles.stickerLayer}>
-      <View style={{ width: size, height: size }}>
-        <Image
-          aria-hidden
-          source={source}
-          tintColor={color.accent}
-          resizeMode="contain"
-          style={[styles.stickerShadow, { width: size, height: size }, shadowAt(tilt)]}
-        />
-        <TiltCard rotate={tilt}>
-          <Image source={source} resizeMode="contain" accessibilityLabel={label} style={{ width: size, height: size }} />
-        </TiltCard>
-      </View>
-    </View>
-  );
-}
-
 function Stats({ stats, size, gap }: { stats: readonly Stat[]; size: number; gap: number }) {
   const tone = useTone();
   return (
@@ -245,30 +161,6 @@ function Stats({ stats, size, gap }: { stats: readonly Stat[]; size: number; gap
 const styles = StyleSheet.create({
   card: { alignItems: 'flex-start', borderTopWidth: 1, borderColor: color.hairOnInk },
   numeral: { position: 'absolute', left: -8, zIndex: 2 },
-  photo: {
-    borderWidth: 2,
-    borderColor: color.paper,
-    backgroundColor: color.plate,
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    padding: 16,
-    overflow: 'hidden',
-  },
-  tagBottom: { alignSelf: 'flex-end' },
-  stickerLayer: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-    pointerEvents: 'box-none',
-  },
-  stickerShadow: { position: 'absolute', top: 0, left: 0 },
-  printShadow: { position: 'absolute', top: 0, left: 0, backgroundColor: color.accent },
-  print: { backgroundColor: color.paper },
-  printFoot: { alignItems: 'center', justifyContent: 'center' },
   body: { gap: 16 },
   bodyBeside: { flex: 1, minWidth: 0 },
   bodyStacked: { alignSelf: 'stretch' },

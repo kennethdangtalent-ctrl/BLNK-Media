@@ -28,7 +28,7 @@ export function Sponsors() {
         <SectionHead eyebrow={sponsors.head.eyebrow} title={sponsors.head.title} dek={sponsors.head.dek} />
         <Grid cols={cols} gap={gap}>
           {sponsors.items.map((item, i) => (
-            <Tile key={item.name} index={i} name={item.name} withLine={item.with} logo={item.logo} size={nameSize} pad={pad} />
+            <Tile key={item.name} index={i} name={item.name} logo={item.logo} size={nameSize} pad={pad} />
           ))}
         </Grid>
       </View>
@@ -36,17 +36,16 @@ export function Sponsors() {
   );
 }
 
+/** A wall tile: the number in the corner, the brand's logo centered in the open space, and the name set along the foot. */
 function Tile({
   index,
   name,
-  withLine,
   logo,
   size,
   pad,
 }: {
   index: number;
   name: string;
-  withLine: string;
   logo?: (typeof sponsors.items)[number]['logo'];
   size: number;
   pad: number;
@@ -54,32 +53,31 @@ function Tile({
   const L = useLayout();
   const tone = useTone();
   return (
-    <View role="article" aria-label={name} style={[styles.tile, { height: L.fl(280, 190), padding: pad }]}>
+    <View role="article" aria-label={name} style={[styles.tile, { height: L.fl(320, 230), padding: pad, gap: L.fl(16, 10) }]}>
       <View style={styles.top}>
-        {logo ? (
-          <Image source={logo} style={styles.logo} resizeMode="contain" accessibilityLabel={`${name} logo`} />
-        ) : (
-          <Tag label={sponsors.logoLabel} tint={tone.fg} border={tone.fg} size={11} padX={10} padY={6} />
-        )}
-        <Mono size={12} weight={600} ls={0.16}>
+        {logo ? null : <Tag label={sponsors.logoLabel} tint={tone.fg} border={tone.fg} size={11} padX={10} padY={6} />}
+        <Mono size={12} weight={600} ls={0.16} style={styles.index}>
           {String(index + 1).padStart(2, '0')}
         </Mono>
       </View>
-      <View style={styles.name}>
-        <Display size={size} lh={0.85}>
-          {name}
-        </Display>
-        <Mono size={11} weight={600} ls={0.12} color={tone.mute}>
-          {withLine}
-        </Mono>
-      </View>
+      {logo ? (
+        <View style={styles.logoArea}>
+          <Image source={logo} style={styles.logo} resizeMode="contain" accessibilityLabel={`${name} logo`} />
+        </View>
+      ) : (
+        <View style={styles.logoArea} />
+      )}
+      <Display size={size} lh={0.85}>
+        {name}
+      </Display>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  tile: { borderWidth: TILE_BORDER, borderColor: color.ink, justifyContent: 'space-between' },
+  tile: { borderWidth: TILE_BORDER, borderColor: color.ink },
   top: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 },
-  logo: { width: 96, height: 40 },
-  name: { gap: 12 },
+  index: { marginLeft: 'auto' },
+  logoArea: { flex: 1, minHeight: 0, alignItems: 'center', justifyContent: 'center' },
+  logo: { width: '82%', height: '100%', maxHeight: 120 },
 });
