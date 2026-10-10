@@ -3,7 +3,7 @@ import { Platform, Pressable, StyleSheet, View, type ViewStyle } from 'react-nat
 
 import { Frame } from './Band';
 import { ULink } from './Link';
-import { Mono } from './Type';
+import { Copy } from './Type';
 import { cookieNotice } from '@/content/legal';
 import { useLayout } from '@/theme/layout';
 import { ToneProvider } from '@/theme/tone';
@@ -71,9 +71,9 @@ function WebCookieNotice() {
         <Frame>
           <View style={[styles.row, L.isPhone && styles.rowStacked]}>
             <View style={styles.copy}>
-              <Mono size={13} lh={1.5} color={color.paper} style={styles.shrink}>
+              <Copy size={13} lh={1.5} color={color.paper} style={styles.shrink}>
                 {cookieNotice.text}
-              </Mono>
+              </Copy>
               <ULink href={cookieNotice.link.href} size={11} ls={0.14} newTab={false}>
                 {cookieNotice.link.label}
               </ULink>
@@ -83,9 +83,9 @@ function WebCookieNotice() {
               accessibilityLabel="Dismiss cookie notice"
               onPress={dismiss}
               style={({ pressed }) => [styles.button, pressed && styles.buttonActive]}>
-              <Mono size={12} weight={600} ls={0.16} color={color.ink}>
+              <Copy size={12} weight={600} ls={0.16} color={color.ink}>
                 {cookieNotice.dismiss}
-              </Mono>
+              </Copy>
             </Pressable>
           </View>
         </Frame>

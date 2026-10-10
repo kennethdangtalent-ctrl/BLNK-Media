@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Animated, { Easing, Extrapolation, interpolate, useAnimatedStyle, useSharedValue, withTiming, type SharedValue } from 'react-native-reanimated';
 
-import { Display, Mono } from './Type';
+import { Display, Copy } from './Type';
 import { BlinkMark } from './Wordmark';
 import { useLayout } from '@/theme/layout';
 import { color } from '@/theme/tokens';
@@ -47,9 +47,9 @@ export function BlinkIntro() {
             <Display size={L.fl(96, 64)} lh={0.8} ls={0.01} upper={false} color={color.ink}>
               BLNK
             </Display>
-            <Mono size={12} weight={600} ls={0.2} color={color.ink}>
+            <Copy size={12} weight={600} ls={0.2} color={color.ink}>
               MEDIA
-            </Mono>
+            </Copy>
           </Animated.View>
         </View>
       </Pressable>

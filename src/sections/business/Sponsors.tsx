@@ -4,7 +4,7 @@ import { Band } from '@/components/Band';
 import { Grid } from '@/components/Grid';
 import { Tag } from '@/components/Marks';
 import { SectionHead } from '@/components/SectionHead';
-import { Display, Mono } from '@/components/Type';
+import { Display, Copy } from '@/components/Type';
 import { sponsors } from '@/content/business';
 import { useLayout } from '@/theme/layout';
 import { fitWords } from '@/theme/metrics';
@@ -56,9 +56,9 @@ function Tile({
     <View role="article" aria-label={name} style={[styles.tile, { height: L.fl(320, 230), padding: pad, gap: L.fl(16, 10) }]}>
       <View style={styles.top}>
         {logo ? null : <Tag label={sponsors.logoLabel} tint={tone.fg} border={tone.fg} size={11} padX={10} padY={6} />}
-        <Mono size={12} weight={600} ls={0.16} style={styles.index}>
+        <Copy size={12} weight={600} ls={0.16} style={styles.index}>
           {String(index + 1).padStart(2, '0')}
-        </Mono>
+        </Copy>
       </View>
       {logo ? (
         <View style={styles.logoArea}>

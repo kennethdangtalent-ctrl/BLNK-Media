@@ -2,16 +2,16 @@ import { Image as Photo } from 'expo-image';
 import { Image, StyleSheet, View } from 'react-native';
 
 import { Barcode } from './Barcode';
-import { Display, Mono, Serif } from './Type';
+import { Display, Copy, Deck } from './Type';
 import type { CaseStudy } from '@/content/business';
 import { ToneProvider, type ToneName } from '@/theme/tone';
 import { color } from '@/theme/tokens';
 
-/** Cover colors in case order: accent red, paper, deck sand. Ink text on all three. */
+/** Cover colors in case order: signal red, then white. Ink text on all of them. */
 const COVERS: readonly { bg: string; tone: ToneName }[] = [
-  { bg: color.accent, tone: 'accent' },
+  { bg: color.hi, tone: 'light' },
   { bg: color.paper, tone: 'light' },
-  { bg: color.deck, tone: 'light' },
+  { bg: color.paper, tone: 'light' },
 ];
 
 export function coverFor(index: number) {
@@ -47,24 +47,24 @@ export function CaseCover({
           </Display>
           <View style={styles.issue}>
             {[item.label, 'RESULTS SOON', 'BLNK.NAME'].map((line) => (
-              <Mono key={line} size={9} weight={600} ls={0.16} align="right" color={color.ink}>
+              <Copy key={line} size={9} weight={600} ls={0.16} align="right" color={color.ink}>
                 {line}
-              </Mono>
+              </Copy>
             ))}
           </View>
         </View>
         <CoverImage item={item} />
         <View style={styles.story}>
-          <Mono size={10} weight={600} ls={0.2} color={color.ink}>
+          <Copy size={10} weight={600} ls={0.2} color={color.ink}>
             COVER STORY
-          </Mono>
+          </Copy>
           <Display size={brandSize} lh={0.85} ls={-0.01} color={color.ink}>
             {item.brand}
           </Display>
           <View style={styles.foot}>
-            <Serif italic size={Math.max(22, Math.round(brandSize * 0.4))} lh={1} color={color.ink} style={styles.shrink}>
+            <Deck italic size={Math.max(22, Math.round(brandSize * 0.4))} lh={1} color={color.ink} style={styles.shrink}>
               × {item.creator}
-            </Serif>
+            </Deck>
             <Barcode width={54} height={26} />
           </View>
         </View>

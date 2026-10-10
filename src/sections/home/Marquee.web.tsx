@@ -1,6 +1,6 @@
 import { StyleSheet, View, type ViewStyle } from 'react-native';
 
-import { Mono } from '@/components/Type';
+import { Copy } from '@/components/Type';
 import { marquee } from '@/content/home';
 import { useLayout } from '@/theme/layout';
 import { color, motion } from '@/theme/tokens';
@@ -25,9 +25,9 @@ export function Marquee() {
       <View style={[styles.track, animate && styles.slide, animate && duration]}>
         {Array.from({ length: perHalf * 2 }, (_, i) => (
           <View key={i} style={styles.copy}>
-            <Mono size={14} weight={600} ls={0.2} color={color.paper} numberOfLines={1}>
+            <Copy size={14} weight={600} ls={0.2} color={color.paper} numberOfLines={1}>
               {marquee}
-            </Mono>
+            </Copy>
           </View>
         ))}
       </View>

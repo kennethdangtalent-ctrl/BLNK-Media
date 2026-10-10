@@ -1,10 +1,11 @@
 import { StyleSheet, View, type GestureResponderEvent } from 'react-native';
 
 import { Frame } from './Band';
+import { Crumple } from './Crumple';
 import { A, NavLink } from './Link';
-import { Badge } from './Marks';
+import { Stamp } from './Marks';
 import { useSections } from './Page';
-import { Mono } from './Type';
+import { Copy } from './Type';
 import { Wordmark } from './Wordmark';
 import { masthead } from '@/content/site';
 import { useLayout } from '@/theme/layout';
@@ -44,18 +45,14 @@ export function Masthead({ current }: { current: Current }) {
       accessibilityLabel={onHome ? 'BLNK Media, back to top' : 'BLNK Media, back to Issue 001'}
       onPress={onHome ? stay(() => sections?.scrollToTop()) : undefined}
       style={styles.logo}>
-      {({ hovered, pressed }) => {
-        const tint = hovered || pressed ? color.accent : color.ink;
-        return (
-          <>
-            {/* On hover the letters take the accent and the blink flips to ink, so the mark stays visible. */}
-            <Wordmark size={40} color={tint} markColor={hovered || pressed ? color.ink : color.accent} open={hovered || pressed} />
-            <Mono size={11} weight={600} ls={0.2} color={tint}>
-              MEDIA
-            </Mono>
-          </>
-        );
-      }}
+      {({ hovered, pressed }) => (
+        <>
+          <Wordmark size={L.isPhone ? 30 : 36} open={hovered || pressed} />
+          <Copy size={13} weight={600} upper color={color.ink}>
+            Media
+          </Copy>
+        </>
+      )}
     </A>
   );
 
@@ -89,17 +86,18 @@ export function Masthead({ current }: { current: Current }) {
   const meta = (
     <View style={styles.meta}>
       {L.isPhone ? null : (
-        <Mono size={12} ls={0.08}>
+        <Copy size={13} weight={600} upper>
           {copy.issue}
-        </Mono>
+        </Copy>
       )}
-      <Badge label={copy.badge} />
+      <Stamp label={copy.badge} tilt={-2} />
     </View>
   );
 
   return (
-    <ToneProvider tone="light">
+    <ToneProvider tone="stock">
       <View role="banner" style={styles.bar}>
+        <Crumple />
         <Frame>
           {L.isDesktop ? (
             <View style={styles.rowDesktop}>
@@ -123,11 +121,11 @@ export function Masthead({ current }: { current: Current }) {
 }
 
 const styles = StyleSheet.create({
-  bar: { backgroundColor: color.paper, borderBottomWidth: 3, borderColor: color.ink },
-  rowDesktop: { height: 72, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 24 },
-  rowTop: { height: 64, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 16 },
-  rowNav: { height: 48, justifyContent: 'center', borderTopWidth: 1, borderColor: color.ink },
-  logo: { flexDirection: 'row', alignItems: 'baseline', gap: 10 },
+  bar: { backgroundColor: color.stock },
+  rowDesktop: { height: 84, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 24 },
+  rowTop: { height: 72, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 16 },
+  rowNav: { height: 48, justifyContent: 'center', borderTopWidth: 2, borderColor: color.ink, borderStyle: 'dashed' },
+  logo: { flexDirection: 'row', alignItems: 'flex-end', gap: 10 },
   nav: { flexDirection: 'row', alignItems: 'center' },
   navSpread: { justifyContent: 'space-between' },
   meta: { flexDirection: 'row', alignItems: 'center', gap: 20 },

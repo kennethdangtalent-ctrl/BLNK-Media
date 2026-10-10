@@ -10,7 +10,7 @@ type TypeProps = Omit<TextProps, 'style'> & {
   color?: string;
   /** Line height as a ratio of `size`, like CSS `line-height: 0.88`. */
   lh?: number;
-  /** Letter-spacing in em, like CSS `letter-spacing: 0.16em`. */
+  /** Letter-spacing in em, like CSS `letter-spacing: -0.02em`. */
   ls?: number;
   align?: TextStyle['textAlign'];
   /** Maximum width in CSS `ch` units of this face. */
@@ -19,21 +19,30 @@ type TypeProps = Omit<TextProps, 'style'> & {
 };
 
 /**
- * Native text views clip glyphs that rise above the first line box. Big Shoulders caps sit
- * 0.184 em below the top of a 1.197 em content box, so they clip once the line box drops
- * under 0.829 em. Web does not clip and keeps the board's exact values.
+ * Native text views clip glyphs that rise above the first line box. Franklin Black caps need a
+ * line box of about 0.9 em; web does not clip and keeps tighter values.
  */
-const NATIVE_MIN_DISPLAY_LH = 0.84;
+const NATIVE_MIN_DISPLAY_LH = 0.92;
+
+/**
+ * Letraset sheets were never tracked out. Small text stays close-set so it reads as type pasted
+ * onto the page, not as a tracked label; anything asked for wider is held to this.
+ */
+const MAX_TEXT_TRACKING = 0.04;
+
+/** Smallest size any copy is set at; a photocopy eats anything finer. */
+const MIN_COPY = 12;
 
 const androidMetrics: TextStyle | null = Platform.OS === 'android' ? { includeFontPadding: false } : null;
 
 const round2 = (n: number) => Math.round(n * 100) / 100;
 
+/** Franklin Black display caps, set tight like rub-down lettering. */
 export function Display({
   size,
   color,
-  lh = 0.88,
-  ls = 0,
+  lh = 0.9,
+  ls = -0.035,
   align,
   level,
   upper = true,
@@ -53,7 +62,8 @@ export function Display({
           fontFamily: font.display,
           fontSize: size,
           lineHeight: round2(size * ratio),
-          letterSpacing: round2(size * ls),
+          // Big caps close up to rub-down tightness; small display caps keep a hair of air.
+          letterSpacing: round2(size * Math.max(-0.04, Math.min(ls, size >= 40 ? -0.03 : -0.01))),
           color: color ?? tone.fg,
           textTransform: upper ? 'uppercase' : 'none',
           textAlign: align,
@@ -65,11 +75,12 @@ export function Display({
   );
 }
 
-export function Mono({
-  size = 15,
+/** Running text, labels, nav and figures: Franklin Regular, or Bold at `weight={600}`. */
+export function Copy({
+  size = 16,
   weight = 400,
   color,
-  lh = 1.6,
+  lh = 1.5,
   ls = 0,
   align,
   maxCh,
@@ -78,20 +89,22 @@ export function Mono({
   ...rest
 }: Omit<TypeProps, 'size'> & { size?: number; weight?: 400 | 600; upper?: boolean }) {
   const tone = useTone();
+  const px = Math.max(MIN_COPY, size);
   return (
     <Text
       maxFontSizeMultiplier={1.25}
       {...rest}
       style={[
         {
-          fontFamily: weight === 600 ? font.monoSemi : font.mono,
-          fontSize: size,
-          lineHeight: round2(size * lh),
-          letterSpacing: round2(size * ls),
+          fontFamily: weight === 600 ? font.bold : font.text,
+          fontSize: px,
+          lineHeight: round2(px * lh),
+          letterSpacing: round2(px * Math.min(ls, MAX_TEXT_TRACKING)),
           color: color ?? tone.fg,
           textAlign: align,
           textTransform: upper ? 'uppercase' : 'none',
-          maxWidth: maxCh ? Math.round(maxCh * CH.mono * size) : undefined,
+          fontVariant: ['tabular-nums'],
+          maxWidth: maxCh ? Math.round(maxCh * CH.copy * px) : undefined,
         },
         androidMetrics,
         style,
@@ -100,7 +113,8 @@ export function Mono({
   );
 }
 
-export function Serif({ size, italic = false, color, lh = 1.2, ls = 0, align, maxCh, style, ...rest }: TypeProps & { italic?: boolean }) {
+/** Ledes, decks and pull lines: Franklin Regular, or its italic. Set larger than `Copy`, never tracked. */
+export function Deck({ size, italic = false, color, lh = 1.25, ls = 0, align, maxCh, style, ...rest }: TypeProps & { italic?: boolean }) {
   const tone = useTone();
   return (
     <Text
@@ -108,13 +122,13 @@ export function Serif({ size, italic = false, color, lh = 1.2, ls = 0, align, ma
       {...rest}
       style={[
         {
-          fontFamily: italic ? font.serifItalic : font.serif,
+          fontFamily: italic ? font.italic : font.text,
           fontSize: size,
           lineHeight: round2(size * lh),
-          letterSpacing: round2(size * ls),
+          letterSpacing: round2(size * Math.min(ls, 0)),
           color: color ?? tone.fg,
           textAlign: align,
-          maxWidth: maxCh ? Math.round(maxCh * CH.serif * size) : undefined,
+          maxWidth: maxCh ? Math.round(maxCh * CH.deck * size) : undefined,
         },
         androidMetrics,
         style,

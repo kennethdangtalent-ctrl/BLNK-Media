@@ -1,91 +1,72 @@
 import { StyleSheet, View } from 'react-native';
 
 import { Band } from '@/components/Band';
-import { Eyebrow } from '@/components/Marks';
-import { Display, Mono, Serif } from '@/components/Type';
+import { Copy, Deck, Display } from '@/components/Type';
 import { chain } from '@/content/mission';
 import { useLayout } from '@/theme/layout';
-import { fitWords } from '@/theme/metrics';
 import { useTone } from '@/theme/tone';
-import { color } from '@/theme/tokens';
 
-const index = (i: number) => String(i + 1).padStart(2, '0');
+import { READING_W } from './Thesis';
 
 /**
- * Creator talent → Media → Brand partnerships → Technology → Capital. Desktop reads it as
- * one row of five steps under accent rules; tablet and phone as a numbered list.
+ * The long game, read as one sentence: Creator talent → Media → Brand partnerships → Technology →
+ * Capital. The steps wrap as a single flowing line on wide screens and stack with downward arrows
+ * on a phone. Same centred column as the essay above it.
  */
 export function Chain() {
   const L = useLayout();
+  const colW = Math.min(L.inner, Math.max(READING_W, 960));
+  const title = chain.eyebrow.replace(/^\d+\s+—\s+/, '');
   return (
     <Band tone="dark" label="The long game">
-      <View style={{ gap: L.fl(56, 36) }}>
-        <View style={styles.head}>
-          <Eyebrow>{chain.eyebrow}</Eyebrow>
-          <Serif italic size={L.fl(56, 34)} lh={1.05}>
-            {chain.intro}
-          </Serif>
-        </View>
+      <View style={[styles.column, { width: colW, gap: L.fl(32, 24) }]}>
+        <Display level={2} size={L.fl(72, 40)} lh={0.9} upper={false}>
+          {sentence(title)}
+        </Display>
         <Steps />
       </View>
     </Band>
   );
 }
 
+/** "THE LONG GAME" from the content file, set in sentence case to match the rest of the page. */
+function sentence(text: string) {
+  const lower = text.toLowerCase();
+  return lower.charAt(0).toUpperCase() + lower.slice(1);
+}
+
 /** Inside the band, so `useTone()` reads the dark tone. */
 function Steps() {
   const L = useLayout();
   const tone = useTone();
-  const gap = Math.round(24 * L.s);
-  const colW = (L.inner - (chain.steps.length - 1) * gap) / chain.steps.length;
-  const rowSize = Math.min(...chain.steps.map((step) => fitWords(step, colW, L.fl(56, 40))));
-  const listSize = Math.min(...chain.steps.map((step) => fitWords(step, L.inner - 64, L.fl(96, 44))));
-
-  if (L.isDesktop) {
-    return (
-      <View role="list" style={[styles.row, { gap }]}>
+  const size = L.fl(40, 26);
+  return (
+    <View style={{ gap: 12 }}>
+      <Deck italic size={L.fl(24, 19)} color={tone.mute}>
+        {chain.intro}
+      </Deck>
+      <View role="list" style={L.isPhone ? styles.stack : styles.flow}>
         {chain.steps.map((step, i) => (
-          <View role="listitem" key={step} style={styles.cell}>
-            <View style={styles.cellTop}>
-              <Mono size={12} weight={600} ls={0.16} color={tone.mute}>
-                {index(i)}
-              </Mono>
-              {i < chain.steps.length - 1 ? (
-                <Mono aria-hidden size={18} weight={600} color={color.accent}>
-                  →
-                </Mono>
-              ) : null}
-            </View>
-            <Display size={rowSize} lh={0.9}>
+          <View role="listitem" key={step} style={L.isPhone ? styles.stackItem : styles.flowItem}>
+            <Display size={size} lh={1.1} upper={false}>
               {step}
             </Display>
+            {i < chain.steps.length - 1 ? (
+              <Copy aria-hidden size={Math.round(size * 0.7)} weight={600} color={tone.mute} lh={1}>
+                {L.isPhone ? '↓' : '→'}
+              </Copy>
+            ) : null}
           </View>
         ))}
       </View>
-    );
-  }
-  return (
-    <View role="list">
-      {chain.steps.map((step, i) => (
-        <View role="listitem" key={step} style={[styles.item, { borderColor: tone.hair }]}>
-          <Mono size={12} weight={600} ls={0.16} color={color.accent} style={styles.itemIndex}>
-            {index(i)}
-          </Mono>
-          <Display size={listSize} lh={0.9} style={styles.shrink}>
-            {step}
-          </Display>
-        </View>
-      ))}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  head: { gap: 20 },
-  row: { flexDirection: 'row', alignItems: 'stretch' },
-  cell: { flex: 1, flexBasis: 0, minWidth: 0, gap: 16, borderTopWidth: 3, borderColor: color.accent, paddingTop: 16 },
-  cellTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  item: { flexDirection: 'row', alignItems: 'baseline', gap: 20, borderTopWidth: 1, paddingVertical: 18 },
-  itemIndex: { width: 24 },
-  shrink: { flexShrink: 1 },
+  column: { alignSelf: 'center' },
+  flow: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 18, rowGap: 6 },
+  flowItem: { flexDirection: 'row', alignItems: 'center', gap: 18 },
+  stack: { gap: 4 },
+  stackItem: { gap: 4 },
 });

@@ -1,4 +1,4 @@
-{
+﻿{
   "expo": {
     "name": "BLNK Media",
     "slug": "blnk-website",
@@ -7,8 +7,8 @@
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "backgroundColor": "#f2efe6",
-    "primaryColor": "#e0341b",
+    "backgroundColor": "#efeee9",
+    "primaryColor": "#c1001f",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "name.blnk.website"
@@ -29,15 +29,15 @@
       "favicon": "./assets/favicon.png",
       "name": "BLNK Media",
       "shortName": "BLNK",
-      "themeColor": "#f2efe6",
-      "backgroundColor": "#f2efe6"
+      "themeColor": "#efeee9",
+      "backgroundColor": "#efeee9"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#f2efe6",
+          "backgroundColor": "#efeee9",
           "image": "./assets/splash-icon.png",
           "imageWidth": 200
         }

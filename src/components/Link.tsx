@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 
 import { Icon, type IconName } from './Icons';
-import { Mono } from './Type';
+import { Copy } from './Type';
 import { useTone } from '@/theme/tone';
 import { color } from '@/theme/tokens';
 import { webProps, webStyle } from '@/theme/web';
@@ -96,59 +96,72 @@ export function A({ href, dismissTo = false, newTab = true, onPress, style, chil
   );
 }
 
-const btnMotion = webStyle<ViewStyle>({
+const scrapMotion = webStyle<ViewStyle>({
   transitionProperty: 'transform, box-shadow',
-  transitionDuration: '120ms, 150ms',
-  transitionTimingFunction: 'ease',
+  transitionDuration: '180ms',
+  transitionTimingFunction: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
 });
 
-/** 56 px block button. Hover and press lift it 3 px onto a hard 5 px shadow, as on the board. */
+/**
+ * A call to action cut from a strip of paper and pasted down a degree off square. Hover or press
+ * peels it up: it squares off, rises 3 px and casts a soft shadow onto the page.
+ * `solid` is crimson (white on dark or red sections); `outline` is white with a black edge.
+ */
 export function Btn({
   href,
   label,
   variant = 'solid',
-  shadow = 'accent',
   dismissTo,
+  tilt = -1.5,
 }: {
   href: string;
   label: string;
   variant?: 'solid' | 'outline';
+  /** Accepted for older call sites; scraps lift with a soft shadow, never a hard block. */
   shadow?: 'accent' | 'ink';
   dismissTo?: boolean;
+  tilt?: number;
 }) {
-  const lift = shadow === 'accent' ? color.accent : color.ink;
+  const tone = useTone();
+  const solid = variant === 'solid';
+  // A crimson scrap on the white pages; on any dark or red section the scrap is white with black type.
+  const onDark = tone.bg === color.ink || tone.bg === color.brand || tone.bg === color.crimson;
+  const scrap = onDark ? color.paper : color.crimson;
+  const ink = onDark ? color.ink : color.paper;
   return (
     <A
       href={href}
       dismissTo={dismissTo}
       style={({ hovered, pressed }) => [
         styles.btn,
-        variant === 'solid' ? styles.btnSolid : styles.btnOutline,
-        (hovered || pressed) && { transform: [{ translateX: -3 }, { translateY: -3 }], boxShadow: `5px 5px 0px ${lift}` },
-        btnMotion,
+        solid ? { backgroundColor: scrap } : styles.btnOutline,
+        { transform: [{ rotate: `${tilt}deg` }] },
+        (hovered || pressed) && { transform: [{ rotate: '0deg' }, { translateY: -3 }], boxShadow: '0px 10px 18px rgba(13, 13, 13, 0.35)' },
+        scrapMotion,
       ]}>
-      <Mono size={13} weight={600} ls={0.16} color={variant === 'solid' ? color.paper : color.ink} style={styles.shrink}>
+      <Copy size={15} weight={600} upper color={solid ? ink : color.ink} style={styles.shrink}>
         {label}
-      </Mono>
+      </Copy>
     </A>
   );
 }
 
-const underlineWeb = webStyle<TextStyle>({
-  textUnderlineOffset: '5px',
+/** Underlines ease in and out instead of switching; nothing changes color. */
+const lineWeb = webStyle<TextStyle>({
+  textDecorationLine: 'underline',
   textDecorationThickness: '2px',
-  transitionProperty: 'color, text-decoration-color',
-  transitionDuration: '150ms',
-  transitionTimingFunction: 'ease',
+  transitionProperty: 'text-underline-offset, text-decoration-color, opacity',
+  transitionDuration: '220ms',
+  transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
 });
 
-/** Underlined text link; text and underline turn accent on hover or press. */
+/** Underlined text link. Hover or press draws the underline in tight under the words. */
 export function ULink({
   href,
   children,
-  size = 12,
+  size = 14,
   weight = 600,
-  ls = 0.14,
+  ls = 0,
   dismissTo,
   newTab,
 }: {
@@ -163,24 +176,24 @@ export function ULink({
   const tone = useTone();
   return (
     <A href={href} dismissTo={dismissTo} newTab={newTab} style={styles.inline}>
-      {({ hovered, pressed }) => {
-        const tint = hovered || pressed ? color.accent : tone.fg;
-        return (
-          <Mono
-            size={size}
-            weight={weight}
-            ls={ls}
-            color={tint}
-            style={[styles.underline, { textDecorationColor: tint }, underlineWeb]}>
-            {children}
-          </Mono>
-        );
-      }}
+      {({ hovered, pressed }) => (
+        <Copy
+          size={size}
+          weight={weight}
+          ls={ls}
+          color={tone.fg}
+          style={[styles.underline, lineWeb, offset(hovered || pressed ? '0.08em' : '0.24em'), { textDecorationColor: tone.fg }]}>
+          {children}
+        </Copy>
+      )}
     </A>
   );
 }
 
-/** Masthead navigation item. `current` draws the board's 3 px accent underline. */
+/**
+ * Masthead navigation item. An underline fades in on hover; the current page keeps it.
+ * Same ink throughout, no fills.
+ */
 export function NavLink({
   href,
   label,
@@ -196,21 +209,32 @@ export function NavLink({
 }) {
   return (
     <A href={href} dismissTo={dismissTo} onPress={onPress} {...webProps(current ? { 'aria-current': 'page' } : {})}>
-      {({ hovered, pressed }) => (
-        <View>
-          <Mono size={13} weight={600} ls={0.16} color={hovered || pressed ? color.accent : color.ink}>
+      {({ hovered, pressed }) => {
+        const on = current || hovered || pressed;
+        return (
+          <Copy
+            size={14}
+            weight={600}
+            upper
+            color={color.ink}
+            style={[styles.navItem, styles.underline, lineWeb, offset(on ? '0.3em' : '0.5em'), { textDecorationColor: on ? color.ink : 'transparent' }]}>
             {label}
-          </Mono>
-          {current ? <View style={styles.current} /> : null}
-        </View>
-      )}
+          </Copy>
+        );
+      }}
     </A>
   );
 }
 
-const chipMotion = webStyle<ViewStyle>({ transitionProperty: 'border-color', transitionDuration: '150ms' });
+const offsets = new Map<string, TextStyle | undefined>();
+function offset(value: string): TextStyle | undefined {
+  if (!offsets.has(value)) offsets.set(value, webStyle<TextStyle>({ textUnderlineOffset: value }));
+  return offsets.get(value);
+}
 
-/** 32 px social chip. Without `href` it renders as a muted placeholder, e.g. "YOUTUBE [LINK]". */
+const chipMotion = webStyle<ViewStyle>({ transitionProperty: 'opacity', transitionDuration: '220ms' });
+
+/** 34 px social chip. Without `href` it renders as a muted placeholder, e.g. "YOUTUBE [LINK]". Hover softens it. */
 export function Chip({
   label,
   href,
@@ -231,47 +255,46 @@ export function Chip({
   const content = (
     <>
       {icon ? <Icon name={icon} size={16} color={tint} /> : null}
-      <Mono size={11} weight={600} ls={0.14} color={tint}>
+      <Copy size={12} weight={600} upper color={tint}>
         {label}
-      </Mono>
+      </Copy>
     </>
   );
   if (!href) {
-    return <View style={[styles.chip, { borderColor: tone.hair, borderStyle: dashed ? 'dashed' : 'solid' }]}>{content}</View>;
+    return <View style={[styles.chip, { borderColor: tint, borderStyle: dashed ? 'dashed' : 'solid' }]}>{content}</View>;
   }
   return (
     <A
       href={href}
       accessibilityLabel={a11yLabel}
-      style={({ hovered, pressed }) => [styles.chip, { borderColor: hovered || pressed ? color.accent : tone.hair }, chipMotion]}>
+      style={({ hovered, pressed }) => [styles.chip, { borderColor: tone.fg }, (hovered || pressed) && styles.chipHot, chipMotion]}>
       {content}
     </A>
   );
 }
-
 const styles = StyleSheet.create({
   pointer: { cursor: 'pointer' },
   btn: {
     minHeight: 56,
-    paddingHorizontal: 28,
-    paddingVertical: 10,
+    paddingHorizontal: 26,
+    paddingVertical: 12,
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'flex-start',
     maxWidth: '100%',
   },
-  btnSolid: { backgroundColor: color.ink },
-  btnOutline: { borderWidth: 3, borderColor: color.ink },
+  btnOutline: { backgroundColor: color.paper, borderWidth: 2.5, borderColor: color.ink },
   shrink: { flexShrink: 1 },
   inline: { alignSelf: 'flex-start', maxWidth: '100%' },
   underline: { textDecorationLine: 'underline' },
-  current: { position: 'absolute', left: 0, right: 0, bottom: -4, height: 3, backgroundColor: color.accent },
+  navItem: { paddingHorizontal: 4, paddingVertical: 2 },
   chip: {
-    height: 32,
+    height: 34,
     paddingHorizontal: 12,
-    borderWidth: 1,
+    borderWidth: 2,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
   },
+  chipHot: { opacity: 0.6 },
 });

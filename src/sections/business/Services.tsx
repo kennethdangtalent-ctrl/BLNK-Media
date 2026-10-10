@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { Band } from '@/components/Band';
 import { SectionHead } from '@/components/SectionHead';
-import { Display, Mono, Serif } from '@/components/Type';
+import { Display, Copy, Deck } from '@/components/Type';
 import { services, type Service } from '@/content/business';
 import { useLayout } from '@/theme/layout';
 import { fitWords } from '@/theme/metrics';
@@ -23,7 +23,7 @@ export function Services() {
   const columns: Columns = { phone: L.isPhone, numW, gap, nameSize };
 
   return (
-    <Band tone="dark" id="services" label="Services">
+    <Band tone="ink" id="services" label="Services">
       <View style={{ gap: L.fl(48, 36) }}>
         <SectionHead eyebrow={services.head.eyebrow} title={services.head.title} dek={services.head.dek} />
         <View style={styles.groups}>
@@ -31,9 +31,9 @@ export function Services() {
             <ServiceGroup key={group.label} label={group.label} rows={group.rows} columns={columns} />
           ))}
         </View>
-        <Serif italic size={L.fl(28, 22)} lh={1.2} maxCh={44}>
+        <Deck italic size={L.fl(28, 22)} lh={1.2} maxCh={44}>
           {services.note}
-        </Serif>
+        </Deck>
       </View>
     </Band>
   );
@@ -43,9 +43,9 @@ function ServiceGroup({ label, rows, columns }: { label: string; rows: readonly 
   const tone = useTone();
   return (
     <View>
-      <Mono size={12} weight={600} ls={0.16} color={tone.mute} style={styles.groupLabel}>
+      <Copy size={12} weight={600} ls={0.16} color={tone.mute} style={styles.groupLabel}>
         {label}
-      </Mono>
+      </Copy>
       <View role="list" style={styles.list}>
         {rows.map((row) => (columns.phone ? <PhoneRow key={row.n} row={row} columns={columns} /> : <WideRow key={row.n} row={row} columns={columns} />))}
       </View>
@@ -58,18 +58,18 @@ function WideRow({ row, columns }: { row: Service; columns: Columns }) {
   const tone = useTone();
   return (
     <View role="listitem" style={[styles.wide, { gap: columns.gap }]}>
-      <Mono size={12} weight={600} ls={0.16} color={tone.mute} style={{ width: columns.numW }}>
+      <Copy size={12} weight={600} ls={0.16} color={tone.mute} style={{ width: columns.numW }}>
         {row.n}
-      </Mono>
+      </Copy>
       <View style={styles.nameCol}>
         <Display size={columns.nameSize} lh={0.9}>
           {row.name}
         </Display>
       </View>
       <View style={styles.descCol}>
-        <Mono size={L.fl(15, 14)} lh={1.6} color={tone.mute}>
+        <Copy size={L.fl(15, 14)} lh={1.6} color={tone.mute}>
           {row.desc}
-        </Mono>
+        </Copy>
       </View>
     </View>
   );
@@ -79,15 +79,15 @@ function PhoneRow({ row, columns }: { row: Service; columns: Columns }) {
   const tone = useTone();
   return (
     <View role="listitem" style={styles.phone}>
-      <Mono size={12} weight={600} ls={0.16} color={tone.mute}>
+      <Copy size={12} weight={600} ls={0.16} color={tone.mute}>
         {row.n}
-      </Mono>
+      </Copy>
       <Display size={columns.nameSize} lh={0.9}>
         {row.name}
       </Display>
-      <Mono size={14} lh={1.6} color={tone.mute}>
+      <Copy size={14} lh={1.6} color={tone.mute}>
         {row.desc}
-      </Mono>
+      </Copy>
     </View>
   );
 }
@@ -95,9 +95,9 @@ function PhoneRow({ row, columns }: { row: Service; columns: Columns }) {
 const styles = StyleSheet.create({
   groups: { gap: 40 },
   groupLabel: { paddingBottom: 16 },
-  list: { borderTopWidth: 1, borderColor: color.hairOnInk },
-  wide: { flexDirection: 'row', alignItems: 'center', paddingVertical: 24, borderBottomWidth: 1, borderColor: color.hairOnInk },
+  list: { borderTopWidth: 1, borderColor: color.ruleOnInk },
+  wide: { flexDirection: 'row', alignItems: 'center', paddingVertical: 24, borderBottomWidth: 1, borderColor: color.ruleOnInk },
   nameCol: { flex: 3, flexBasis: 0, minWidth: 0 },
   descCol: { flex: 5, flexBasis: 0, minWidth: 0 },
-  phone: { gap: 10, paddingVertical: 20, borderBottomWidth: 1, borderColor: color.hairOnInk },
+  phone: { gap: 10, paddingVertical: 20, borderBottomWidth: 1, borderColor: color.ruleOnInk },
 });

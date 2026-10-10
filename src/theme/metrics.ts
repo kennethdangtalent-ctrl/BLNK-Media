@@ -1,6 +1,6 @@
 /**
- * Advance widths of Big Shoulders Display Black in em, read from the vendored TTF
- * (hmtx advance / unitsPerEm 2000). Display text is always set in capitals, so only
+ * Advance widths of Libre Franklin Black in em, read from the vendored TTF
+ * (hmtx advance / unitsPerEm). Display text is always set in capitals, so only
  * capitals, figures and punctuation are listed.
  *
  * React Native has no synchronous text measurement, so the layout uses this table to
@@ -8,22 +8,25 @@
  * overestimates width slightly; the safety factor covers rendering differences.
  */
 const ADVANCE: Record<string, number> = {
-  ' ': 0.22, '!': 0.25, '"': 0.403, '#': 0.736, $: 0.474, '%': 0.682, '&': 0.619, "'": 0.203,
-  '(': 0.292, ')': 0.292, '*': 0.252, '+': 0.536, ',': 0.251, '-': 0.446, '.': 0.25, '/': 0.41,
-  '0': 0.507, '1': 0.274, '2': 0.49, '3': 0.504, '4': 0.511, '5': 0.515, '6': 0.4985, '7': 0.485,
-  '8': 0.5005, '9': 0.499, ':': 0.25, ';': 0.251, '<': 0.553, '=': 0.516, '>': 0.553, '?': 0.48,
-  '@': 0.724, A: 0.478, B: 0.4725, C: 0.49, D: 0.495, E: 0.408, F: 0.406, G: 0.493, H: 0.485,
-  I: 0.23, J: 0.4525, K: 0.4965, L: 0.402, M: 0.745, N: 0.543, O: 0.4965, P: 0.4705, Q: 0.4965,
-  R: 0.477, S: 0.474, T: 0.419, U: 0.487, V: 0.494, W: 0.8, X: 0.471, Y: 0.465, Z: 0.418,
-  '[': 0.356, ']': 0.356, _: 0.656, '×': 0.482, '·': 0.189, '—': 0.902, 'º': 0.406, '’': 0.251,
-  '→': 0.88, '←': 0.88, '↗': 0.653,
+  ' ': 0.2, '!': 0.277, '"': 0.509, '#': 0.603, $: 0.687, '%': 0.963, '&': 0.878, "'": 0.253,
+  '(': 0.332, ')': 0.332, '*': 0.521, '+': 0.6, ',': 0.279, '-': 0.38, '.': 0.279, '/': 0.38,
+  '0': 0.722, '1': 0.537, '2': 0.673, '3': 0.685, '4': 0.716, '5': 0.69, '6': 0.701, '7': 0.632,
+  '8': 0.693, '9': 0.701, ':': 0.279, ';': 0.279, '<': 0.599, '=': 0.6, '>': 0.599, '?': 0.546,
+  '@': 0.834, A: 0.799, B: 0.739, C: 0.737, D: 0.771, E: 0.671, F: 0.65, G: 0.761, H: 0.762,
+  I: 0.331, J: 0.467, K: 0.772, L: 0.643, M: 0.977, N: 0.761, O: 0.78, P: 0.731, Q: 0.782,
+  R: 0.739, S: 0.701, T: 0.704, U: 0.728, V: 0.751, W: 1.109, X: 0.756, Y: 0.774, Z: 0.714,
+  '[': 0.336, ']': 0.336, _: 0.562, '×': 0.6, '·': 0.279, '—': 0.928, 'º': 0.391, '’': 0.253,
+  '‘': 0.253, '“': 0.509, '”': 0.514, '–': 0.602, '→': 0.612, '←': 0.612, '↗': 0.612,
 };
 
-const FALLBACK_ADVANCE = 0.5;
+const FALLBACK_ADVANCE = 0.72;
 const SAFETY = 1.03;
 
-/** Width of the digit zero in em, which is what CSS `ch` measures. */
-export const CH = { mono: 0.6, serif: 0.46 } as const;
+/**
+ * Average prose character width in em for Libre Franklin Regular and Italic. Franklin's figures
+ * are tabular and wide (0.688 em), so a true `ch` would overshoot a 65-character measure.
+ */
+export const CH = { copy: 0.52, deck: 0.5 } as const;
 
 /** Rendered width in px of `text` set in display capitals at `size` with `trackingEm` letter-spacing. */
 export function displayWidth(text: string, size: number, trackingEm = 0): number {

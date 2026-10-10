@@ -2,10 +2,9 @@ import { StyleSheet, View } from 'react-native';
 
 import { Band } from '@/components/Band';
 import { Btn, ULink } from '@/components/Link';
-import { Eyebrow } from '@/components/Marks';
 import { Reveal } from '@/components/Reveal';
 import { TiltCard } from '@/components/TiltCard';
-import { Display, Mono, Serif } from '@/components/Type';
+import { Display, Copy, Deck } from '@/components/Type';
 import { bizHero } from '@/content/business';
 import { useLayout } from '@/theme/layout';
 import { fitWords } from '@/theme/metrics';
@@ -27,18 +26,15 @@ export function BizHero() {
     <Band tone="light" label="Business" ruleBottom padTop={L.fl(80, 40)} padBottom={L.fl(72, 56)}>
       <View style={[styles.grid, { flexDirection: twoColumns ? 'row' : 'column', gap }]}>
         <View style={[twoColumns && styles.textColumn, { gap: L.fl(40, 28) }]}>
-          <Reveal index={0}>
-            <Eyebrow>{bizHero.eyebrow}</Eyebrow>
-          </Reveal>
           <Reveal index={1}>
             <Display level={1} size={titleSize} lh={0.88} ls={-0.01}>
               {bizHero.title}
             </Display>
           </Reveal>
           <Reveal index={2}>
-            <Serif size={L.fl(30, 21)} lh={1.2} maxCh={36}>
+            <Deck size={L.fl(30, 21)} lh={1.2} maxCh={36}>
               {bizHero.lede}
-            </Serif>
+            </Deck>
           </Reveal>
           <Reveal index={3} style={styles.ctas}>
             <Btn href={bizHero.cta.href} label={bizHero.cta.label} />
@@ -70,19 +66,19 @@ function MediaKitCard({ width }: { width: number }) {
             <Display size={px(56)} lh={0.85} style={styles.shrink}>
               {kit.title}
             </Display>
-            <Mono size={11} weight={600} ls={0.16}>
+            <Copy size={11} weight={600} ls={0.16}>
               {kit.issue}
-            </Mono>
+            </Copy>
           </View>
           <View>
             {kit.rows.map((row, i) => (
               <View key={row.label} style={[styles.kitRow, i === kit.rows.length - 1 && styles.kitRowLast]}>
-                <Mono size={12} weight={600} ls={0.16}>
+                <Copy size={12} weight={600} ls={0.16}>
                   {row.label}
-                </Mono>
-                <Mono size={12} ls={0.08} align="right" style={styles.shrink}>
+                </Copy>
+                <Copy size={12} ls={0.08} align="right" style={styles.shrink}>
                   {row.value}
-                </Mono>
+                </Copy>
               </View>
             ))}
           </View>
@@ -97,7 +93,7 @@ const styles = StyleSheet.create({
   textColumn: { flex: 1, minWidth: 0 },
   ctas: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 28, rowGap: 16 },
   offset: { position: 'absolute', right: 0, bottom: 0, backgroundColor: color.ink },
-  kit: { backgroundColor: color.accent, borderWidth: 3, borderColor: color.ink, justifyContent: 'space-between' },
+  kit: { backgroundColor: color.paper, borderWidth: 3, borderColor: color.ink, justifyContent: 'space-between' },
   kitTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 },
   kitRow: {
     flexDirection: 'row',

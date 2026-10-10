@@ -4,7 +4,7 @@ import { Band } from '@/components/Band';
 import { Grid } from '@/components/Grid';
 import { ULink } from '@/components/Link';
 import { SectionHead } from '@/components/SectionHead';
-import { Display, Mono, Serif } from '@/components/Type';
+import { Display, Copy, Deck } from '@/components/Type';
 import { clients, type Client } from '@/content/business';
 import { useLayout } from '@/theme/layout';
 import { fitLines } from '@/theme/metrics';
@@ -20,7 +20,7 @@ export function Clients() {
   const nameSize = Math.min(...clients.items.map((client) => fitLines(client.name, colW, L.fl(88, 52), -0.005)));
 
   return (
-    <Band tone="dark" id="clients" label="Clients and partners">
+    <Band tone="paper" id="clients" label="Clients and partners">
       <View style={{ gap: L.fl(64, 40) }}>
         <SectionHead eyebrow={clients.head.eyebrow} title={clients.head.title} dek={clients.head.dek} />
         <Grid cols={cols} gap={gap} rowGap={L.fl(56, 40)}>
@@ -39,30 +39,30 @@ function ClientCard({ client, nameSize }: { client: Client; nameSize: number }) 
   return (
     <View role="article" aria-label={client.name} style={styles.card}>
       <View style={styles.top}>
-        <LogoSlot label={client.logoLabel} logo={client.logo} aspect={client.logoAspect ?? 1} name={client.name} />
+        <LogoSlot label={client.logoLabel} logo={client.logo} aspect={client.logoAspect ?? 1} ink={client.logoInk} name={client.name} />
         <Display aria-hidden size={L.fl(56, 44)} lh={0.85} upper={false} color={color.accent}>
           {client.n}
         </Display>
       </View>
-      <Mono size={12} weight={600} ls={0.16} color={tone.mute}>
+      <Copy size={12} weight={600} ls={0.16} color={tone.mute}>
         {client.kicker}
-      </Mono>
+      </Copy>
       <Display level={3} size={nameSize} lh={0.88} ls={-0.005}>
         {client.name}
       </Display>
-      <Serif italic size={L.fl(30, 22)} lh={1.15}>
+      <Deck italic size={L.fl(30, 22)} lh={1.15}>
         {client.line}
-      </Serif>
-      <Mono size={L.fl(15, 14)} lh={1.65} color={tone.mute} maxCh={52}>
+      </Deck>
+      <Copy size={L.fl(15, 14)} lh={1.65} color={tone.mute} maxCh={52}>
         {client.body}
-      </Mono>
+      </Copy>
       <View style={styles.foot}>
         {client.link.href ? (
           <ULink href={client.link.href}>{client.link.label}</ULink>
         ) : (
-          <Mono size={12} weight={600} ls={0.14} color={tone.mute}>
+          <Copy size={12} weight={600} ls={0.14} color={tone.mute}>
             {client.link.label}
-          </Mono>
+          </Copy>
         )}
       </View>
     </View>
@@ -73,27 +73,33 @@ function ClientCard({ client, nameSize }: { client: Client; nameSize: number }) 
 const LOGO_H = 96;
 const LOGO_MAX_W = 260;
 
-function LogoSlot({ label, logo, aspect, name }: { label: string; logo?: ImageSourcePropType; aspect: number; name: string }) {
+function LogoSlot({ label, logo, aspect, ink, name }: { label: string; logo?: ImageSourcePropType; aspect: number; ink?: boolean; name: string }) {
   if (logo) {
     const width = Math.min(LOGO_MAX_W, LOGO_H * aspect);
     return (
       <View style={[styles.logoRow, { width }]}>
-        <Image source={logo} style={{ width, height: width / aspect }} resizeMode="contain" accessibilityLabel={`${name} logo`} />
+        <Image
+          source={logo}
+          style={{ width, height: width / aspect }}
+          resizeMode="contain"
+          tintColor={ink ? color.ink : undefined}
+          accessibilityLabel={`${name} logo`}
+        />
       </View>
     );
   }
   return (
     <View style={[styles.logo, styles.logoSlot]}>
-      <Mono size={11} ls={0.14} align="center">
+      <Copy size={11} ls={0.14} align="center">
         {label}
-      </Mono>
+      </Copy>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   // Fills its grid cell so the links pin to a shared baseline across the row.
-  card: { flexGrow: 1, gap: 20, borderTopWidth: 3, borderColor: color.paper, paddingTop: 24 },
+  card: { flexGrow: 1, gap: 20, borderTopWidth: 3, borderColor: color.ink, paddingTop: 24 },
   foot: { marginTop: 'auto' },
   top: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
   logo: { width: LOGO_H, height: LOGO_H },
@@ -101,7 +107,7 @@ const styles = StyleSheet.create({
   logoSlot: {
     borderWidth: 1,
     borderStyle: 'dashed',
-    borderColor: color.dashOnInk,
+    borderColor: color.blankOnPaper,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 6,

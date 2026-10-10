@@ -5,7 +5,7 @@ import { CaseCover } from '@/components/CaseCover';
 import { Grid } from '@/components/Grid';
 import { A } from '@/components/Link';
 import { SectionHead } from '@/components/SectionHead';
-import { Mono } from '@/components/Type';
+import { Copy } from '@/components/Type';
 import { cases, type CaseStudy } from '@/content/business';
 import { useLayout } from '@/theme/layout';
 import { fitWords } from '@/theme/metrics';
@@ -73,14 +73,14 @@ function CoverLink({
                 // Pinned up at an angle on a hard shadow; hover squares it up and lifts it onto the accent.
                 active
                   ? { transform: [{ translateX: -4 }, { translateY: -4 }, { rotate: '0deg' }], boxShadow: `10px 10px 0px ${color.accent}` }
-                  : { transform: [{ translateX: 0 }, { translateY: 0 }, { rotate: `${TILTS[index % TILTS.length]}deg` }], boxShadow: `8px 8px 0px ${color.hairOnInk}` },
+                  : { transform: [{ translateX: 0 }, { translateY: 0 }, { rotate: `${TILTS[index % TILTS.length]}deg` }], boxShadow: `8px 8px 0px ${color.ruleOnInk}` },
                 lift,
               ]}>
               <CaseCover item={item} index={index} brandSize={brandSize} pad={pad} minHeight={minHeight} />
             </View>
-            <Mono size={12} weight={600} ls={0.16} color={active ? color.accent : color.paper}>
+            <Copy size={12} weight={600} ls={0.16} color={active ? color.accent : color.paper}>
               READ THE STORY →
-            </Mono>
+            </Copy>
           </>
         );
       }}

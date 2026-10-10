@@ -1,52 +1,72 @@
-/* Design tokens extracted from the BLNK.name boards (Claude Design bundle, Issue 001, September 2026). */
+/*
+ * Design tokens for the BLNK magazine identity (October 2026): white, black and three reds. Clean
+ * white pages and black type like a premium print title; oxblood owns the big sections (roster,
+ * case studies), saturated crimson the loud ones (apply, start a brief) and every call to action,
+ * and signal red is the small accent on stickers, serials and pull-quote marks. No cream, no neon.
+ */
 
 export const color = {
-  paper: '#f2efe6',
-  ink: '#111111',
-  accent: '#e0341b',
-  plate: '#26231f',
-  deck: '#d9d3c4',
-  muteOnInk: '#cfc9bb',
-  muteOnPaper: '#3a3733',
-  hairOnInk: '#3a3733',
-  hairOnPaper: '#c9c3b4',
-  credit: '#d9d4c7',
-  dotOnPlate: 'rgba(242, 239, 230, 0.3)',
-  dotOnCover: 'rgba(242, 239, 230, 0.32)',
-  dotOnDeck: 'rgba(17, 17, 17, 0.5)',
-  dashOnInk: 'rgba(242, 239, 230, 0.7)',
-  tagOnPlate: 'rgba(17, 17, 17, 0.6)',
-  tagOnCover: 'rgba(17, 17, 17, 0.55)',
-  tagOnDeck: 'rgba(242, 239, 230, 0.85)',
+  /** The page: an uncoated paper tone, light warm grey, low enough in saturation to never read as cream. */
+  stock: '#efeee9',
+  /** Printer's black. Type, rules and the footer. */
+  ink: '#0d0d0d',
+  /** Bright white sheet: taped notes and scraps laid on the page. */
+  paper: '#ffffff',
+  /** Oxblood. Owns whole sections; the brand color. */
+  brand: '#5c0d12',
+  /** Saturated crimson. Loud sections and calls to action; white type on it. */
+  crimson: '#c1001f',
+  /** Signal red. Stickers, serials, quote marks, the logo's eye on dark grounds. Never a whole section. */
+  hi: '#e91b0f',
+  /** Text on orange. */
+  onHi: '#0d0d0d',
+  /** Secondary text on white. */
+  greyOnPaper: '#4a4a47',
+  /** Secondary text on black. */
+  greyOnInk: '#b4b4ae',
+  /** Secondary text on oxblood. */
+  greyOnBrand: '#e3bdb9',
+  /** Secondary text on crimson. */
+  greyOnCrimson: '#ffd6d9',
+  /** Secondary text on the page. */
+  muteOnStock: '#4a4a48',
+  /** A thin rule on a dark section: the page showing through. */
+  ruleOnInk: 'rgba(250, 250, 248, 0.28)',
+  /** Masking tape: translucent beige-brown, so it reads on white notes and on the paper tone alike. */
+  tape: 'rgba(196, 178, 140, 0.72)',
+  /** Placeholder fills, so empty photo slots read as unprinted space. */
+  blankOnInk: 'rgba(243, 243, 239, 0.12)',
+  blankOnPaper: 'rgba(13, 13, 13, 0.08)',
+  /** Back-compat aliases for components that still name the old roles. */
+  accent: '#e91b0f',
+  plate: '#0d0d0d',
 } as const;
-
-/** The other two accents offered by the board's brand control. */
-export const accentAlternates = ['#d61c6c', '#2a44d9'] as const;
-
 export const font = {
-  display: 'BigShouldersDisplay-Black',
-  mono: 'IBMPlexMono-Regular',
-  monoSemi: 'IBMPlexMono-SemiBold',
-  serif: 'InstrumentSerif-Regular',
-  serifItalic: 'InstrumentSerif-Italic',
+  /** Libre Franklin Black: the Letraset gothic every photocopied flyer was set in. Display caps only. */
+  display: 'LibreFranklin-Black',
+  /** Libre Franklin Bold: labels, nav, buttons, stat figures. */
+  bold: 'LibreFranklin-Bold',
+  /** Libre Franklin Regular: running text. */
+  text: 'LibreFranklin-Regular',
+  /** Libre Franklin Italic: decks and pull lines. */
+  italic: 'LibreFranklin-Italic',
 } as const;
 
 /** Each cut is registered under its own family name; weight and style are never synthesized. */
 export const fontSources = {
-  [font.display]: require('../../assets/fonts/BigShouldersDisplay_900Black.ttf'),
-  [font.mono]: require('../../assets/fonts/IBMPlexMono_400Regular.ttf'),
-  [font.monoSemi]: require('../../assets/fonts/IBMPlexMono_600SemiBold.ttf'),
-  [font.serif]: require('../../assets/fonts/InstrumentSerif_400Regular.ttf'),
-  [font.serifItalic]: require('../../assets/fonts/InstrumentSerif_400Regular_Italic.ttf'),
+  [font.display]: require('../../assets/fonts/LibreFranklin_900Black.ttf'),
+  [font.bold]: require('../../assets/fonts/LibreFranklin_700Bold.ttf'),
+  [font.text]: require('../../assets/fonts/LibreFranklin_400Regular.ttf'),
+  [font.italic]: require('../../assets/fonts/LibreFranklin_400Regular_Italic.ttf'),
 };
 
 export const motion = {
   marqueeMs: 48_000,
-  revealMs: 700,
-  revealStepMs: 90,
-  revealDelayMs: 120,
-  tiltMs: 260,
+  revealMs: 520,
+  revealStepMs: 70,
+  revealDelayMs: 80,
+  tiltMs: 200,
 } as const;
 
-/** Width of the design boards. Content frames never grow past it. */
+/** Width of the design frame. Content frames never grow past it. */
 export const BOARD_W = 1440;

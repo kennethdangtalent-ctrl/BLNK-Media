@@ -6,7 +6,7 @@ import { Grid } from '@/components/Grid';
 import { ULink } from '@/components/Link';
 import { Tag } from '@/components/Marks';
 import { SectionHead } from '@/components/SectionHead';
-import { Display, Mono } from '@/components/Type';
+import { Display, Copy } from '@/components/Type';
 import { decks, type Deck } from '@/content/business';
 import { useLayout } from '@/theme/layout';
 import { fitWords } from '@/theme/metrics';
@@ -43,25 +43,25 @@ function DeckCard({ deck, titleSize }: { deck: Deck; titleSize: number }) {
           <Image source={deck.cover} style={styles.fill} resizeMode="cover" accessibilityLabel={`${deck.title} cover`} />
         ) : (
           <>
-            <DotGrid color={color.dotOnDeck} />
-            <Tag label={deck.coverLabel} tint={color.ink} border={color.ink} fill={color.tagOnDeck} style={styles.bottom} />
+            <DotGrid color={color.blankOnPaper} />
+            <Tag label={deck.coverLabel} tint={color.ink} border={color.ink} fill={color.paper} style={styles.bottom} />
           </>
         )}
         <View style={[styles.pdf, deck.cover ? styles.pdfOnImage : null]}>
-          <Mono size={11} weight={600} ls={0.16} color={color.ink}>
+          <Copy size={11} weight={600} ls={0.16} color={color.ink}>
             PDF
-          </Mono>
+          </Copy>
         </View>
       </View>
-      <Mono size={12} weight={600} ls={0.16} color={tone.mute}>
+      <Copy size={12} weight={600} ls={0.16} color={tone.mute}>
         {deck.label}
-      </Mono>
+      </Copy>
       <Display level={3} size={titleSize} lh={0.9}>
         {deck.title}
       </Display>
-      <Mono size={14} lh={1.6} color={tone.mute}>
+      <Copy size={14} lh={1.6} color={tone.mute}>
         {deck.body}
-      </Mono>
+      </Copy>
       <ULink href={deck.cta.href}>{deck.cta.label}</ULink>
     </View>
   );
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     height: 224,
     borderWidth: 2,
     borderColor: color.ink,
-    backgroundColor: color.deck,
+    backgroundColor: color.paper,
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'space-between',

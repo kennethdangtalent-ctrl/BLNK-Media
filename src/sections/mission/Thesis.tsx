@@ -1,68 +1,68 @@
 import { StyleSheet, View } from 'react-native';
 
 import { Band } from '@/components/Band';
-import { SectionHead } from '@/components/SectionHead';
-import { Display, Mono, Serif } from '@/components/Type';
+import { Copy, Deck, Display } from '@/components/Type';
 import { thesis, type ThesisLine } from '@/content/mission';
 import { useLayout } from '@/theme/layout';
 import { fitWords } from '@/theme/metrics';
 import { useTone } from '@/theme/tone';
 import { color } from '@/theme/tokens';
 
+/** Widest the essay column gets, so lines stay a comfortable read. */
+export const READING_W = 720;
+
 /**
- * The page's opening: the thesis title, the lead sentence set as a large italic statement,
- * then the argument. Everything starts on the frame's left edge like every other band; on
- * desktop the argument is held to two-thirds of the frame so the pull lines stay a column.
+ * The page's opening, set like a magazine essay: one centred reading column with the title, the
+ * lead as a calm statement, then the argument at a comfortable size. The two pull lines are the
+ * only large type inside it, in sentence case under a short crimson rule.
  */
 export function Thesis() {
   const L = useLayout();
-  const colW = L.isDesktop ? Math.round((L.inner * 2) / 3) : L.inner;
+  const colW = Math.min(L.inner, READING_W);
   const lead = thesis.lines.find((line) => line.kind === 'lead');
   const rest = thesis.lines.filter((line) => line.kind !== 'lead');
-  // One size for both pull lines, so they read as a pair.
-  const pullSize = Math.min(
-    ...rest.filter((line) => line.kind === 'pull').map((line) => fitWords(line.text, colW, L.fl(72, 44), -0.005)),
-  );
 
   return (
     <Band tone="light" label="Thesis">
-      <View style={{ gap: L.fl(72, 48) }}>
-        <SectionHead level={1} eyebrow={thesis.eyebrow} title={thesis.title} />
+      <View style={[styles.column, { width: colW, gap: L.fl(40, 28) }]}>
+        <Display level={1} size={fitWords(thesis.title, colW, L.fl(112, 56), -0.03)} lh={0.9} upper={false}>
+          {thesis.title}
+        </Display>
         {lead ? (
-          <Serif italic size={L.fl(64, 34)} lh={1.05} ls={-0.01} maxCh={30}>
+          <Deck size={L.fl(32, 24)} lh={1.3}>
             {lead.text}
-          </Serif>
+          </Deck>
         ) : null}
-        <View style={[styles.argument, { maxWidth: colW, gap: L.fl(40, 28) }]}>
-          {rest.map((line) => (
-            <Line key={line.text} line={line} pullSize={pullSize} />
-          ))}
-        </View>
+        {rest.map((line) => (
+          <Line key={line.text} line={line} />
+        ))}
       </View>
     </Band>
   );
 }
 
-function Line({ line, pullSize }: { line: ThesisLine; pullSize: number }) {
+function Line({ line }: { line: ThesisLine }) {
   const L = useLayout();
   const tone = useTone();
   if (line.kind === 'pull') {
     return (
-      <View style={styles.pull}>
-        <Display size={pullSize} lh={0.9} ls={-0.005}>
+      <View style={[styles.pull, { paddingTop: L.fl(24, 16) }]}>
+        <View aria-hidden style={styles.rule} />
+        <Display size={L.fl(44, 30)} lh={1.05} upper={false}>
           {line.text}
         </Display>
       </View>
     );
   }
   return (
-    <Mono size={L.fl(17, 15)} lh={1.7} color={tone.mute} maxCh={64}>
+    <Copy size={L.fl(20, 17)} lh={1.65} color={tone.fg}>
       {line.text}
-    </Mono>
+    </Copy>
   );
 }
 
 const styles = StyleSheet.create({
-  argument: { borderTopWidth: 3, borderColor: color.ink, paddingTop: 32 },
-  pull: { borderLeftWidth: 6, borderColor: color.accent, paddingLeft: 20 },
+  column: { alignSelf: 'center' },
+  pull: { gap: 16 },
+  rule: { width: 48, height: 4, backgroundColor: color.crimson },
 });

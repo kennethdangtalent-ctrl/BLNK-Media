@@ -34,7 +34,7 @@ export default function RootLayout() {
         {Platform.OS === 'web' ? (
           <Slot />
         ) : (
-          <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: color.paper } }} />
+          <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: color.stock } }} />
         )}
         <CookieNotice />
         <BlinkIntro />
@@ -56,5 +56,5 @@ function Shell({ children }: { children: ReactNode }) {
 }
 
 const styles = StyleSheet.create({
-  shell: { flex: 1, backgroundColor: color.paper },
+  shell: { flex: 1, backgroundColor: color.stock },
 });

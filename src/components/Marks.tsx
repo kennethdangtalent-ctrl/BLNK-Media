@@ -1,66 +1,71 @@
 import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
-import { Mono } from './Type';
+import { Copy } from './Type';
+import { useTone } from '@/theme/tone';
 import { color } from '@/theme/tokens';
 
-/** Section kicker: a 10 px square and a tracked label, e.g. "01 — THE ROSTER". */
-export function Eyebrow({ children, square = color.accent }: { children: string; square?: string }) {
+/**
+ * A rubber stamp pressed onto the page at an angle: an inked frame around bold caps, e.g.
+ * "RESULTS SOON". It annotates something already on the page; it never heads a section.
+ */
+export function Stamp({ label, tilt = -4, tint, style }: { label: string; tilt?: number; tint?: string; style?: StyleProp<ViewStyle> }) {
+  const tone = useTone();
+  const ink = tint ?? tone.fg;
   return (
-    <View style={styles.eyebrow}>
-      <View style={[styles.square, { backgroundColor: square }]} />
-      <Mono size={12} weight={600} ls={0.16} style={styles.shrink}>
-        {children}
-      </Mono>
+    <View style={[styles.stamp, { borderColor: ink, transform: [{ rotate: `${tilt}deg` }] }, style]}>
+      <Copy size={13} weight={600} upper lh={1.1} color={ink}>
+        {label}
+      </Copy>
     </View>
   );
 }
 
-/** Dashed placeholder label, e.g. "[PHOTO — NOVAPOVIE]" or "[LOGO]". */
+/**
+ * A strip of masking tape with a typed label, used for placeholders such as "[PHOTO — NOVAPOVIE]"
+ * or "[LOGO]". The `tint`, `border` and `fill` props are accepted for older call sites; tape is
+ * always tape-colored with toner text.
+ */
 export function Tag({
   label,
-  tint,
-  border,
-  fill,
   size = 12,
-  ls = 0.14,
   padX = 12,
-  padY = 8,
+  padY = 6,
+  tilt = -2,
   style,
 }: {
   label: string;
-  tint: string;
-  border: string;
+  tint?: string;
+  border?: string;
   fill?: string;
   size?: number;
   ls?: number;
   padX?: number;
   padY?: number;
+  tilt?: number;
   style?: StyleProp<ViewStyle>;
 }) {
   return (
-    <View style={[styles.tag, { borderColor: border, backgroundColor: fill, paddingHorizontal: padX, paddingVertical: padY }, style]}>
-      <Mono size={size} ls={ls} color={tint}>
+    <View style={[styles.tape, { paddingHorizontal: padX, paddingVertical: padY, transform: [{ rotate: `${tilt}deg` }] }, style]}>
+      <Copy size={size} weight={600} upper color={color.ink}>
         {label}
-      </Mono>
+      </Copy>
     </View>
   );
 }
 
-/** Accent block label, e.g. "APPLICATIONS OPEN". */
-export function Badge({ label, size = 11, padX = 12, padY = 6 }: { label: string; size?: number; padX?: number; padY?: number }) {
+/** A press-red sticker slapped on at an angle, e.g. "APPLICATIONS OPEN". */
+export function Badge({ label, size = 13, padX = 12, padY = 6, tilt = 3 }: { label: string; size?: number; padX?: number; padY?: number; tilt?: number }) {
   return (
-    <View style={[styles.badge, { paddingHorizontal: padX, paddingVertical: padY }]}>
-      <Mono size={size} weight={600} ls={0.16} color={color.ink}>
+    <View style={[styles.sticker, { paddingHorizontal: padX, paddingVertical: padY, transform: [{ rotate: `${tilt}deg` }] }]}>
+      <Copy size={size} weight={600} upper lh={1.1} color={color.onHi}>
         {label}
-      </Mono>
+      </Copy>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  eyebrow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  square: { width: 10, height: 10 },
-  shrink: { flexShrink: 1 },
-  tag: { borderWidth: 1, borderStyle: 'dashed', alignSelf: 'flex-start', maxWidth: '100%' },
-  badge: { backgroundColor: color.accent, alignSelf: 'flex-start' },
+  stamp: { borderWidth: 2.5, paddingHorizontal: 10, paddingVertical: 5, alignSelf: 'flex-start', opacity: 0.9 },
+  tape: { backgroundColor: color.tape, alignSelf: 'flex-start', maxWidth: '100%' },
+  sticker: { backgroundColor: color.hi, alignSelf: 'flex-start' },
 });

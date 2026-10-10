@@ -14,7 +14,7 @@ export function TiltCard({ rotate, children }: { rotate: number; children: React
   const up = lifted && !reduceMotion;
   // Same function list in both states so the browser interpolates each one.
   const transform: ViewStyle['transform'] = up
-    ? [{ translateX: -4 }, { translateY: -4 }, { rotate: '0deg' }]
+    ? [{ translateX: 0 }, { translateY: -4 }, { rotate: '0deg' }]
     : [{ translateX: 0 }, { translateY: 0 }, { rotate: `${rotate}deg` }];
 
   return (
@@ -26,15 +26,16 @@ export function TiltCard({ rotate, children }: { rotate: number; children: React
       onPressIn={() => setLifted(true)}
       onPressOut={() => setLifted(false)}
       style={styles.cursor}>
-      <View style={[styles.card, { transform }]}>{children}</View>
+      <View style={[styles.card, { transform }, up && styles.up]}>{children}</View>
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   cursor: { cursor: 'auto' },
+  up: { boxShadow: '0px 14px 24px rgba(13, 13, 13, 0.32)' } as unknown as ViewStyle,
   card: {
-    transitionProperty: 'transform',
+    transitionProperty: 'transform, box-shadow',
     transitionDuration: `${motion.tiltMs}ms`,
     transitionTimingFunction: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
   } as unknown as ViewStyle,

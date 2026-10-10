@@ -29,6 +29,8 @@ export type Client = {
   logo?: ImageSourcePropType;
   /** Width ÷ height of `logo`. Wide wordmarks get a wider slot at the same height. Default 1. */
   logoAspect?: number;
+  /** A one-color logo (white or black art) printed in ink so it shows on the light page. Keep off for full-color logos. */
+  logoInk?: boolean;
   kicker: string;
   name: string;
   line: string;
@@ -58,6 +60,7 @@ export const clients: { head: SectionCopy; items: readonly Client[] } = {
       logoLabel: '[LOGO]',
       logo: require('../../assets/logos/rising-founders.png'),
       logoAspect: 325 / 75,
+      logoInk: true,
       kicker: 'PARTNER · FOUNDER PROGRAM · 23 AND UNDER',
       name: 'J Rising Founder',
       line: 'An early chance for extraordinary founders.',

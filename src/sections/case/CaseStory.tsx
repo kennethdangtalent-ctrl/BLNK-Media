@@ -5,13 +5,13 @@ import { CaseCover, coverFor } from '@/components/CaseCover';
 import { Footer } from '@/components/Footer';
 import { Grid } from '@/components/Grid';
 import { Btn, ULink } from '@/components/Link';
-import { Eyebrow } from '@/components/Marks';
+import { Stamp } from '@/components/Marks';
 import { Masthead } from '@/components/Masthead';
 import { Main, Page } from '@/components/Page';
 import { PageHead } from '@/components/PageHead';
 import { PhotoSlot } from '@/components/PhotoSlot';
 import { TiltCard } from '@/components/TiltCard';
-import { Display, Mono, Serif } from '@/components/Type';
+import { Display, Copy, Deck } from '@/components/Type';
 import { cases, type CaseStudy } from '@/content/business';
 import { roster } from '@/content/home';
 import { useLayout } from '@/theme/layout';
@@ -62,18 +62,19 @@ function Opener({ item, index }: { item: CaseStudy; index: number }) {
         <Frame style={{ paddingTop: L.fl(96, 56), paddingBottom: L.fl(96, 56) }}>
           <View style={[styles.openerRow, { gap: L.fl(64, 32) }]}>
             <View style={styles.openerText}>
-              <Eyebrow square={color.ink}>{`${item.label.replace('CASE', 'CASE STUDY')} · RESULTS SOON`}</Eyebrow>
               <Display level={1} size={brandSize} lh={0.85} ls={-0.01} color={color.ink}>
                 {item.brand}
               </Display>
-              <Serif italic size={L.fl(56, 34)} lh={1} color={color.ink}>
+              <Deck italic size={L.fl(56, 34)} lh={1} color={color.ink}>
                 × {item.creator}
-              </Serif>
+              </Deck>
               {item.objective ? (
-                <Serif size={L.fl(28, 22)} lh={1.2} maxCh={36} color={color.ink}>
+                <Deck size={L.fl(28, 22)} lh={1.2} maxCh={36} color={color.ink}>
                   {item.objective}
-                </Serif>
+                </Deck>
               ) : null}
+              <Stamp label={`${item.label.replace('CASE', 'CASE STUDY')} · RESULTS SOON`} tint={color.ink} />
+
             </View>
             {showCover ? (
               <View style={{ width: coverW }}>
@@ -102,15 +103,15 @@ function Numbers({ item }: { item: CaseStudy }) {
   return (
     <Band tone="dark" label="The numbers">
       <View style={{ gap: L.fl(48, 32) }}>
-        <Eyebrow>THE NUMBERS</Eyebrow>
+        <Display level={2} size={L.fl(64, 40)} lh={0.9}>The numbers</Display>
         <Grid cols={L.isPhone ? 1 : 3} gap={L.fl(32, 20)} rowGap={24}>
           {item.rows.map(([term, value]) => (
             <Stat key={term} term={term} value={value} />
           ))}
         </Grid>
-        <Serif italic size={L.fl(28, 22)} lh={1.2} maxCh={44}>
+        <Deck italic size={L.fl(28, 22)} lh={1.2} maxCh={44}>
           Results are published here when the campaign wraps.
-        </Serif>
+        </Deck>
       </View>
     </Band>
   );
@@ -121,9 +122,9 @@ function Stat({ term, value }: { term: string; value: string }) {
   const tone = useTone();
   return (
     <View style={styles.stat}>
-      <Mono size={12} weight={600} ls={0.16} color={tone.mute}>
+      <Copy size={12} weight={600} ls={0.16} color={tone.mute}>
         {term}
-      </Mono>
+      </Copy>
       <Display size={fitWords(value, L.isPhone ? L.inner : L.inner / 3 - 32, L.fl(72, 48))} lh={0.9}>
         {value}
       </Display>
@@ -140,7 +141,7 @@ function Creator({ item }: { item: CaseStudy }) {
   return (
     <Band tone="light" label="The creator">
       <View style={{ gap: L.fl(48, 32) }}>
-        <Eyebrow>THE CREATOR</Eyebrow>
+        <Display level={2} size={L.fl(64, 40)} lh={0.9}>The creator</Display>
         <View style={[styles.creatorRow, { flexDirection: stacked ? 'column' : 'row', gap: L.fl(64, 32) }]}>
           <View style={{ width: photoW }}>
             <PhotoSlot subject={creator} height={Math.round((photoW * 2) / 3)} tilt={-3} />
@@ -157,18 +158,18 @@ function CreatorText({ creator }: { creator: (typeof roster)[number] }) {
   const tone = useTone();
   return (
     <View style={styles.creatorText}>
-      <Mono size={12} weight={600} ls={0.16} color={tone.mute}>
+      <Copy size={12} weight={600} ls={0.16} color={tone.mute}>
         {creator.kicker}
-      </Mono>
+      </Copy>
       <Display level={2} size={L.fl(80, 52)} lh={0.88} upper>
         {creator.name}
       </Display>
-      <Serif italic size={L.fl(28, 21)} lh={1.15}>
+      <Deck italic size={L.fl(28, 21)} lh={1.15}>
         {creator.hook}
-      </Serif>
-      <Mono size={L.fl(15, 14)} lh={1.65} color={tone.mute} maxCh={60}>
+      </Deck>
+      <Copy size={L.fl(15, 14)} lh={1.65} color={tone.mute} maxCh={60}>
         {creator.body}
-      </Mono>
+      </Copy>
       <ULink href="/?s=roster">MEET THE ROSTER →</ULink>
     </View>
   );
@@ -187,9 +188,9 @@ function Ask({ item, next }: { item: CaseStudy; next: CaseStudy }) {
           <Btn href="/business?s=cases" label="← ALL CASE STUDIES" variant="outline" shadow="ink" />
         </View>
         <View style={styles.next}>
-          <Mono size={12} weight={600} ls={0.16}>
+          <Copy size={12} weight={600} ls={0.16}>
             NEXT STORY
-          </Mono>
+          </Copy>
           <ULink href={`/cases/${next.slug}`} size={14}>{`${next.brand.toUpperCase()} × ${next.creator.toUpperCase()} →`}</ULink>
         </View>
       </View>
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
   opener: { borderBottomWidth: 3, borderColor: color.ink },
   openerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   openerText: { flex: 1, minWidth: 0, gap: 20 },
-  coverFrame: { borderWidth: 2, borderColor: color.ink, boxShadow: `10px 10px 0px ${color.ink}` },
+  coverFrame: { borderWidth: 2, borderColor: color.ink, boxShadow: '0px 14px 28px rgba(13, 13, 13, 0.3)' },
   stat: { gap: 12, borderTopWidth: 3, borderColor: color.paper, paddingTop: 16 },
   creatorRow: { alignItems: 'flex-start' },
   creatorText: { flex: 1, minWidth: 0, gap: 16 },

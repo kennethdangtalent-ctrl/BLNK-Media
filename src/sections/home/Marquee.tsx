@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, { Easing, cancelAnimation, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
 
-import { Mono } from '@/components/Type';
+import { Copy } from '@/components/Type';
 import { marquee } from '@/content/home';
 import { useLayout } from '@/theme/layout';
 import { color, motion } from '@/theme/tokens';
 
-/** 107 characters of 14 px Plex Mono at 0.2 em tracking (11.2 px each) plus 48 px padding, rounded up. */
+/** 107 characters of 14 px Plex Copy at 0.2 em tracking (11.2 px each) plus 48 px padding, rounded up. */
 const ESTIMATED_COPY_W = 1300;
 
 /**
@@ -41,9 +41,9 @@ export function Marquee() {
             key={i}
             style={styles.copy}
             onLayout={i === 0 ? (event) => setCopyW(Math.round(event.nativeEvent.layout.width)) : undefined}>
-            <Mono size={14} weight={600} ls={0.2} color={color.paper} numberOfLines={1}>
+            <Copy size={14} weight={600} ls={0.2} color={color.paper} numberOfLines={1}>
               {marquee}
-            </Mono>
+            </Copy>
           </View>
         ))}
       </Animated.View>

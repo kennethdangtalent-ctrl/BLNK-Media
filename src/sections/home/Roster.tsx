@@ -1,56 +1,53 @@
 import { StyleSheet, View } from 'react-native';
 
 import { Band } from '@/components/Band';
+import { FillPhoto } from '@/components/FillPhoto';
 import { Chip, ULink } from '@/components/Link';
 import { PhotoSlot } from '@/components/PhotoSlot';
 import { SectionHead } from '@/components/SectionHead';
-import { Display, Mono, Serif } from '@/components/Type';
-import { roster, rosterHead, type Creator, type Social, type Stat } from '@/content/home';
+import { TiltCard } from '@/components/TiltCard';
+import { Copy, Deck, Display } from '@/components/Type';
+import { cover, roster, rosterHead, type Creator, type Social, type Stat } from '@/content/home';
+import { ISSUE } from '@/content/site';
 import { useLayout, type Layout } from '@/theme/layout';
-import { fitLines, fitWords } from '@/theme/metrics';
+import { fitWords } from '@/theme/metrics';
 import { useTone } from '@/theme/tone';
 import { color } from '@/theme/tokens';
 
-type Columns = { stacked: boolean; photoW: number; gap: number; textW: number };
+/** Serial letters for the five roster spots in this issue: 001-A to 001-E. */
+const SERIAL = ['A', 'B', 'C', 'D', 'E'] as const;
+const issueNo = ISSUE.no.replace(/\D/g, '');
 
-/** Desktop keeps the board's 480 | 1fr split; tablet gives the photo 38%; phone stacks. */
-function columnsFor(L: Layout): Columns {
-  if (L.isDesktop) {
-    const photoW = Math.round(480 * L.s);
-    const gap = Math.round(64 * L.s);
-    return { stacked: false, photoW, gap, textW: L.inner - photoW - gap };
-  }
-  if (L.isTablet) {
-    const photoW = Math.round(L.inner * 0.38);
-    return { stacked: false, photoW, gap: 40, textW: L.inner - photoW - 40 };
-  }
-  return { stacked: true, photoW: L.inner, gap: 32, textW: L.inner };
+type Spread = { stacked: boolean; photoW: number; gap: number; textW: number };
+
+/** Desktop and tablet set each creator as a two-page spread, photo about 45 % wide; phone stacks. */
+function spreadFor(L: Layout): Spread {
+  if (L.isPhone) return { stacked: true, photoW: L.inner, gap: 28, textW: L.inner };
+  const gap = L.isDesktop ? Math.round(72 * L.s) : 40;
+  const photoW = Math.round(L.inner * (L.isDesktop ? 0.45 : 0.42));
+  return { stacked: false, photoW, gap, textW: L.inner - photoW - gap };
+}
+
+/** The full-size portrait shot for the cover, when there is one; the roster's own picture otherwise. */
+function portraitFor(creator: Creator): { photo: number; focus?: number } | null {
+  const shot = cover.card.slides.find((s) => s.name.toLowerCase() === creator.name.toLowerCase());
+  if (shot) return { photo: shot.photo, focus: shot.photoFocus };
+  if (creator.photo && creator.photoStyle !== 'print') return { photo: creator.photo, focus: creator.photoFocus };
+  return null;
 }
 
 export function Roster() {
   const L = useLayout();
-  const columns = columnsFor(L);
-  const statGap = L.fl(24, 12);
-  const statColW = (columns.textW - 2 * statGap) / 3;
-  // One figure size across every card, so the stat rows line up down the page.
-  const statSize = Math.min(L.fl(48, 30), ...roster.flatMap((c) => c.stats.map((stat) => fitLines(stat.value, statColW, 48))));
-
+  const spread = spreadFor(L);
   return (
     <Band tone="dark" id="roster" label="Roster">
-      <View style={{ gap: L.fl(64, 40) }}>
+      <View style={{ gap: L.fl(72, 40) }}>
         <SectionHead eyebrow={rosterHead.eyebrow} title={rosterHead.title} dek={rosterHead.dek}>
           <ULink href="/business">{rosterHead.link}</ULink>
         </SectionHead>
-        <View style={{ gap: L.fl(48, 40) }}>
+        <View style={{ gap: L.fl(120, 64) }}>
           {roster.map((creator, i) => (
-            <RosterCard
-              key={creator.n}
-              creator={creator}
-              columns={columns}
-              statSize={statSize}
-              statGap={statGap}
-              tilt={TILTS[i % TILTS.length]}
-            />
+            <Feature key={creator.n} creator={creator} serial={`${issueNo}-${SERIAL[i]}`} spread={spread} flip={i % 2 === 1} tilt={TILTS[i % TILTS.length]} />
           ))}
         </View>
       </View>
@@ -58,59 +55,82 @@ export function Roster() {
   );
 }
 
-function RosterCard({
-  creator,
-  columns,
-  statSize,
-  statGap,
-  tilt,
-}: {
-  creator: Creator;
-  columns: Columns;
-  statSize: number;
-  statGap: number;
-  tilt: number;
-}) {
+/** Hand-placed angles, one per feature in order, so the pasted-up portraits read as a collage. */
+const TILTS = [-1.5, 2, -2, 1.5, -1];
+
+/** One creator set as a magazine feature: portrait on one page, the profile on the facing page. */
+function Feature({ creator, serial, spread, flip, tilt }: { creator: Creator; serial: string; spread: Spread; flip: boolean; tilt: number }) {
   const L = useLayout();
   const tone = useTone();
-  const numeral = L.fl(140, 88);
-  const photoH = Math.round((columns.photoW * 2) / 3);
+  const portrait = portraitFor(creator);
+  const photoH = spread.stacked ? Math.round(Math.min(spread.photoW * 1.2, 520)) : Math.round(spread.photoW * 1.25);
+  const nameSize = fitWords(creator.name, spread.textW, L.fl(132, 60), -0.03);
+  // The lede is the bio's first sentence, set bold; the rest runs on as feature copy.
+  const split = creator.body.search(/[.!?](\s|$)/);
+  const lede = split > 0 ? creator.body.slice(0, split + 1) : creator.body;
+  const rest = split > 0 ? creator.body.slice(split + 1).trim() : '';
 
   return (
     <View
       role="article"
       aria-label={creator.name}
       style={[
-        styles.card,
-        { flexDirection: columns.stacked ? 'column' : 'row', gap: columns.gap, paddingTop: L.fl(40, 32) },
+        styles.feature,
+        {
+          flexDirection: spread.stacked ? 'column' : flip ? 'row-reverse' : 'row',
+          gap: spread.gap,
+        },
       ]}>
-      <View style={{ width: columns.photoW, paddingTop: 24 }}>
-        <Display
-          aria-hidden
-          size={numeral}
-          lh={0.8}
-          upper={false}
-          color={color.accent}
-          style={[styles.numeral, { top: -Math.round(numeral * 0.23) }]}>
-          {creator.n}
-        </Display>
-        <PhotoSlot subject={creator} height={photoH} tilt={tilt} />
-      </View>
+      {/* Rests at its pasted-up angle; hover or press picks it up off the page. */}
+      <TiltCard rotate={tilt}>
+        <View style={{ width: spread.photoW }}>
+          <View style={[styles.portrait, { height: photoH }]}>
+            {portrait ? (
+              <FillPhoto source={portrait.photo} label={`Portrait of ${creator.name}`} focus={portrait.focus ?? 30} />
+            ) : (
+              <PhotoSlot subject={creator} height={photoH} tilt={0} />
+            )}
+            <View style={[styles.serial, flip ? styles.serialRight : styles.serialLeft]}>
+              <Display size={L.fl(44, 32)} lh={0.95} upper={false} color={color.onHi}>
+                {serial}
+              </Display>
+            </View>
+          </View>
+        </View>
+      </TiltCard>
 
-      <View style={[styles.body, columns.stacked ? styles.bodyStacked : styles.bodyBeside]}>
-        <Mono size={12} weight={600} ls={0.16} color={tone.mute}>
-          {creator.kicker}
-        </Mono>
-        <Display level={3} size={fitWords(creator.name, columns.textW, L.fl(80, 52), -0.005)} lh={0.88} ls={-0.005}>
+      <View style={[styles.profile, spread.stacked ? styles.profileStacked : { width: spread.textW }]}>
+        <View style={[styles.runningHead, { borderColor: tone.mute }]}>
+          <Copy size={13} weight={600} upper color={tone.fg}>
+            {`Profile ${serial}`}
+          </Copy>
+          <Copy size={13} weight={600} upper color={tone.mute} style={styles.shrink}>
+            {creator.kicker}
+          </Copy>
+        </View>
+
+        <Display level={3} size={nameSize} lh={0.86}>
           {creator.name}
         </Display>
-        <Serif italic size={L.fl(28, 21)} lh={1.15}>
-          {creator.hook}
-        </Serif>
-        <Mono size={L.fl(15, 14)} lh={1.65} color={tone.mute} maxCh={60}>
-          {creator.body}
-        </Mono>
-        <Stats stats={creator.stats} size={statSize} gap={statGap} />
+
+        <View style={styles.pull}>
+          <Display aria-hidden size={L.fl(96, 64)} lh={0.7} upper={false} color={color.hi} style={styles.quoteMark}>
+            “
+          </Display>
+          <Deck italic size={L.fl(34, 24)} lh={1.15} style={styles.shrink}>
+            {creator.hook}
+          </Deck>
+        </View>
+
+        <Copy size={L.fl(17, 16)} lh={1.6} maxCh={62}>
+          <Copy size={L.fl(17, 16)} weight={600} lh={1.6}>
+            {lede}
+          </Copy>
+          {rest ? ` ${rest}` : ''}
+        </Copy>
+
+        <FactBox stats={creator.stats} />
+
         <View style={styles.links}>
           <View style={styles.chips}>
             {creator.socials.map((social) => (
@@ -137,21 +157,25 @@ function socialLabel(name: string, social: Social) {
   return social.followers ? `${name} on ${social.platform}, ${social.followers} followers` : `${name} on ${social.platform}`;
 }
 
-/** Hand-placed angles, one per card in order, so the pasted-up pictures read as a collage. */
-const TILTS = [4, -5, 3, -4, 5];
-
-function Stats({ stats, size, gap }: { stats: readonly Stat[]; size: number; gap: number }) {
+/** The magazine's fact box: "By the numbers", one stat per row, label and figure joined by a dotted leader. */
+function FactBox({ stats }: { stats: readonly Stat[] }) {
   const tone = useTone();
   return (
-    <View style={[styles.stats, { gap }]}>
-      {stats.map((stat) => (
-        <View key={stat.label} style={styles.stat}>
-          <Display size={size} lh={0.9} upper={false} style={styles.tabular}>
+    <View style={[styles.box, { borderColor: tone.fg }]}>
+      <View style={[styles.boxHead, { backgroundColor: tone.fg }]}>
+        <Copy size={13} weight={600} upper color={tone.bg}>
+          By the numbers
+        </Copy>
+      </View>
+      {stats.map((stat, i) => (
+        <View key={stat.label} style={[styles.fact, i > 0 && { borderTopWidth: 1, borderColor: color.ruleOnInk }]}>
+          <Copy size={13} weight={600} upper color={tone.mute} style={styles.shrink}>
+            {stat.label}
+          </Copy>
+          <View aria-hidden style={[styles.leader, { borderColor: tone.mute }]} />
+          <Display size={28} lh={1} upper={false}>
             {stat.value}
           </Display>
-          <Mono size={11} weight={600} ls={0.14} color={tone.mute}>
-            {stat.label}
-          </Mono>
         </View>
       ))}
     </View>
@@ -159,14 +183,61 @@ function Stats({ stats, size, gap }: { stats: readonly Stat[]; size: number; gap
 }
 
 const styles = StyleSheet.create({
-  card: { alignItems: 'flex-start', borderTopWidth: 1, borderColor: color.hairOnInk },
-  numeral: { position: 'absolute', left: -8, zIndex: 2 },
-  body: { gap: 16 },
-  bodyBeside: { flex: 1, minWidth: 0 },
-  bodyStacked: { alignSelf: 'stretch' },
-  stats: { flexDirection: 'row', paddingTop: 20, borderTopWidth: 1, borderColor: color.hairOnInk },
-  stat: { flex: 1, flexBasis: 0, minWidth: 0, gap: 6 },
-  tabular: { fontVariant: ['tabular-nums'] },
-  links: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 24 },
+  feature: { alignItems: 'flex-start' },
+  portrait: {
+    overflow: 'hidden',
+    backgroundColor: color.ink,
+    boxShadow: '0px 14px 30px rgba(0, 0, 0, 0.45)',
+  } as object,
+  serial: {
+    position: 'absolute',
+    top: 16,
+    backgroundColor: color.hi,
+    paddingHorizontal: 12,
+    paddingTop: 8,
+    paddingBottom: 4,
+  },
+  serialLeft: { left: 16, transform: [{ rotate: '-3deg' }] },
+  serialRight: { right: 16, transform: [{ rotate: '3deg' }] },
+  profile: { gap: 22 },
+  profileStacked: { alignSelf: 'stretch' },
+  runningHead: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    columnGap: 16,
+    rowGap: 4,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+  },
+  pull: { flexDirection: 'row', gap: 10, alignItems: 'flex-start' },
+  quoteMark: { marginTop: 4 },
+  box: { borderWidth: 2, alignSelf: 'stretch', maxWidth: 560 },
+  boxHead: {
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    alignSelf: 'flex-start',
+  },
+  fact: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    gap: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+  },
+  leader: {
+    flex: 1,
+    minWidth: 16,
+    borderBottomWidth: 2,
+    borderStyle: 'dotted',
+    marginBottom: 6,
+  },
+  links: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 20,
+  },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, flexShrink: 1 },
+  shrink: { flexShrink: 1 },
 });
