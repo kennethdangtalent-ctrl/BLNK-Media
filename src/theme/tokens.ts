@@ -1,8 +1,8 @@
 /*
  * Design tokens for the BLNK magazine identity (October 2026): white, black and three reds. Clean
  * white pages and black type like a premium print title; oxblood owns the big sections (roster,
- * case studies), saturated crimson the loud ones (apply, start a brief) and every call to action,
- * and signal red is the small accent on stickers, serials and pull-quote marks. No cream, no neon.
+ * case studies); one crimson red does every job red does (buttons, stickers, serials, highlighted
+ * words), always with white type on it. No cream, no neon.
  */
 
 export const color = {
@@ -16,10 +16,10 @@ export const color = {
   brand: '#5c0d12',
   /** Saturated crimson. Loud sections and calls to action; white type on it. */
   crimson: '#c1001f',
-  /** Signal red. Stickers, serials, quote marks, the logo's eye on dark grounds. Never a whole section. */
-  hi: '#e91b0f',
-  /** Text on orange. */
-  onHi: '#0d0d0d',
+  /** The one red, used the same way everywhere: stickers, serials, highlighted words, buttons. Same as crimson. */
+  hi: '#c1001f',
+  /** Text on the red: white. */
+  onHi: '#ffffff',
   /** Secondary text on white. */
   greyOnPaper: '#4a4a47',
   /** Secondary text on black. */
@@ -38,7 +38,7 @@ export const color = {
   blankOnInk: 'rgba(243, 243, 239, 0.12)',
   blankOnPaper: 'rgba(13, 13, 13, 0.08)',
   /** Back-compat aliases for components that still name the old roles. */
-  accent: '#e91b0f',
+  accent: '#c1001f',
   plate: '#0d0d0d',
 } as const;
 export const font = {

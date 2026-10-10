@@ -114,7 +114,7 @@ function Feature({ creator, serial, spread, flip, tilt }: { creator: Creator; se
         </Display>
 
         <View style={styles.pull}>
-          <Display aria-hidden size={L.fl(96, 64)} lh={0.7} upper={false} color={color.hi} style={styles.quoteMark}>
+          <Display aria-hidden size={L.fl(96, 64)} lh={0.7} upper={false} color={tone.mute} style={styles.quoteMark}>
             “
           </Display>
           <Deck italic size={L.fl(34, 24)} lh={1.15} style={styles.shrink}>

@@ -1,5 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 
+import { Accented } from '@/components/Accent';
 import { Band } from '@/components/Band';
 import { Grid } from '@/components/Grid';
 import { Copy, Deck, Display } from '@/components/Type';
@@ -7,7 +8,6 @@ import { mission } from '@/content/mission';
 import { useLayout } from '@/theme/layout';
 import { fitWords } from '@/theme/metrics';
 import { useTone } from '@/theme/tone';
-import { color } from '@/theme/tokens';
 
 /**
  * The mission: its title and deck, the four values in a roomy two-by-two grid (one column on a
@@ -46,13 +46,11 @@ export function Values() {
 function Value({ name, title, body }: { name: string; title: string; body: string }) {
   const L = useLayout();
   const tone = useTone();
+  const word = `${name.charAt(0)}${name.slice(1).toLowerCase()}`;
   return (
     <View style={[styles.value, { borderColor: tone.fg }]}>
-      <Display level={3} size={L.fl(34, 26)} lh={1.08} upper={false}>
-        <Display size={L.fl(34, 26)} lh={1.08} upper={false} color={color.crimson}>
-          {`${name.charAt(0)}${name.slice(1).toLowerCase()}. `}
-        </Display>
-        {title}
+      <Display level={3} size={L.fl(34, 26)} lh={1.15} upper={false}>
+        <Accented text={`${word}. ${title}`} word={word} />
       </Display>
       <Copy size={L.fl(18, 16)} lh={1.6} color={tone.mute}>
         {body}
