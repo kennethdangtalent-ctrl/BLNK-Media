@@ -29,7 +29,7 @@ export const meta = {
   mission: {
     title: 'BLNK Media — The Mission',
     description:
-      'BLNK exists to build the infrastructure and brand layer for the next generation of internet creators. The thesis, the mission and the founder.',
+      'What BLNK Media is about: a creator management company that helps streamers turn what they love into a real career. Why we exist, what we look for, and who runs it.',
     path: '/mission',
   },
   privacy: {
@@ -61,7 +61,7 @@ export const footer = {
   notes: {
     home: 'Follower counts from public trackers, September 2026.',
     business: 'Brand names and logos are the property of their owners.',
-    mission: 'The thesis, as written by the founder, September 2026.',
+    mission: 'Written by the founder, October 2026.',
     legal: 'Questions about these pages? Email business@BLNK.name.',
     services: 'Every project is scoped to you. We reply within 1 business day.',
     case: 'Campaign results are added when each campaign wraps.',
