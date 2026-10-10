@@ -1,5 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 
+import { Accented } from '@/components/Accent';
 import { Band } from '@/components/Band';
 import { Grid } from '@/components/Grid';
 import { Copy, Deck, Display } from '@/components/Type';
@@ -49,7 +50,7 @@ function Value({ name, title, body }: { name: string; title: string; body: strin
   return (
     <View style={[styles.value, { borderColor: tone.fg }]}>
       <Display level={3} size={L.fl(34, 26)} lh={1.15} upper={false}>
-        {`${word}. ${title}`}
+        <Accented text={`${word}. ${title}`} word={word} />
       </Display>
       <Copy size={L.fl(18, 16)} lh={1.6} color={tone.mute}>
         {body}

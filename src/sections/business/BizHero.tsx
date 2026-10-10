@@ -1,5 +1,6 @@
 import { StyleSheet, View, type ViewStyle } from 'react-native';
 
+import { Accented } from '@/components/Accent';
 import { Band } from '@/components/Band';
 import { Btn, ULink } from '@/components/Link';
 import { Reveal } from '@/components/Reveal';
@@ -28,7 +29,7 @@ export function BizHero() {
         <View style={[twoColumns && styles.textColumn, { gap: L.fl(40, 28) }]}>
           <Reveal index={1}>
             <Display level={1} size={titleSize} lh={0.88} ls={-0.01}>
-              {bizHero.title}
+              <Accented text={bizHero.title} word="cover" />
             </Display>
           </Reveal>
           <Reveal index={2}>

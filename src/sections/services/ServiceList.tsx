@@ -1,5 +1,6 @@
 import { View } from 'react-native';
 
+import { Accented } from '@/components/Accent';
 import { Band } from '@/components/Band';
 import { Clipping } from '@/components/Clipping';
 import { Btn } from '@/components/Link';
@@ -31,7 +32,7 @@ export function ServiceList() {
       <Band tone="stock" label="Services" padTop={L.fl(96, 56)} padBottom={L.fl(40, 24)}>
         <View style={{ gap: 14 }}>
           <Display level={1} size={fitWords(services.head.title, L.inner, L.fl(120, 56), -0.03)} lh={1} upper={false}>
-            {services.head.title}
+            <Accented text={services.head.title} word="Services" />
           </Display>
           <Deck size={L.fl(24, 19)} lh={1.3} color={tone.mute}>
             {services.head.dek}
@@ -83,7 +84,7 @@ function SpreadBody({ title, rows, cta, note }: { title: string; rows: readonly 
   return (
     <View style={{ gap: L.fl(48, 32) }}>
       <Display level={2} size={L.fl(72, 44)} lh={1.05} upper={false}>
-        {title}
+        <Accented text={title} word={title.split(' ').slice(-1)[0]} />
       </Display>
       <View style={{ flexDirection: 'row', gap, alignItems: 'flex-start' }}>
         {columns.map((column, c) => (

@@ -1,5 +1,6 @@
 import { StyleSheet, View, type ViewStyle } from 'react-native';
 
+import { Accented } from '@/components/Accent';
 import { Band } from '@/components/Band';
 import { CaseCover } from '@/components/CaseCover';
 import { Grid } from '@/components/Grid';
@@ -36,7 +37,7 @@ export function Cases() {
       <View style={{ gap: L.fl(64, 40) }}>
         <View style={{ gap: 12 }}>
           <Display level={2} size={fitWords(cases.head.title, L.inner, L.fl(80, 44), -0.03)} lh={0.92} upper={false}>
-            {cases.head.title}
+            <Accented text={cases.head.title} word="studies" />
           </Display>
           <Deck size={L.fl(22, 18)} lh={1.3} color={color.greyOnBrand}>
             {cases.head.dek}
