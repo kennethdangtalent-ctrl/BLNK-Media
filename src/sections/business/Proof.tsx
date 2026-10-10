@@ -1,6 +1,5 @@
 import { Image, StyleSheet, View } from 'react-native';
 
-import { Accented } from '@/components/Accent';
 import { Band } from '@/components/Band';
 import { Clipping, Sticker } from '@/components/Clipping';
 import { Grid } from '@/components/Grid';
@@ -29,7 +28,7 @@ export function Proof() {
     <Band tone="stock" id="clients" label="Who we work with">
       <View style={{ gap: L.fl(72, 48) }}>
         <Display level={2} size={fitWords(proof.title, L.inner, L.fl(80, 44), -0.03)} lh={1.05} upper={false}>
-          <Accented text={proof.title} word={proof.accent} />
+          {proof.title}
         </Display>
 
         <View style={{ gap: L.fl(36, 24) }}>

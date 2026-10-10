@@ -1,6 +1,5 @@
 import { View } from 'react-native';
 
-import { Accented } from '@/components/Accent';
 import { Band } from '@/components/Band';
 import { Clipping } from '@/components/Clipping';
 import { Grid } from '@/components/Grid';
@@ -25,7 +24,7 @@ export function BrandServices() {
     <Band tone="stock" id="services" label="How we work with brands">
       <View style={{ gap: L.fl(56, 36) }}>
         <Display level={2} size={fitWords(brandServices.title, L.inner, L.fl(80, 44), -0.03)} lh={1.05} upper={false}>
-          <Accented text={brandServices.title} word="brands" />
+          {brandServices.title}
         </Display>
         <Grid cols={cols} gap={L.fl(32, 20)} rowGap={L.fl(32, 24)}>
           {rows.map((row, i) => (

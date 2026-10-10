@@ -1,6 +1,5 @@
 import { StyleSheet, View } from 'react-native';
 
-import { Accented } from '@/components/Accent';
 import { Band } from '@/components/Band';
 import { Btn, ULink } from '@/components/Link';
 import { Copy, Deck, Display } from '@/components/Type';
@@ -17,7 +16,7 @@ export function Brief() {
     <Band tone="accent" id="brief" label="Start a brief">
       <View style={{ gap: L.fl(32, 24) }}>
         <Display level={2} size={fitLines(brief.title, L.inner, L.fl(120, 64), -0.03)} lh={0.88}>
-          <Accented text={brief.title} word="brief" />
+          {brief.title}
         </Display>
         <Deck size={L.fl(24, 19)} lh={1.3} maxCh={44}>
           {brief.body}
