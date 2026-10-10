@@ -1,5 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 
+import { Accented } from '@/components/Accent';
 import { Band } from '@/components/Band';
 import { Btn } from '@/components/Link';
 import { Copy, Deck, Display } from '@/components/Type';
@@ -53,7 +54,7 @@ function Column({ title, rows, cta }: { title: string; rows: readonly { name: st
   return (
     <View style={[styles.column, { gap: L.fl(28, 20) }]}>
       <Display level={2} size={L.fl(48, 32)} lh={0.95} upper={false}>
-        {title}
+        <Accented text={title} word={title.split(' ').slice(-1)[0]} />
       </Display>
       <View role="list">
         {rows.map((row) => (

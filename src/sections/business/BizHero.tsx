@@ -1,5 +1,6 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, type ViewStyle } from 'react-native';
 
+import { Accented } from '@/components/Accent';
 import { Band } from '@/components/Band';
 import { Btn, ULink } from '@/components/Link';
 import { Reveal } from '@/components/Reveal';
@@ -28,7 +29,7 @@ export function BizHero() {
         <View style={[twoColumns && styles.textColumn, { gap: L.fl(40, 28) }]}>
           <Reveal index={1}>
             <Display level={1} size={titleSize} lh={0.88} ls={-0.01}>
-              {bizHero.title}
+              <Accented text={bizHero.title} word="cover" />
             </Display>
           </Reveal>
           <Reveal index={2}>
@@ -51,7 +52,7 @@ export function BizHero() {
   );
 }
 
-/** The accent media-kit card tilted +2° over an ink block. It grows with its rows on small screens. */
+/** The media-kit card, tilted +2° on a soft paper shadow. It grows with its rows on small screens. */
 function MediaKitCard({ width }: { width: number }) {
   const k = width / COMPOSITION_W;
   const px = (n: number) => Math.round(n * k * 10) / 10;
@@ -59,7 +60,6 @@ function MediaKitCard({ width }: { width: number }) {
 
   return (
     <View style={{ width, paddingRight: px(40), paddingBottom: px(40) }}>
-      <View aria-hidden style={[styles.offset, { left: px(40), top: px(40) }]} />
       <TiltCard rotate={2}>
         <View style={[styles.kit, { minHeight: px(380), padding: px(28), gap: px(24) }]}>
           <View style={styles.kitTop}>
@@ -92,8 +92,13 @@ const styles = StyleSheet.create({
   grid: { alignItems: 'flex-start' },
   textColumn: { flex: 1, minWidth: 0 },
   ctas: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 28, rowGap: 16 },
-  offset: { position: 'absolute', right: 0, bottom: 0, backgroundColor: color.ink },
-  kit: { backgroundColor: color.paper, borderWidth: 3, borderColor: color.ink, justifyContent: 'space-between' },
+  kit: {
+    backgroundColor: color.paper,
+    borderWidth: 3,
+    borderColor: color.ink,
+    justifyContent: 'space-between',
+    boxShadow: '0px 14px 30px rgba(13, 13, 13, 0.18)',
+  } as ViewStyle,
   kitTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 },
   kitRow: {
     flexDirection: 'row',

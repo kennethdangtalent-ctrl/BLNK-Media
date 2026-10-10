@@ -7,9 +7,9 @@ import type { CaseStudy } from '@/content/business';
 import { ToneProvider, type ToneName } from '@/theme/tone';
 import { color } from '@/theme/tokens';
 
-/** Cover colors in case order: signal red, then white. Ink text on all of them. */
+/** Cover colors in case order: all white, so the covers read as one calm set. Ink text on all of them. */
 const COVERS: readonly { bg: string; tone: ToneName }[] = [
-  { bg: color.hi, tone: 'light' },
+  { bg: color.paper, tone: 'paper' },
   { bg: color.paper, tone: 'light' },
   { bg: color.paper, tone: 'light' },
 ];

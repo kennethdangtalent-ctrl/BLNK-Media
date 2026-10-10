@@ -70,12 +70,15 @@ export const clients: { head: SectionCopy; items: readonly Client[] } = {
   ],
 };
 
-/** Who we work with: the clients and the stream sponsors, shown together as one logo wall. */
+/**
+ * Who we work with, in two groups: partners (companies BLNK works with directly, business to business)
+ * and the brands BLNK's creators have been sponsored by.
+ */
 export const proof = {
   title: 'Who we work with.',
-  dek: 'Clients who hire BLNK, and brands already on a BLNK stream.',
-  clientTag: 'Client',
-  sponsorTag: 'On a BLNK stream',
+  accent: 'work with',
+  partners: { title: 'Partners', dek: 'Companies that hire BLNK, and companies building with it.' },
+  brands: { title: 'Brands our creators have worked with' },
 } as const;
 
 /** The brand half of the services, as previewed on the business page. */

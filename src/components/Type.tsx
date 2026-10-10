@@ -48,7 +48,7 @@ export function Display({
   upper = true,
   style,
   ...rest
-}: Omit<TypeProps, 'maxCh'> & { level?: 1 | 2 | 3; upper?: boolean }) {
+}: Omit<TypeProps, 'maxCh'> & { level?: 1 | 2 | 3 | 4; upper?: boolean }) {
   const tone = useTone();
   const ratio = Platform.OS === 'web' ? lh : Math.max(lh, NATIVE_MIN_DISPLAY_LH);
   return (

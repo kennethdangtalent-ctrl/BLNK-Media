@@ -1,96 +1,117 @@
-import { Image, StyleSheet, View, type ImageSourcePropType } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 
+import { Accented } from '@/components/Accent';
 import { Band } from '@/components/Band';
 import { Grid } from '@/components/Grid';
 import { ULink } from '@/components/Link';
 import { Copy, Deck, Display } from '@/components/Type';
-import { clients, proof, sponsors } from '@/content/business';
+import { clients, proof, sponsors, type Client } from '@/content/business';
 import { useLayout } from '@/theme/layout';
 import { fitWords } from '@/theme/metrics';
 import { useTone } from '@/theme/tone';
 import { color } from '@/theme/tokens';
 
-type Tile = { name: string; tag: string; logo?: ImageSourcePropType; aspect: number; ink?: boolean; link?: { label: string; href?: string } };
-
-/** Height every logo is fitted into, so a wall of different marks reads as one row. */
-const LOGO_H = 72;
+/** Height the logos are fitted into, so different marks read as one row. */
+const LOGO_H = 64;
 
 /**
- * Who we work with: the clients and the brands already on a BLNK stream, as one logo wall on white.
- * Each logo gets a name and one small tag under it; clients link out to their sites.
+ * Who we work with, printed straight onto the paper: partners first (the companies BLNK works with
+ * directly, each with its line and a link), then the brands BLNK's creators have been sponsored by,
+ * as a row of logos. No boxes; the logos are transparent and sit on the page itself.
  */
 export function Proof() {
   const L = useLayout();
   const tone = useTone();
-  const tiles: Tile[] = [
-    ...clients.items.map((c) => ({ name: c.name, tag: proof.clientTag, logo: c.logo, aspect: c.logoAspect ?? 1, ink: c.logoInk, link: c.link })),
-    ...sponsors.items.map((s) => ({ name: s.name, tag: proof.sponsorTag, logo: s.logo, aspect: 1 })),
-  ];
-  const cols = L.isPhone ? 2 : 3;
   return (
-    <Band tone="paper" id="clients" label="Who we work with">
-      <View style={{ gap: L.fl(48, 32) }}>
-        <View style={{ gap: 12 }}>
-          <Display level={2} size={fitWords(proof.title, L.inner, L.fl(80, 44), -0.03)} lh={0.92} upper={false}>
-            {proof.title}
-          </Display>
-          <Deck size={L.fl(22, 18)} lh={1.3} color={tone.mute}>
-            {proof.dek}
-          </Deck>
+    <Band tone="stock" id="clients" label="Who we work with">
+      <View style={{ gap: L.fl(64, 40) }}>
+        <Display level={2} size={fitWords(proof.title, L.inner, L.fl(80, 44), -0.03)} lh={0.92} upper={false}>
+          <Accented text={proof.title} word={proof.accent} />
+        </Display>
+
+        <View style={{ gap: L.fl(28, 20) }}>
+          <View style={{ gap: 8 }}>
+            <Display level={3} size={L.fl(34, 26)} lh={1} upper={false}>
+              {proof.partners.title}
+            </Display>
+            <Copy size={L.fl(17, 15)} color={tone.mute}>
+              {proof.partners.dek}
+            </Copy>
+          </View>
+          <Grid cols={L.isPhone ? 1 : 2} gap={L.fl(48, 24)} rowGap={32}>
+            {clients.items.map((client) => (
+              <Partner key={client.name} client={client} />
+            ))}
+          </Grid>
         </View>
-        <Grid cols={cols} gap={L.fl(24, 12)} rowGap={L.fl(24, 12)}>
-          {tiles.map((tile) => (
-            <LogoTile key={tile.name} tile={tile} />
-          ))}
-        </Grid>
+
+        <View style={{ gap: L.fl(28, 20) }}>
+          <Display level={3} size={L.fl(34, 26)} lh={1} upper={false}>
+            {proof.brands.title}
+          </Display>
+          <Grid cols={L.isPhone ? 2 : 4} gap={L.fl(40, 20)} rowGap={28}>
+            {sponsors.items.map((brand) => (
+              <View key={brand.name} style={[styles.brand, { borderColor: tone.fg }]}>
+                <View style={styles.logoBox}>
+                  {brand.logo ? (
+                    <Image source={brand.logo} style={styles.brandLogo} resizeMode="contain" accessibilityLabel={`${brand.name} logo`} />
+                  ) : null}
+                </View>
+                <Copy size={14} weight={600}>
+                  {brand.name}
+                </Copy>
+              </View>
+            ))}
+          </Grid>
+        </View>
       </View>
     </Band>
   );
 }
 
-function LogoTile({ tile }: { tile: Tile }) {
+/** A partner: logo, name, its one line and what it is, and a link out. */
+function Partner({ client }: { client: Client }) {
   const L = useLayout();
   const tone = useTone();
-  const maxW = L.isPhone ? 120 : 200;
-  const logoW = Math.min(maxW, LOGO_H * tile.aspect);
-  const logoH = logoW / tile.aspect;
+  const aspect = client.logoAspect ?? 1;
+  const logoW = Math.min(L.isPhone ? 200 : 260, LOGO_H * aspect);
   return (
-    <View style={[styles.tile, { padding: L.fl(24, 16) }]}>
+    <View style={[styles.partner, { borderColor: tone.fg }]}>
       <View style={styles.logoBox}>
-        {tile.logo ? (
+        {client.logo ? (
           <Image
-            source={tile.logo}
-            style={{ width: logoW, height: logoH }}
+            source={client.logo}
+            style={{ width: logoW, height: logoW / aspect }}
             resizeMode="contain"
-            tintColor={tile.ink ? color.ink : undefined}
-            accessibilityLabel={`${tile.name} logo`}
+            tintColor={client.logoInk ? color.ink : undefined}
+            accessibilityLabel={`${client.name} logo`}
           />
-        ) : (
-          <Copy size={14} weight={600} upper color={tone.mute}>
-            {tile.name}
-          </Copy>
-        )}
-      </View>
-      <View style={{ gap: 4 }}>
-        <Copy size={16} weight={600}>
-          {tile.name}
-        </Copy>
-        <Copy size={13} color={tone.mute}>
-          {tile.tag}
-        </Copy>
-        {tile.link?.href ? (
-          <View style={{ paddingTop: 6 }}>
-            <ULink href={tile.link.href} size={13}>
-              {tile.link.label}
-            </ULink>
-          </View>
         ) : null}
       </View>
+      <Copy size={13} weight={600} upper color={tone.mute}>
+        {client.kicker}
+      </Copy>
+      <Display level={4} size={L.fl(30, 24)} lh={1.05} upper={false}>
+        {client.name}
+      </Display>
+      <Deck italic size={L.fl(20, 18)} lh={1.3}>
+        {client.line}
+      </Deck>
+      <Copy size={L.fl(16, 15)} lh={1.55} color={tone.mute}>
+        {client.body}
+      </Copy>
+      {client.link.href ? (
+        <ULink href={client.link.href} size={14}>
+          {client.link.label}
+        </ULink>
+      ) : null}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  tile: { gap: 18, borderWidth: 1, borderColor: color.blankOnPaper, flexGrow: 1 },
+  partner: { gap: 10, borderTopWidth: 2, paddingTop: 20 },
+  brand: { gap: 12, borderTopWidth: 1, paddingTop: 18 },
   logoBox: { height: LOGO_H, justifyContent: 'center', alignItems: 'flex-start' },
+  brandLogo: { width: '100%', maxWidth: 140, height: LOGO_H },
 });

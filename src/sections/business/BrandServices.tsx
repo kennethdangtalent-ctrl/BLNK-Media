@@ -1,5 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 
+import { Accented } from '@/components/Accent';
 import { Band } from '@/components/Band';
 import { Grid } from '@/components/Grid';
 import { ULink } from '@/components/Link';
@@ -22,7 +23,7 @@ export function BrandServices() {
     <Band tone="stock" id="services" label="How we work with brands">
       <View style={{ gap: L.fl(48, 32) }}>
         <Display level={2} size={fitWords(brandServices.title, L.inner, L.fl(80, 44), -0.03)} lh={0.92} upper={false}>
-          {brandServices.title}
+          <Accented text={brandServices.title} word="brands" />
         </Display>
         <Grid cols={cols} gap={L.fl(40, 24)} rowGap={L.fl(36, 24)}>
           {rows.map((row) => (

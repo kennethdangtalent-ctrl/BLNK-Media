@@ -1,7 +1,8 @@
 import { StyleSheet, View } from 'react-native';
 
 import { Band, Frame } from '@/components/Band';
-import { CaseCover, coverFor } from '@/components/CaseCover';
+import { CaseCover } from '@/components/CaseCover';
+import { Crumple } from '@/components/Crumple';
 import { Footer } from '@/components/Footer';
 import { Grid } from '@/components/Grid';
 import { Btn, ULink } from '@/components/Link';
@@ -20,7 +21,7 @@ import { ToneProvider, useTone } from '@/theme/tone';
 import { color } from '@/theme/tokens';
 
 /**
- * A case study laid out like a magazine feature: a cover-colored opener with the brand set huge
+ * A case study laid out like a magazine feature: a paper-tone opener with the brand set huge
  * and the cover beside it, the numbers, the creator, then the ask and the next story.
  */
 export function CaseStory({ index }: { index: number }) {
@@ -51,21 +52,21 @@ export function CaseStory({ index }: { index: number }) {
 
 function Opener({ item, index }: { item: CaseStudy; index: number }) {
   const L = useLayout();
-  const cover = coverFor(index);
   const showCover = !L.isPhone;
   const coverW = L.isDesktop ? Math.round(340 * L.s) : 240;
   const textW = showCover ? L.inner - coverW - L.fl(64, 32) : L.inner;
   const brandSize = fitWords(item.brand, textW, L.fl(200, 88), -0.01);
   return (
-    <ToneProvider tone={cover.tone}>
-      <View role="region" aria-label="Cover story" style={[styles.opener, { backgroundColor: cover.bg }]}>
+    <ToneProvider tone="stock">
+      <View role="region" aria-label="Cover story" style={[styles.opener, { backgroundColor: color.stock }]}>
+        <Crumple />
         <Frame style={{ paddingTop: L.fl(96, 56), paddingBottom: L.fl(96, 56) }}>
           <View style={[styles.openerRow, { gap: L.fl(64, 32) }]}>
             <View style={styles.openerText}>
               <Display level={1} size={brandSize} lh={0.85} ls={-0.01} color={color.ink}>
                 {item.brand}
               </Display>
-              <Deck italic size={L.fl(56, 34)} lh={1} color={color.ink}>
+              <Deck italic size={L.fl(56, 34)} lh={1} color={color.crimson}>
                 × {item.creator}
               </Deck>
               {item.objective ? (
@@ -199,7 +200,7 @@ function Ask({ item, next }: { item: CaseStudy; next: CaseStudy }) {
 }
 
 const styles = StyleSheet.create({
-  opener: { borderBottomWidth: 3, borderColor: color.ink },
+  opener: {},
   openerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   openerText: { flex: 1, minWidth: 0, gap: 20 },
   coverFrame: { borderWidth: 2, borderColor: color.ink, boxShadow: '0px 14px 28px rgba(13, 13, 13, 0.3)' },
