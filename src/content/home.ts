@@ -85,8 +85,8 @@ export const roster: readonly Creator[] = [
     ],
     socials: [
       { label: 'TWITCH', icon: 'twitch', platform: 'Twitch', href: 'https://www.twitch.tv/novapovie' },
-      { label: 'TIKTOK 27K', icon: 'tiktok', platform: 'TikTok', followers: '27K', href: 'https://www.tiktok.com/@clipnovapovie' },
-      { label: 'INSTAGRAM 15K', icon: 'instagram', platform: 'Instagram', followers: '15K', href: 'https://www.instagram.com/novapovie/' },
+      { label: 'TIKTOK', icon: 'tiktok', platform: 'TikTok', href: 'https://www.tiktok.com/@clipnovapovie' },
+      { label: 'INSTAGRAM', icon: 'instagram', platform: 'Instagram', href: 'https://www.instagram.com/novapovie/' },
       { label: 'YOUTUBE', icon: 'youtube', platform: 'YouTube', href: 'https://www.youtube.com/@NovaPoviee' },
     ],
     photoLabel: '[PHOTO — NOVAPOVIE]',
