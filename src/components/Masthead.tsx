@@ -93,7 +93,7 @@ export function Masthead({ current }: { current: Current }) {
           {copy.issue}
         </Copy>
       )}
-      <Stamp label={copy.badge} tilt={-2} tint={color.crimson} />
+      <Stamp label={copy.badge} tilt={-2} tint={color.crimson} pop />
     </View>
   );
 
