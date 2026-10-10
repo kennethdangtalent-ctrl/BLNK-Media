@@ -37,6 +37,11 @@ export const meta = {
     description: "How BLNK Media handles your information. No tracking cookies, no analytics, and we don't sell your data.",
     path: '/privacy',
   },
+  services: {
+    title: 'BLNK Media — Services',
+    description: 'What BLNK does for brands (sponsored streams, short- and long-form, campaigns) and for the creators it signs (brand deals, growth, the business side).',
+    path: '/services',
+  },
   terms: {
     title: 'BLNK Media — Terms of Service',
     description: 'The terms for using blnk.name.',
@@ -48,6 +53,7 @@ export const masthead = {
   home: { issue: 'Nº 001 — THE CREATOR ISSUE', badge: 'APPLICATIONS OPEN' },
   business: { issue: 'Nº 001 — THE BUSINESS PAGES', badge: 'NOW BOOKING' },
   mission: { issue: 'Nº 001 — THE MISSION', badge: 'APPLICATIONS OPEN' },
+  services: { issue: 'Nº 001 — THE SERVICES', badge: 'NOW BOOKING' },
 } as const;
 
 export const footer = {
@@ -57,6 +63,7 @@ export const footer = {
     business: 'Brand names and logos are the property of their owners.',
     mission: 'The thesis, as written by the founder, September 2026.',
     legal: 'Questions about these pages? Email business@BLNK.name.',
+    services: 'Every project is scoped to you. We reply within 1 business day.',
     case: 'Campaign results are added when each campaign wraps.',
   },
   legal: [

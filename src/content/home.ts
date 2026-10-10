@@ -9,7 +9,7 @@ export type Social = {
   label: string;
   icon?: IconName;
   href?: string;
-  /** Platform name for the accessible label, e.g. "NovaPovie on TikTok, 27K followers". */
+  /** Platform name for the accessible label, e.g. "fumibean on Twitch". */
   platform?: string;
   followers?: string;
   dashed?: boolean;
@@ -23,7 +23,8 @@ export type Creator = PhotoSubject & {
   kicker: string;
   hook: string;
   body: string;
-  stats: readonly [Stat, Stat, Stat];
+  /** Up to three figures for the fact box. Leave a figure out rather than showing one you don't want public. */
+  stats: readonly Stat[];
   socials: readonly Social[];
 };
 
@@ -52,7 +53,7 @@ export const cover: {
     slides: [
       { name: 'NovaPovie', photo: require('../../assets/creators/novapovie-cover.jpg'), photoFocus: 20, line: 'Lifestyle, live and unscripted.' },
       { name: 'fumibean', photo: require('../../assets/creators/fumibean.jpg'), photoFocus: 30, line: 'An artist on and off stream.' },
-      { name: 'm0rals_', photo: require('../../assets/creators/m0rals-cover.jpg'), line: 'Roblox creator. The sweet one.' },
+      { name: 'm0rals_', photo: require('../../assets/creators/m0rals-cover.jpg'), photoFocus: 22, line: 'Roblox creator. The sweet one.' },
       { name: 'jackypoowoo', photo: require('../../assets/creators/jackypoowoo-cover.jpg'), line: 'Filmmaker on stream. Film nerd off it.' },
       { name: 'cloyyd', photo: require('../../assets/creators/cloyyd-cover.jpg'), line: 'IRL meets gaming. The chat plays too.' },
     ],
@@ -78,14 +79,12 @@ export const roster: readonly Creator[] = [
     hook: 'Lifestyle creator. Entertainer first.',
     body: 'NovaPovie turns everyday life into appointment viewing: IRL streams, travel days and high-energy Just Chatting, carried by a big personality and genuinely creative formats. Her audience shows up for her, which makes her a natural fit for lifestyle, beauty and consumer brands.',
     stats: [
-      { value: '11.5K', label: 'TWITCH FOLLOWERS' },
-      { value: '100K', label: 'YOUTUBE SUBSCRIBERS' },
       { value: 'PARTNER', label: 'TWITCH STATUS' },
     ],
     socials: [
       { label: 'TWITCH', icon: 'twitch', platform: 'Twitch', href: 'https://www.twitch.tv/novapovie' },
-      { label: 'TIKTOK 27K', icon: 'tiktok', platform: 'TikTok', followers: '27K', href: 'https://www.tiktok.com/@clipnovapovie' },
-      { label: 'INSTAGRAM 15K', icon: 'instagram', platform: 'Instagram', followers: '15K', href: 'https://www.instagram.com/novapovie/' },
+      { label: 'TIKTOK', icon: 'tiktok', platform: 'TikTok', href: 'https://www.tiktok.com/@clipnovapovie' },
+      { label: 'INSTAGRAM', icon: 'instagram', platform: 'Instagram', href: 'https://www.instagram.com/novapovie/' },
       { label: 'YOUTUBE', icon: 'youtube', platform: 'YouTube', href: 'https://www.youtube.com/@NovaPoviee' },
     ],
     photoLabel: '[PHOTO — NOVAPOVIE]',
@@ -183,6 +182,7 @@ export const apply = {
   body: 'Applications for the next cover close soon. 5 spots on the roster. Every one gets read.',
   primary: { label: 'APPLY → BUSINESS@BLNK.NAME', href: mailto('BLNK Roster Application') },
   secondary: { label: 'BRAND PARTNERSHIPS', href: '/business' },
+  services: { label: 'What we do for the creators we sign →', href: '/services' },
   sendLabel: 'WHAT TO SEND',
   send: ['Your Twitch link.', 'Your streaming schedule.', 'One clip that shows who you are.', 'Nothing else.'],
 } as const;

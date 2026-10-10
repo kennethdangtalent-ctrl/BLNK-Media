@@ -43,7 +43,7 @@ export function Roster() {
     <Band tone="dark" id="roster" label="Roster">
       <View style={{ gap: L.fl(72, 40) }}>
         <SectionHead eyebrow={rosterHead.eyebrow} title={rosterHead.title} dek={rosterHead.dek}>
-          <ULink href="/business">{rosterHead.link}</ULink>
+          <ULink href="/business?s=clients">{rosterHead.link}</ULink>
         </SectionHead>
         <View style={{ gap: L.fl(120, 64) }}>
           {roster.map((creator, i) => (

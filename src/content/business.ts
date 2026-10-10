@@ -70,6 +70,20 @@ export const clients: { head: SectionCopy; items: readonly Client[] } = {
   ],
 };
 
+/** Who we work with: the clients and the stream sponsors, shown together as one logo wall. */
+export const proof = {
+  title: 'Who we work with.',
+  dek: 'Clients who hire BLNK, and brands already on a BLNK stream.',
+  clientTag: 'Client',
+  sponsorTag: 'On a BLNK stream',
+} as const;
+
+/** The brand half of the services, as previewed on the business page. */
+export const brandServices = {
+  title: 'How we work with brands.',
+  link: { label: 'SEE ALL SERVICES →', href: '/services' },
+} as const;
+
 export const sponsors: {
   head: SectionCopy;
   logoLabel: string;
@@ -236,6 +250,9 @@ export const services: {
   ],
   note: "Every project is scoped to you. Send a brief and we'll reply within 1 business day.",
 };
+
+/** Shown under the brief's buttons: each deck as a quiet request link. */
+export const deckLinks = { label: 'Or request a deck:' } as const;
 
 export const brief = {
   eyebrow: 'BOOKING',

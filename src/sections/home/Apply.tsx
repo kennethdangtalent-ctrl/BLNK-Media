@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native';
 
 import { Band } from '@/components/Band';
 import { Grid } from '@/components/Grid';
-import { Btn } from '@/components/Link';
+import { Btn, ULink } from '@/components/Link';
 import { Display, Copy, Deck } from '@/components/Type';
 import { apply } from '@/content/home';
 import { useLayout } from '@/theme/layout';
@@ -24,6 +24,9 @@ export function Apply() {
           <Btn href={apply.primary.href} label={apply.primary.label} shadow="ink" />
           <Btn href={apply.secondary.href} label={apply.secondary.label} variant="outline" shadow="ink" />
         </View>
+        <ULink href={apply.services.href} size={15}>
+          {apply.services.label}
+        </ULink>
         <View style={styles.send}>
           <Copy size={12} weight={600} ls={0.16}>
             {apply.sendLabel}

@@ -6,14 +6,16 @@ import { PageHead } from '@/components/PageHead';
 import { Masthead } from '@/components/Masthead';
 import { meta } from '@/content/site';
 import { BizHero } from '@/sections/business/BizHero';
+import { BrandServices } from '@/sections/business/BrandServices';
 import { Brief } from '@/sections/business/Brief';
 import { Cases } from '@/sections/business/Cases';
-import { Clients } from '@/sections/business/Clients';
-import { Decks } from '@/sections/business/Decks';
-import { Services } from '@/sections/business/Services';
-import { Sponsors } from '@/sections/business/Sponsors';
+import { Proof } from '@/sections/business/Proof';
 
-/** The business pages: clients, sponsors, case studies, decks and services for brand teams. `?s=cases` scrolls to a section. */
+/**
+ * The business page, in the order a brand team decides: the pitch, who we work with, the case
+ * studies, how we work with brands, then the brief (with the decks). The full service list lives on
+ * /services. `?s=cases` scrolls to a section.
+ */
 export default function Business() {
   const { s } = useLocalSearchParams<{ s?: string }>();
   return (
@@ -23,11 +25,9 @@ export default function Business() {
         <Masthead current="business" />
         <Main>
           <BizHero />
-          <Clients />
-          <Sponsors />
+          <Proof />
           <Cases />
-          <Decks />
-          <Services />
+          <BrandServices />
           <Brief />
         </Main>
         <Footer variant="business" />

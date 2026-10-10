@@ -200,10 +200,13 @@ export function NavLink({
   current = false,
   dismissTo,
   onPress,
+  size = 14,
 }: {
   href: string;
   label: string;
   current?: boolean;
+  /** Smaller on phones, where five items share one row. */
+  size?: number;
   dismissTo?: boolean;
   onPress?: (event: GestureResponderEvent) => boolean | void;
 }) {
@@ -213,7 +216,7 @@ export function NavLink({
         const on = current || hovered || pressed;
         return (
           <Copy
-            size={14}
+            size={size}
             weight={600}
             upper
             color={color.ink}

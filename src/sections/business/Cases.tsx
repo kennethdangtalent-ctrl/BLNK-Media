@@ -4,8 +4,7 @@ import { Band } from '@/components/Band';
 import { CaseCover } from '@/components/CaseCover';
 import { Grid } from '@/components/Grid';
 import { A } from '@/components/Link';
-import { SectionHead } from '@/components/SectionHead';
-import { Copy } from '@/components/Type';
+import { Copy, Deck, Display } from '@/components/Type';
 import { cases, type CaseStudy } from '@/content/business';
 import { useLayout } from '@/theme/layout';
 import { fitWords } from '@/theme/metrics';
@@ -35,7 +34,14 @@ export function Cases() {
   return (
     <Band tone="dark" id="cases" label="Case studies">
       <View style={{ gap: L.fl(64, 40) }}>
-        <SectionHead eyebrow={cases.head.eyebrow} title={cases.head.title} dek={cases.head.dek} />
+        <View style={{ gap: 12 }}>
+          <Display level={2} size={fitWords(cases.head.title, L.inner, L.fl(80, 44), -0.03)} lh={0.92} upper={false}>
+            {cases.head.title}
+          </Display>
+          <Deck size={L.fl(22, 18)} lh={1.3} color={color.greyOnBrand}>
+            {cases.head.dek}
+          </Deck>
+        </View>
         <Grid cols={cols} gap={gap} rowGap={40}>
           {cases.items.map((item, i) => (
             <CoverLink key={item.slug} item={item} index={i} brandSize={brandSize} pad={pad} minHeight={minHeight} />
@@ -70,15 +76,15 @@ function CoverLink({
             <View
               style={[
                 styles.frame,
-                // Pinned up at an angle on a hard shadow; hover squares it up and lifts it onto the accent.
+                // Pinned up at an angle; hover squares it up and lifts it off the board on a soft shadow.
                 active
-                  ? { transform: [{ translateX: -4 }, { translateY: -4 }, { rotate: '0deg' }], boxShadow: `10px 10px 0px ${color.accent}` }
-                  : { transform: [{ translateX: 0 }, { translateY: 0 }, { rotate: `${TILTS[index % TILTS.length]}deg` }], boxShadow: `8px 8px 0px ${color.ruleOnInk}` },
+                  ? { transform: [{ translateY: -6 }, { rotate: '0deg' }], boxShadow: '0px 18px 32px rgba(0, 0, 0, 0.45)' }
+                  : { transform: [{ translateY: 0 }, { rotate: `${TILTS[index % TILTS.length]}deg` }], boxShadow: '0px 8px 18px rgba(0, 0, 0, 0.3)' },
                 lift,
               ]}>
               <CaseCover item={item} index={index} brandSize={brandSize} pad={pad} minHeight={minHeight} />
             </View>
-            <Copy size={12} weight={600} ls={0.16} color={active ? color.accent : color.paper}>
+            <Copy size={14} weight={600} color={color.paper} style={active ? styles.underline : null}>
               READ THE STORY →
             </Copy>
           </>
@@ -91,4 +97,5 @@ function CoverLink({
 const styles = StyleSheet.create({
   link: { gap: 16 },
   frame: { borderWidth: CARD_BORDER, borderColor: color.paper },
+  underline: { textDecorationLine: 'underline' },
 });
