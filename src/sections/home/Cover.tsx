@@ -32,12 +32,6 @@ const STRIPS: readonly { bg: string; fg: string; tilt: number; nudge: number }[]
   { bg: color.ink, fg: color.paper, tilt: -0.6, nudge: 0.2 },
 ];
 
-/** `A CREATOR MANAGEMENT HOUSE · TWITCH FIRST` from the content file, as a sentence: the note's sign-off. */
-function signOff(text: string) {
-  const lower = text.replace(/\s*·\s*/g, ', ').toLowerCase().replace('twitch', 'Twitch');
-  return `${lower.charAt(0).toUpperCase()}${lower.slice(1)}.`;
-}
-
 /** Below this width the cover stacks: the pitch first, the pile of issues under it. */
 const SIDE_BY_SIDE = 900;
 /** Height of the masthead row on desktop, so the cover can fill the rest of the screen. */
@@ -114,9 +108,6 @@ export function Cover() {
             <Deck size={wide ? 20 : 18} lh={1.35} color={color.ink}>
               {cover.lede}
             </Deck>
-            <Copy size={14} color={color.greyOnPaper}>
-              {signOff(cover.eyebrow)}
-            </Copy>
             {/* Tape last, so it lies over the note's corners and onto the page. */}
             <View aria-hidden style={[styles.tape, styles.tapeLeft]} />
             <View aria-hidden style={[styles.tape, styles.tapeRight]} />

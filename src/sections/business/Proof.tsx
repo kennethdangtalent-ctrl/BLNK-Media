@@ -1,16 +1,18 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, Platform, StyleSheet, View, type ViewStyle } from 'react-native';
 
 import { Accented } from '@/components/Accent';
 import { Band } from '@/components/Band';
 import { Clipping, Sticker } from '@/components/Clipping';
 import { Grid } from '@/components/Grid';
 import { ULink } from '@/components/Link';
+import { TiltCard } from '@/components/TiltCard';
 import { Copy, Deck, Display } from '@/components/Type';
 import { clients, proof, sponsors, type Client } from '@/content/business';
 import { useLayout } from '@/theme/layout';
 import { fitWords } from '@/theme/metrics';
 import { useTone } from '@/theme/tone';
 import { color } from '@/theme/tokens';
+import { webStyle } from '@/theme/web';
 
 /** Hand-set angles, so the clippings and stickers read as pasted down by hand. */
 const CLIP_TILTS = [-1.2, 1];
@@ -57,9 +59,14 @@ export function Proof() {
           <View style={[styles.stickers, { gap: L.fl(40, 20) }]}>
             {sponsors.items.map((brand, i) => (
               <View key={brand.name} style={styles.stickerCell}>
-                <Sticker size={sticker} tilt={STICKER_TILTS[i % STICKER_TILTS.length]}>
-                  {brand.logo ? <Image source={brand.logo} style={styles.fill} resizeMode="contain" accessibilityLabel={`${brand.name} logo`} /> : null}
-                </Sticker>
+                {/* Sways gently on its own, out of step with its neighbours; hover picks it up off the page. */}
+                <View style={[sway, swayDelay(i)]}>
+                  <TiltCard rotate={STICKER_TILTS[i % STICKER_TILTS.length]}>
+                    <Sticker size={sticker}>
+                      {brand.logo ? <Image source={brand.logo} style={styles.fill} resizeMode="contain" accessibilityLabel={`${brand.name} logo`} /> : null}
+                    </Sticker>
+                  </TiltCard>
+                </View>
                 <Copy size={14} weight={600} align="center">
                   {brand.name}
                 </Copy>
@@ -114,6 +121,20 @@ function Partner({ client }: { client: Client }) {
     </View>
   );
 }
+
+/** The stickers' sway: a slow rock either side of their pasted angle, web only. */
+const swayStyles = StyleSheet.create({
+  sway: {
+    animationKeyframes: [{ '0%': { transform: 'rotate(-2.5deg)' }, '100%': { transform: 'rotate(2.5deg)' } }],
+    animationDuration: '3200ms',
+    animationTimingFunction: 'ease-in-out',
+    animationIterationCount: 'infinite',
+    animationDirection: 'alternate',
+  } as unknown as ViewStyle,
+});
+const sway = Platform.OS === 'web' ? swayStyles.sway : undefined;
+/** Negative delays start each sticker part-way through its sway, so they never move in step. */
+const swayDelay = (i: number) => webStyle<ViewStyle>({ animationDelay: `-${(i * 1.3) % 3.2}s` });
 
 const styles = StyleSheet.create({
   stickers: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'flex-start' },

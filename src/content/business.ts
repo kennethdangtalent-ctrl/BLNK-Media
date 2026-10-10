@@ -184,7 +184,7 @@ export type Deck = {
 export const decks: { head: SectionCopy; items: readonly Deck[] } = {
   head: {
     eyebrow: 'EXAMPLES OF MEDIA DECKS',
-    title: 'The decks.',
+    title: 'Request a deck.',
     dek: "Ask for one and it's in your inbox the same day.",
   },
   items: [
@@ -253,9 +253,6 @@ export const services: {
   ],
   note: "Every project is scoped to you. Send a brief and we'll reply within 1 business day.",
 };
-
-/** Shown under the brief's buttons: each deck as a quiet request link. */
-export const deckLinks = { label: 'Or request a deck:' } as const;
 
 export const brief = {
   eyebrow: 'BOOKING',
