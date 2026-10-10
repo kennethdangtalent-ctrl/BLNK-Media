@@ -29,7 +29,7 @@ export default function Root({ children }: PropsWithChildren) {
         <meta name="color-scheme" content="light" />
         <meta property="og:site_name" content="BLNK Media" />
         <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:card" content="summary_large_image" />
         <style dangerouslySetInnerHTML={{ __html: GLOBAL_CSS }} />
       </head>
       <body>{children}</body>
