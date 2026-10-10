@@ -18,9 +18,9 @@ type Current = 'home' | 'business' | 'mission' | 'services' | 'other';
 const NAV = [
   { kind: 'section', id: 'roster', label: 'ROSTER' },
   { kind: 'route', id: 'mission', label: 'MISSION', href: '/mission' },
-  { kind: 'section', id: 'apply', label: 'APPLY' },
   { kind: 'route', id: 'business', label: 'BUSINESS', href: '/business' },
   { kind: 'route', id: 'services', label: 'SERVICES', href: '/services' },
+  { kind: 'section', id: 'apply', label: 'APPLY' },
 ] as const;
 
 /**
