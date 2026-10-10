@@ -61,7 +61,7 @@ export const fontSources = {
 };
 
 export const motion = {
-  marqueeMs: 48_000,
+  marqueeMs: 24_000,
   revealMs: 520,
   revealStepMs: 70,
   revealDelayMs: 80,

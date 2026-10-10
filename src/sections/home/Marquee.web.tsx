@@ -4,24 +4,26 @@ import { Copy } from '@/components/Type';
 import { marquee } from '@/content/home';
 import { useLayout } from '@/theme/layout';
 import { color, motion } from '@/theme/tokens';
-import { webStyle } from '@/theme/web';
+import { webProps, webStyle } from '@/theme/web';
 
 /** A deliberate underestimate of one copy's width (about 1246 px), so a half always covers the screen. */
 const MIN_COPY_W = 1200;
 
 /**
  * Web build of the ticker: two identical halves on a max-content track, slid by -50% with CSS
- * keyframes like the board's `.mq` rule. No Reanimated on web; the compositor runs it.
+ * keyframes like the board's `.mq` rule. No Reanimated on web; the compositor runs it. It runs for
+ * every visitor, Reduce Motion included, by the owner's choice: the band is marked motion-safe so the
+ * site's reduced-motion rule leaves it scrolling.
  */
 export function Marquee() {
   const L = useLayout();
   const perHalf = Math.max(1, Math.ceil(L.width / MIN_COPY_W));
-  const animate = L.hydrated && !L.reduceMotion;
-  // The board moves one copy per 48 s; a half holds `perHalf` copies.
+  const animate = L.hydrated;
+  // One copy scrolls by every `motion.marqueeMs`; a half holds `perHalf` copies.
   const duration = webStyle<ViewStyle>({ animationDuration: `${(motion.marqueeMs * perHalf) / 1000}s` });
 
   return (
-    <View aria-hidden style={styles.band}>
+    <View aria-hidden {...webProps({ dataSet: { motionsafe: 'true' } })} style={styles.band}>
       <View style={[styles.track, animate && styles.slide, animate && duration]}>
         {Array.from({ length: perHalf * 2 }, (_, i) => (
           <View key={i} style={styles.copy}>
