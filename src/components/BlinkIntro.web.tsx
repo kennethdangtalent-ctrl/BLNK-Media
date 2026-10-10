@@ -21,17 +21,11 @@ import { webProps, webStyle } from '@/theme/web';
 const INTRO_MS = 1800;
 
 /**
- * The gentle version for people with Reduce Motion on, 1300 ms: the eye shut, then open in place
- * (no lid bounce, no glancing, no zoom), then the screen fades to the page.
- */
-const GENTLE_MS = 1300;
-
-/**
  * The opening: the logo's eye opens, looks left, looks right, then the view dives into the pupil
  * and comes out on the page. Plays on every page load and every move to another page (keyed by
- * pathname, so a `?s=` scroll on the same page does not replay it). Under reduced motion it plays the
- * gentle version instead, marked motion-safe so the site's reduced-motion rule leaves it running.
- * A tap skips it.
+ * pathname, so a `?s=` scroll on the same page does not replay it). It plays for every visitor, Reduce
+ * Motion included, by the owner's choice: it is marked motion-safe so the site's reduced-motion rule
+ * leaves it running. A tap skips it.
  */
 export function BlinkIntro() {
   const L = useLayout();
@@ -39,14 +33,12 @@ export function BlinkIntro() {
   // The page whose intro has finished (or was skipped). A new pathname makes it play again.
   const [donePath, setDonePath] = useState<string | null>(null);
   const show = L.hydrated && donePath !== pathname;
-  const gentle = L.reduceMotion;
-  const length = gentle ? GENTLE_MS : INTRO_MS;
 
   useEffect(() => {
     if (!show) return;
-    const timer = setTimeout(() => setDonePath(pathname), length);
+    const timer = setTimeout(() => setDonePath(pathname), INTRO_MS);
     return () => clearTimeout(timer);
-  }, [show, pathname, length]);
+  }, [show, pathname]);
 
   if (!show) return null;
   return (
@@ -55,11 +47,11 @@ export function BlinkIntro() {
       key={pathname}
       accessibilityLabel="Skip intro"
       onPress={() => setDonePath(pathname)}
-      {...webProps(gentle ? { dataSet: { motionsafe: 'true' } } : {})}
-      style={[styles.screen, fixedFill, gentle ? calm.screen : motion.screen]}>
+      {...webProps({ dataSet: { motionsafe: 'true' } })}
+      style={[styles.screen, fixedFill, motion.screen]}>
       <View style={styles.stack}>
-        <IntroEye width={L.fl(240, 160)} gentle={gentle} />
-        <View style={[styles.word, gentle ? null : motion.word]}>
+        <IntroEye width={L.fl(240, 160)} />
+        <View style={[styles.word, motion.word]}>
           <Display size={L.fl(96, 64)} lh={0.82} upper={false} color={color.ink}>
             BLNK
           </Display>
@@ -77,7 +69,7 @@ export function BlinkIntro() {
  * on its own so it can look around under the lid, and a plain ink disc laid exactly over it is
  * what zooms, so the dive is a clean circle growing out of the pupil.
  */
-function IntroEye({ width, gentle }: { width: number; gentle: boolean }) {
+function IntroEye({ width }: { width: number }) {
   const height = (width * 22) / 64;
   // Iris centre and radius from BlinkMark's open drawing: (32, 15.5), r 6.5 in a 64 × 22 box.
   const r = (width * 6.5) / 64;
@@ -87,21 +79,21 @@ function IntroEye({ width, gentle }: { width: number; gentle: boolean }) {
   const disc = { left: cx - r, top: cy - r, width: 2 * r, height: 2 * r, borderRadius: r };
   return (
     <View style={{ width, height }}>
-      <View style={[styles.layer, gentle ? calm.closed : motion.closed]}>
+      <View style={[styles.layer, motion.closed]}>
         <BlinkMark width={width} color={color.crimson} />
       </View>
-      <View style={[styles.layer, gentle ? calm.open : motion.open]}>
+      <View style={[styles.layer, motion.open]}>
         <BlinkMark width={width} color={color.crimson} open iris={false} />
       </View>
-      <View style={[styles.iris, disc, gentle ? calm.open : motion.irisShow]}>
-        <View style={[StyleSheet.absoluteFill, gentle ? null : glance(look)]}>
+      <View style={[styles.iris, disc, motion.irisShow]}>
+        <View style={[StyleSheet.absoluteFill, glance(look)]}>
           <View style={[styles.irisFill, { borderRadius: r }]} />
           {/* The sparkle, as in the logo: a bright glint up and to the right, a dot down and to the left. */}
           <View style={[styles.glint, { width: r * 0.55, height: r * 0.55, borderRadius: r, left: r * 1.15, top: r * 0.35 }]} />
           <View style={[styles.glint, { width: r * 0.3, height: r * 0.3, borderRadius: r, left: r * 0.45, top: r * 1.25 }]} />
         </View>
       </View>
-      {gentle ? null : <View style={[styles.pupil, disc, motion.pupil]} />}
+      <View style={[styles.pupil, disc, motion.pupil]} />
     </View>
   );
 }
@@ -198,24 +190,6 @@ const motion = StyleSheet.create({
   screen: {
     ...run,
     animationKeyframes: [{ '0%': { opacity: 1 }, '90%': { opacity: 1 }, '100%': { opacity: 0 } }],
-  } as unknown as ViewStyle,
-});
-
-const calmRun = { animationDuration: `${GENTLE_MS}ms`, animationTimingFunction: 'ease-out', animationFillMode: 'both' };
-
-/** The gentle intro: only opacity changes, nothing moves or scales. */
-const calm = StyleSheet.create({
-  closed: {
-    ...calmRun,
-    animationKeyframes: [{ '0%': { opacity: 1 }, '34%': { opacity: 1 }, '40%': { opacity: 0 }, '100%': { opacity: 0 } }],
-  } as unknown as ViewStyle,
-  open: {
-    ...calmRun,
-    animationKeyframes: [{ '0%': { opacity: 0 }, '34%': { opacity: 0 }, '40%': { opacity: 1 }, '100%': { opacity: 1 } }],
-  } as unknown as ViewStyle,
-  screen: {
-    ...calmRun,
-    animationKeyframes: [{ '0%': { opacity: 1 }, '70%': { opacity: 1 }, '100%': { opacity: 0 } }],
   } as unknown as ViewStyle,
 });
 
