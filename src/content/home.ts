@@ -45,7 +45,7 @@ export const cover: {
 } = {
   eyebrow: 'A CREATOR MANAGEMENT HOUSE · TWITCH FIRST',
   title: 'We sign the\ncreators\nbefore the\nalgorithm\ndoes.',
-  lede: 'A roster you can count on one hand. Five creators, no tiers, no back pages. Applications, not sign-ups.',
+  lede: 'Five creators. Every one of them started as a DM.',
   cta: { label: 'APPLY TO THE ROSTER →', href: mailto('BLNK Roster Application') },
   brands: { label: 'Brands & sponsors → business@BLNK.name', href: mailto() },
   card: {

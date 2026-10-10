@@ -104,8 +104,8 @@ export function Cover() {
               );
             })}
           </View>
-          <Reveal index={lines.length} style={[styles.scrap, { maxWidth: Math.min(500, textW), padding: wide ? 22 : 18 }]}>
-            <Deck size={wide ? 20 : 18} lh={1.35} color={color.ink}>
+          <Reveal index={lines.length} style={[styles.scrap, { maxWidth: Math.min(440, textW), paddingHorizontal: wide ? 24 : 18, paddingVertical: wide ? 18 : 14 }]}>
+            <Deck italic size={wide ? 24 : 20} lh={1.3} color={color.ink}>
               {cover.lede}
             </Deck>
             {/* Tape last, so it lies over the note's corners and onto the page. */}
