@@ -17,9 +17,9 @@ export const withCreators = {
   label: 'Our creators',
   title: 'Put your brand on their stream.',
   formats: ['Sponsored streams', 'Stream segments', 'TikTok, Reels & Shorts', 'YouTube integrations', 'Whole-roster takeover'],
-  /** The roster's reach in one line. ~50K is the sum of the five Twitch counts on the home page. */
+  /** The roster's reach in one line. ~56K is the sum of the five Twitch counts on the home page. */
   reach: [
-    { value: '~50K', label: 'Combined Twitch followers' },
+    { value: '~56K', label: 'Combined Twitch followers' },
     { value: '5', label: 'Creators, one team' },
     { value: '4', label: 'Platforms: Twitch, TikTok, YouTube, Instagram' },
   ],

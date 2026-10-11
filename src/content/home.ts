@@ -81,7 +81,7 @@ export const roster: readonly Creator[] = [
     hook: 'Chasing the K-pop idol dream, one stream at a time.',
     body: 'Meet NovaPovie, the Austin streamer who decided to audition to become a K-pop idol on stream and keep going until it works. She has a big personality and she’s up for anything, whether that’s a JYP audition arc, a chaotic night on Omegle or her first day in Shibuya streamed live. People come for her energy and stay for the bit. A natural fit for lifestyle, beauty and everyday consumer brands.',
     stats: [
-      { value: '11.5K', label: 'TWITCH FOLLOWERS' },
+      { value: '17.2K', label: 'TWITCH FOLLOWERS' },
       { value: '100K', label: 'YOUTUBE SUBSCRIBERS' },
       { value: 'PARTNER', label: 'TWITCH STATUS' },
     ],
