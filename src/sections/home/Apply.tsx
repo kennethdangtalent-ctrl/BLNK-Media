@@ -6,43 +6,47 @@ import { Btn, ULink } from '@/components/Link';
 import { Display, Copy, Deck } from '@/components/Type';
 import { apply } from '@/content/home';
 import { useLayout } from '@/theme/layout';
-import { fitLines } from '@/theme/metrics';
-import { color } from '@/theme/tokens';
+import { fitWords } from '@/theme/metrics';
+import { useTone } from '@/theme/tone';
 
+/** The creators' corner, after the brand close: the casting call, what to send and the apply button. */
 export function Apply() {
   const L = useLayout();
+  const tone = useTone();
   return (
-    <Band tone="accent" id="apply" label="Apply">
-      <View style={{ gap: L.fl(40, 28) }}>
-        <Display level={2} size={fitLines(apply.title, L.inner, L.fl(160, 72), -0.01)} lh={0.86} ls={-0.01}>
+    <Band tone="stock" id="apply" label="For creators">
+      <View style={{ gap: L.fl(28, 20) }}>
+        <Copy size={13} weight={600} upper>
+          {apply.eyebrow}
+        </Copy>
+        <Display level={2} size={fitWords(apply.title, L.inner, L.fl(72, 40), -0.03)} lh={1} upper={false}>
           {apply.title}
         </Display>
-        <Deck size={L.fl(30, 21)} lh={1.2} maxCh={40}>
+        <Deck size={L.fl(22, 18)} lh={1.3} color={tone.mute}>
           {apply.body}
         </Deck>
-        <View style={styles.ctas}>
-          <Btn href={apply.primary.href} label={apply.primary.label} shadow="ink" />
-          <Btn href={apply.secondary.href} label={apply.secondary.label} variant="outline" shadow="ink" />
-        </View>
-        <ULink href={apply.services.href} size={15}>
-          {apply.services.label}
-        </ULink>
-        <View style={styles.send}>
-          <Copy size={12} weight={600} ls={0.16}>
+        <View style={[styles.send, { borderColor: tone.fg }]}>
+          <Copy size={12} weight={600} upper>
             {apply.sendLabel}
           </Copy>
-          <Grid cols={L.isPhone ? 2 : 4} gap={L.fl(32, 16)} rowGap={24}>
+          <Grid cols={L.isPhone ? 2 : 4} gap={L.fl(32, 16)} rowGap={20}>
             {apply.send.map((item, i) => (
               <View key={item} style={styles.item}>
-                <Copy size={12} weight={600} ls={0.16}>
+                <Copy size={12} weight={600}>
                   {String(i + 1).padStart(2, '0')}
                 </Copy>
-                <Deck size={L.fl(26, 21)} lh={1.15}>
+                <Deck size={L.fl(20, 18)} lh={1.2}>
                   {item}
                 </Deck>
               </View>
             ))}
           </Grid>
+        </View>
+        <View style={styles.ctas}>
+          <Btn href={apply.primary.href} label={apply.primary.label} />
+          <ULink href={apply.services.href} size={14}>
+            {apply.services.label}
+          </ULink>
         </View>
       </View>
     </Band>
@@ -50,7 +54,7 @@ export function Apply() {
 }
 
 const styles = StyleSheet.create({
-  ctas: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 20 },
-  send: { gap: 20, paddingTop: 40, borderTopWidth: 2, borderColor: color.ink },
-  item: { gap: 8 },
+  ctas: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 24, rowGap: 14 },
+  send: { gap: 16, paddingTop: 20, borderTopWidth: 2 },
+  item: { gap: 6 },
 });

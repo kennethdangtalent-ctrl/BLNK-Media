@@ -114,8 +114,8 @@ export function Cover() {
           </Reveal>
           <Reveal index={lines.length + 1} style={[styles.ctas, { columnGap: 24, rowGap: 14 }]}>
             <Btn href={cover.cta.href} label={cover.cta.label} />
-            <ULink href={cover.brands.href} size={14} weight={600}>
-              {cover.brands.label}
+            <ULink href={cover.creators.href} size={14} weight={600}>
+              {cover.creators.label}
             </ULink>
           </Reveal>
         </View>

@@ -232,12 +232,12 @@ export const services: {
     {
       label: 'FOR BRANDS',
       rows: [
-        { n: '01', name: 'Sponsored streams', desc: "A dedicated segment or full stream, in the creator's own voice." },
-        { n: '02', name: 'Short-form', desc: 'Clips for TikTok, Shorts and Reels.' },
-        { n: '03', name: 'Long-form', desc: 'Your brand built into a YouTube video.' },
-        { n: '04', name: 'Issue takeover', desc: 'Every creator on the roster. One campaign, one month.' },
-        { n: '05', name: 'Creator campaigns', desc: 'We find the creators, run the campaign and report the results.' },
-        { n: '06', name: 'Social media', desc: "We run your brand's socials. Analytics included." },
+        { n: '01', name: 'Social media', desc: "We run your brand's socials: the plan, the posts, the community and a monthly report." },
+        { n: '02', name: 'Content', desc: 'Short-form video, photos and edits for TikTok, Reels and Shorts.' },
+        { n: '03', name: 'Creator campaigns', desc: 'We find the creators, run the campaign and report the results.' },
+        { n: '04', name: 'Sponsored streams', desc: "A dedicated segment or full stream, in the creator's own voice." },
+        { n: '05', name: 'Long-form', desc: 'Your brand built into a YouTube video.' },
+        { n: '06', name: 'Issue takeover', desc: 'Every creator on the roster. One campaign, one month.' },
       ],
     },
     {

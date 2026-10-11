@@ -5,7 +5,7 @@ import { Clipping } from '@/components/Clipping';
 import { Btn } from '@/components/Link';
 import { Copy, Deck, Display } from '@/components/Type';
 import { bizHero, services } from '@/content/business';
-import { cover } from '@/content/home';
+import { apply } from '@/content/home';
 import { useLayout } from '@/theme/layout';
 import { fitWords } from '@/theme/metrics';
 import { useTone, type ToneName } from '@/theme/tone';
@@ -39,7 +39,7 @@ export function ServiceList() {
         </View>
       </Band>
       <Spread tone="stock" title={sentence(forBrands.label)} rows={forBrands.rows} cta={bizHero.cta} padTop={L.fl(48, 32)} />
-      <Spread tone="dark" title={sentence(forCreators.label)} rows={forCreators.rows} cta={cover.cta} note={services.note} />
+      <Spread tone="dark" title={sentence(forCreators.label)} rows={forCreators.rows} cta={apply.primary} note={services.note} />
     </>
   );
 }
