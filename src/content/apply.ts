@@ -2,12 +2,12 @@
 import { EMAIL } from './site';
 
 /**
- * Where the form posts applications. Paste the Formspree form URL here (it looks like
- * `https://formspree.io/f/abcd1234`) and every application arrives at the business inbox as an
- * email. While it is empty, submitting opens the applicant's email app with everything filled in,
- * addressed to `EMAIL`.
+ * Where the form posts applications: FormSubmit's AJAX endpoint, which emails each one to `EMAIL`.
+ * The very first submission makes FormSubmit send a one-time activation email to that inbox; after
+ * the link in it is clicked, applications arrive as emails. Set this to '' to fall back to opening
+ * the applicant's email app with everything filled in.
  */
-export const FORM_ENDPOINT = '';
+export const FORM_ENDPOINT = `https://formsubmit.co/ajax/${EMAIL}`;
 
 export const applyPage = {
   kicker: 'Casting call · Nº 002',

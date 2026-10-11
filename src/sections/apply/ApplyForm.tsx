@@ -64,10 +64,19 @@ export function ApplyForm() {
       const res = await fetch(FORM_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ ...values, _subject: subject, _replyto: values.email.trim() }),
+        body: JSON.stringify({
+          // Labelled keys so the email reads "Twitch channel: …", not "twitch: …".
+          ...Object.fromEntries(fields.map((f) => [f.label, values[f.key].trim() || '-'])),
+          _subject: subject,
+          _replyto: values.email.trim(),
+          _template: 'table',
+        }),
       });
-      setStatus(res.ok ? 'sent' : 'failed');
-      if (!res.ok) console.warn('[BLNK] application form returned', res.status);
+      // FormSubmit answers 200 with `success: "false"` when it refuses (e.g. before activation).
+      const json = (await res.json().catch(() => ({}))) as { success?: string | boolean; message?: string };
+      const ok = res.ok && String(json.success) !== 'false';
+      setStatus(ok ? 'sent' : 'failed');
+      if (!ok) console.warn('[BLNK] application form returned', res.status, json.message);
     } catch (error) {
       console.warn('[BLNK] application form failed to send', error);
       setStatus('failed');
