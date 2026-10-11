@@ -1,5 +1,6 @@
 import { StyleSheet, View, type GestureResponderEvent } from 'react-native';
 
+import { ApplyMenu } from './ApplyMenu';
 import { Frame } from './Band';
 import { Crumple } from './Crumple';
 import { A, NavLink } from './Link';
@@ -14,14 +15,15 @@ import { color } from '@/theme/tokens';
 
 type Current = 'home' | 'business' | 'mission' | 'services' | 'apply' | 'contact' | 'brands' | 'other';
 
-/** Nav items in order. `section` items are bands on Issue 001; `route` items are pages of their own. */
+/** Nav items in order. `section` items are bands on the home page; `route` items are pages of their own; `menu` opens a dropdown. */
 const NAV = [
   { kind: 'section', id: 'roster', label: 'ROSTER' },
   { kind: 'route', id: 'mission', label: 'MISSION', href: '/mission' },
   { kind: 'route', id: 'business', label: 'OUR WORK', href: '/business' },
   { kind: 'route', id: 'services', label: 'SERVICES', href: '/services' },
   { kind: 'route', id: 'brands', label: 'FOR BRANDS', href: '/brands' },
-  { kind: 'route', id: 'apply', label: 'APPLY', href: '/apply' },
+  // A dropdown: creators to /apply, brands to the contact form.
+  { kind: 'menu', id: 'apply', label: 'APPLY' },
 ] as const;
 
 /**
@@ -65,7 +67,9 @@ export function Masthead({ current }: { current: Current }) {
     <View role="navigation" aria-label="Sections" style={[styles.nav, L.isPhone ? styles.navSpread : { columnGap: L.isDesktop && L.width >= 1300 ? 40 : 28 }]}>
       {NAV.map((item, i) => {
         const link =
-          item.kind === 'section' ? (
+          item.kind === 'menu' ? (
+            <ApplyMenu key={item.id} size={L.isPhone ? 12 : 14} current={current === 'apply' || current === 'contact'} align={L.isDesktop ? 'left' : 'right'} />
+          ) : item.kind === 'section' ? (
             <NavLink
               size={L.isPhone ? 12 : 14}
               key={item.id}
@@ -139,7 +143,8 @@ const ISSUE_MIN_W = 1440;
 const PHONE_ALIGN = ['flex-start', 'center', 'flex-end'] as const;
 
 const styles = StyleSheet.create({
-  bar: { backgroundColor: color.stock },
+  // Above the page, so the Apply dropdown opens over the first section.
+  bar: { backgroundColor: color.stock, position: 'relative', zIndex: 20 },
   rowDesktop: { height: 84, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 24 },
   rowTop: { height: 72, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 16 },
   rowNav: { minHeight: 48, paddingVertical: 12, justifyContent: 'center', borderTopWidth: 2, borderColor: color.ink, borderStyle: 'dashed' },
