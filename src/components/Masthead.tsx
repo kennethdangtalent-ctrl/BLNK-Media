@@ -12,7 +12,7 @@ import { useLayout } from '@/theme/layout';
 import { ToneProvider } from '@/theme/tone';
 import { color } from '@/theme/tokens';
 
-type Current = 'home' | 'business' | 'mission' | 'services' | 'other';
+type Current = 'home' | 'business' | 'mission' | 'services' | 'apply' | 'other';
 
 /** Nav items in order. `section` items are bands on Issue 001; `route` items are pages of their own. */
 const NAV = [
@@ -20,7 +20,7 @@ const NAV = [
   { kind: 'route', id: 'mission', label: 'MISSION', href: '/mission' },
   { kind: 'route', id: 'business', label: 'BUSINESS', href: '/business' },
   { kind: 'route', id: 'services', label: 'SERVICES', href: '/services' },
-  { kind: 'section', id: 'apply', label: 'APPLY' },
+  { kind: 'route', id: 'apply', label: 'APPLY', href: '/apply' },
 ] as const;
 
 /**
@@ -31,7 +31,7 @@ export function Masthead({ current }: { current: Current }) {
   const L = useLayout();
   const sections = useSections();
   const onHome = current === 'home';
-  const copy = current === 'business' || current === 'mission' || current === 'services' ? masthead[current] : masthead.home;
+  const copy = current === 'business' || current === 'mission' || current === 'services' || current === 'apply' ? masthead[current] : masthead.home;
 
   const stay = (action: () => void) => (event: GestureResponderEvent) => {
     event.preventDefault();

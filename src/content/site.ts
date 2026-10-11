@@ -37,6 +37,11 @@ export const meta = {
     description: "How BLNK Media handles your information. No tracking cookies, no analytics, and we don't sell your data.",
     path: '/privacy',
   },
+  apply: {
+    title: 'BLNK Media — Apply to the roster',
+    description: 'Apply to join the BLNK Media roster. Tell us who you are, link your Twitch and one clip that shows what you make. We read every application.',
+    path: '/apply',
+  },
   services: {
     title: 'BLNK Media — Services',
     description: 'What BLNK does for brands (sponsored streams, short- and long-form, campaigns) and for the creators it signs (brand deals, growth, the business side).',
@@ -54,6 +59,7 @@ export const masthead = {
   business: { issue: 'Nº 001 — THE BUSINESS PAGES', badge: 'NOW BOOKING' },
   mission: { issue: 'Nº 001 — THE MISSION', badge: 'APPLICATIONS OPEN' },
   services: { issue: 'Nº 001 — THE SERVICES', badge: 'NOW BOOKING' },
+  apply: { issue: 'Nº 002 — CASTING NOW', badge: 'APPLICATIONS OPEN' },
 } as const;
 
 export const footer = {
@@ -64,6 +70,7 @@ export const footer = {
     mission: 'Written by the founder, October 2026.',
     legal: 'Questions about these pages? Email business@BLNK.name.',
     services: 'Every project is scoped to you. We reply within 1 business day.',
+    apply: 'We read every application ourselves.',
     case: 'Campaign results are added when each campaign wraps.',
   },
   legal: [

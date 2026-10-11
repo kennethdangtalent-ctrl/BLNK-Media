@@ -1,7 +1,7 @@
 /*
  * Privacy policy, terms of service and the cookie notice. Written for the site as built:
- * no accounts, no forms, no analytics, no cookies. Contact is by email only.
- * If tracking, a form or a newsletter is ever added, update the privacy policy first.
+ * no accounts, no analytics, no cookies; one roster application form, delivered to our inbox.
+ * If tracking or a newsletter is ever added, update the privacy policy first.
  */
 import { EMAIL } from './site';
 
@@ -14,14 +14,14 @@ export type LegalSection = {
 
 export type LegalDoc = { eyebrow: string; title: string; updated: string; intro: string; sections: readonly LegalSection[] };
 
-export const LEGAL_UPDATED = 'Last updated October 9, 2026';
+export const LEGAL_UPDATED = 'Last updated October 11, 2026';
 
 export const privacy: LegalDoc = {
   eyebrow: 'LEGAL',
   title: 'Privacy policy.',
   updated: LEGAL_UPDATED,
   intro:
-    "The short version: we don't use tracking cookies, we don't run analytics, and we don't sell your information. The only personal information we get is what you choose to email us.",
+    "The short version: we don't use tracking cookies, we don't run analytics, and we don't sell your information. The only personal information we get is what you choose to send us, by email or through our application form.",
   sections: [
     {
       heading: 'Who we are',
@@ -32,9 +32,9 @@ export const privacy: LegalDoc = {
     {
       heading: 'What we collect',
       body: [
-        'Information you send us. If you email us, for example to apply to the roster or to start a brief, we receive what you include: your name, email address, social links, and anything else you choose to share.',
+        'Information you send us. If you apply to the roster through our application form, or email us to apply or to start a brief, we receive what you include: your name, email address, social links, a clip link, your streaming schedule, and anything else you choose to share.',
         'Technical information. Like any website, our hosting provider automatically records basic request data, such as IP address, browser type and the pages requested, to keep the site running and secure.',
-        "We don't have accounts, sign-up forms or payment pages on this site.",
+        "Our application form sends what you enter to our email inbox through a form-delivery service. We don't have accounts, newsletters or payment pages on this site.",
       ],
     },
     {
@@ -49,7 +49,7 @@ export const privacy: LegalDoc = {
       heading: 'Who we share it with',
       body: [
         "With creators or brands, only as needed for a partnership you've asked us about.",
-        'With service providers that help us run the business, such as email and website hosting, who may only use it to provide their service to us.',
+        'With service providers that help us run the business, such as email, form delivery and website hosting, who may only use it to provide their service to us.',
         'When the law requires it, or to protect our rights or the safety of others.',
       ],
     },

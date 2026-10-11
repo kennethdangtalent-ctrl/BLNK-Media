@@ -46,7 +46,7 @@ export const cover: {
   eyebrow: 'A CREATOR MANAGEMENT HOUSE · TWITCH FIRST',
   title: 'We sign the\ncreators\nbefore the\nalgorithm\ndoes.',
   lede: 'Five creators, one team behind every one of them.',
-  cta: { label: 'APPLY TO THE ROSTER →', href: mailto('BLNK Roster Application') },
+  cta: { label: 'APPLY TO THE ROSTER →', href: '/apply' },
   brands: { label: 'Brands & sponsors → business@BLNK.name', href: mailto() },
   card: {
     meta: ['Nº 001', 'SEP 2026', 'BLNK.NAME'],
@@ -182,7 +182,7 @@ export const apply = {
   eyebrow: '02 — APPLICATIONS',
   title: 'Issue 002\nis being cast.',
   body: 'Applications for the next cover close soon. 5 spots on the roster. Every one gets read.',
-  primary: { label: 'APPLY → BUSINESS@BLNK.NAME', href: mailto('BLNK Roster Application') },
+  primary: { label: 'APPLY TO THE ROSTER →', href: '/apply' },
   secondary: { label: 'BRAND PARTNERSHIPS', href: '/business' },
   services: { label: 'What we do for the creators we sign →', href: '/services' },
   sendLabel: 'WHAT TO SEND',
