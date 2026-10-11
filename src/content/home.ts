@@ -35,19 +35,18 @@ export const cover: {
   title: string;
   lede: string;
   cta: { label: string; href: string };
-  /** The quieter link beside the button, for creators. */
-  creators: { label: string; href: string };
+  brands: { label: string; href: string };
   /**
    * The cover card rotates through `slides` every 5 seconds. A slide's `photo` fills the card and needs a
    * full-size portrait, 800 px wide or more (`photoFocus` is the crop point from the top, in percent).
    */
   card: { meta: readonly string[]; slides: readonly CoverSlide[] };
 } = {
-  eyebrow: 'CREATOR-POWERED MARKETING',
-  title: 'We make\nbrands\npeople\nactually\nwatch.',
-  lede: 'Social, content and creator campaigns, from a team that lives online.',
-  cta: { label: 'WORK WITH US →', href: '/contact' },
-  creators: { label: 'Creators → apply to the roster', href: '/apply' },
+  eyebrow: 'A CREATOR MANAGEMENT HOUSE · TWITCH FIRST',
+  title: 'We sign the\ncreators\nbefore the\nalgorithm\ndoes.',
+  lede: 'Five creators, one team behind every one of them.',
+  cta: { label: 'APPLY TO THE ROSTER →', href: '/apply' },
+  brands: { label: 'Brands & sponsors → work with us', href: '/contact' },
   card: {
     meta: ['Nº 001', 'SEP 2026', 'BLNK.NAME'],
     slides: [
@@ -61,12 +60,12 @@ export const cover: {
 };
 
 export const marquee =
-  'SOCIAL MEDIA ★ CONTENT ★ CREATOR CAMPAIGNS ★ SPONSORED STREAMS ★ SHORT-FORM ★ NOW BOOKING ★ BLNK.NAME ★';
+  'INSIDE THIS ISSUE ★ NOVAPOVIE ★ FUMIBEAN ★ M0RALS_ ★ JACKYPOOWOO ★ CLOYYD ★ APPLICATIONS OPEN ★ BLNK.NAME ★';
 
 export const rosterHead: SectionCopy & { link: string; partnerships: string } = {
-  eyebrow: '03 — THE ROSTER',
+  eyebrow: '01 — THE ROSTER',
   title: 'The roster.',
-  dek: 'Five creators in-house, so your campaign goes out through people their audiences already trust.',
+  dek: 'Five creators. One roster. No tiers.',
   link: 'SEE THE BRANDS OUR CREATORS HAVE WORKED WITH →',
   partnerships: 'BRAND PARTNERSHIPS →',
 };
@@ -178,44 +177,12 @@ export const roster: readonly Creator[] = [
   },
 ];
 
-/** The three things BLNK sells brands, right under the cover. */
-export const offer = {
-  eyebrow: '01 — FOR BRANDS',
-  title: 'What we do for brands.',
-  accent: 'brands',
-  dek: 'One team for your socials, your content and your creator campaigns.',
-  pillars: [
-    {
-      name: 'Social media',
-      body: 'We run your accounts: the plan, the posts, the community, and a monthly report on what worked.',
-    },
-    {
-      name: 'Content',
-      body: 'Short-form video, photos and edits made for how people actually scroll, by people who post every day.',
-    },
-    {
-      name: 'Creator campaigns',
-      body: 'Sponsored streams, clips and YouTube integrations with our roster, plus creators we bring in for you.',
-    },
-  ],
-  link: { label: 'SEE ALL SERVICES →', href: '/services' },
-} as const;
-
-/** The closing ask, for brands. */
-export const close = {
-  title: 'Put your brand\non the cover.',
-  accent: 'brand',
-  body: 'Tell us what you’re launching. We’ll come back within one business day with a plan, the creators who fit and a quote.',
-  primary: { label: 'WORK WITH US →', href: '/contact' },
-  secondary: { label: 'SEE OUR WORK', href: '/business' },
-} as const;
-
-/** The smaller band for creators, after the brand close. */
 export const apply = {
-  eyebrow: 'FOR CREATORS',
-  title: 'Issue 002 is being cast.',
-  body: 'Five spots on the roster. Every application gets read.',
+  eyebrow: '02 — APPLICATIONS',
+  title: 'Issue 002\nis being cast.',
+  body: 'Applications for the next cover close soon. 5 spots on the roster. Every one gets read.',
   primary: { label: 'APPLY TO THE ROSTER →', href: '/apply' },
+  secondary: { label: 'BRAND PARTNERSHIPS', href: '/business' },
   services: { label: 'What we do for the creators we sign →', href: '/services' },
   sendLabel: 'WHAT TO SEND',
   send: ['Your Twitch link.', 'Your streaming schedule.', 'One clip that shows who you are.', 'Nothing else.'],

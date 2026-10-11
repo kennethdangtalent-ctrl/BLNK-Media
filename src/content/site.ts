@@ -23,9 +23,9 @@ export function mailto(subject?: string): string {
 
 export const meta = {
   home: {
-    title: 'BLNK Media — Creator-powered marketing',
+    title: 'BLNK Media — Issue 001',
     description:
-      'BLNK Media runs social media, content and creator campaigns for brands, with a Twitch-first roster of five creators behind every campaign.',
+      'BLNK Media is a creator management house, Twitch first. Five creators, one roster, no tiers. Applications for Issue 002 are open.',
     path: '/',
   },
   business: {
@@ -68,7 +68,7 @@ export const meta = {
 } as const;
 
 export const masthead = {
-  home: { issue: 'Nº 001 — THE BRAND ISSUE', badge: 'NOW BOOKING' },
+  home: { issue: 'Nº 001 — THE CREATOR ISSUE', badge: 'APPLICATIONS OPEN' },
   business: { issue: 'Nº 001 — THE BUSINESS PAGES', badge: 'NOW BOOKING' },
   mission: { issue: 'Nº 001 — THE MISSION', badge: 'APPLICATIONS OPEN' },
   services: { issue: 'Nº 001 — THE SERVICES', badge: 'NOW BOOKING' },
