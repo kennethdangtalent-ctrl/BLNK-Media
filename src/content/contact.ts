@@ -1,6 +1,6 @@
 /* The brand contact page: one form for briefs, deck requests and case studies. */
 import type { FormCopy } from '@/components/FormPage';
-import { EMAIL, mailto } from './site';
+import { CALL_URL, EMAIL, mailto } from './site';
 
 /**
  * What a brand can ask for. The `id` goes in links (`/contact?topic=media-kit`) so each request
@@ -70,5 +70,8 @@ export const nextSteps = {
     { head: 'You get what you asked for', body: 'Decks and case studies go straight to your inbox.' },
     { head: 'We set up a call', body: 'Planning a campaign? We’ll find a time to talk through the brief.' },
   ],
-  direct: { label: 'Rather email?', link: { label: 'BUSINESS@BLNK.NAME →', href: mailto('BLNK Brand Brief') } },
+  direct: [
+    { label: 'Rather talk?', link: { label: 'BOOK A 30-MIN CALL ↗', href: CALL_URL } },
+    { label: 'Rather email?', link: { label: 'BUSINESS@BLNK.NAME →', href: mailto('BLNK Brand Brief') } },
+  ],
 } as const;

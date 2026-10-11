@@ -1,16 +1,17 @@
 import { useLocalSearchParams } from 'expo-router';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { ContinuedOn } from '@/components/ContinuedOn';
 import { Footer } from '@/components/Footer';
 import { FormPage, NumberedPoints } from '@/components/FormPage';
-import { ULink } from '@/components/Link';
+import { Btn } from '@/components/Link';
 import { Masthead } from '@/components/Masthead';
 import { Main, Page } from '@/components/Page';
 import { PageHead } from '@/components/PageHead';
 import { Copy } from '@/components/Type';
 import { contactPage, nextSteps, topics } from '@/content/contact';
 import { meta } from '@/content/site';
+import { color } from '@/theme/tokens';
 
 /** How brands reach BLNK. `?topic=media-kit` (see `contactHref`) opens the form with that request picked. */
 export default function Contact() {
@@ -27,11 +28,16 @@ export default function Contact() {
             initial={picked ? { topic: picked.label } : undefined}
             aside={
               <NumberedPoints title={nextSteps.title} points={nextSteps.points}>
-                <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', columnGap: 10, rowGap: 4 }}>
-                  <Copy size={14}>{nextSteps.direct.label}</Copy>
-                  <ULink href={nextSteps.direct.link.href} size={14}>
-                    {nextSteps.direct.link.label}
-                  </ULink>
+                {/* The other ways in, as real buttons on a ruled box so they aren't missed beside the form. */}
+                <View style={styles.direct}>
+                  <Copy size={13} weight={600} upper>
+                    Rather talk, or email?
+                  </Copy>
+                  <View style={styles.directButtons}>
+                    {nextSteps.direct.map((d, i) => (
+                      <Btn key={d.label} href={d.link.href} label={d.link.label} variant={i === 0 ? 'solid' : 'outline'} tilt={i === 0 ? -1.5 : 1} />
+                    ))}
+                  </View>
                 </View>
               </NumberedPoints>
             }
@@ -43,3 +49,8 @@ export default function Contact() {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  direct: { gap: 14, marginTop: 8, padding: 18, borderWidth: 2, borderColor: color.ink, backgroundColor: color.paper },
+  directButtons: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 14 },
+});

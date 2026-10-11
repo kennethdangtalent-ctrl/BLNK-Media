@@ -25,16 +25,14 @@ export const privacy: LegalDoc = {
   sections: [
     {
       heading: 'Who we are',
-      body: [
-        `BLNK Media ("BLNK", "we", "us") is a creator management company. This policy covers blnk.name and its pages. Questions go to ${EMAIL}.`,
-      ],
+      body: [`BLNK Media ("BLNK", "we", "us") is a creator management company. This policy covers blnk.name and its pages. Questions go to ${EMAIL}.`],
     },
     {
       heading: 'What we collect',
       body: [
         'Information you send us. If you apply to the roster through our application form, or email us to apply or to start a brief, we receive what you include: your name, email address, social links, a clip link, your streaming schedule, and anything else you choose to share. If you contact us as a brand through our contact form, we receive your name, work email, company, website, and the details of your request.',
         'Technical information. Like any website, our hosting provider automatically records basic request data, such as IP address, browser type and the pages requested, to keep the site running and secure.',
-        "Our application and contact forms send what you enter to our email inbox through a form-delivery service. We don't have accounts, newsletters or payment pages on this site.",
+        "Our application and contact forms send what you enter to our email inbox through a form-delivery service. If you book a call with us, you do it on Calendly, which handles that booking under its own privacy policy. We don't have accounts, newsletters or payment pages on this site.",
       ],
     },
     {
@@ -113,7 +111,7 @@ export const terms: LegalDoc = {
     {
       heading: 'Brands and quotes',
       body: [
-        "Services and descriptions on this site are general information, not offers. Any campaign or service is quoted for your brief and agreed in a separate written agreement, which controls if it conflicts with these terms.",
+        'Services and descriptions on this site are general information, not offers. Any campaign or service is quoted for your brief and agreed in a separate written agreement, which controls if it conflicts with these terms.',
       ],
     },
     {
@@ -136,9 +134,7 @@ export const terms: LegalDoc = {
     },
     {
       heading: 'Limitation of liability',
-      body: [
-        "To the extent the law allows, BLNK Media isn't liable for indirect or consequential losses arising from your use of the site.",
-      ],
+      body: ["To the extent the law allows, BLNK Media isn't liable for indirect or consequential losses arising from your use of the site."],
     },
     {
       heading: 'Changes',

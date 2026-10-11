@@ -35,6 +35,7 @@ export function BrandsHero() {
         <View style={styles.ctas}>
           <Btn href={brandsHero.primary.href} label={brandsHero.primary.label} />
           <Btn href={brandsHero.secondary.href} label={brandsHero.secondary.label} variant="outline" />
+          <Btn href={brandsHero.call.href} label={brandsHero.call.label} variant="outline" tilt={1} />
         </View>
       </View>
     </Band>
@@ -217,6 +218,7 @@ export function BrandsClose() {
         <View style={styles.ctas}>
           <Btn href={brandsClose.primary.href} label={brandsClose.primary.label} />
           <Btn href={brandsClose.secondary.href} label={brandsClose.secondary.label} variant="outline" />
+          <Btn href={brandsClose.call.href} label={brandsClose.call.label} variant="outline" tilt={1} />
         </View>
       </View>
     </Band>

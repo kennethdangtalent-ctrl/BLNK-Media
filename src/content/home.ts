@@ -56,14 +56,13 @@ export const cover: {
       { name: 'NovaPovie', photo: require('../../assets/creators/novapovie-cover.jpg'), photoFocus: 20, line: 'Lifestyle, live and unscripted.' },
       { name: 'fumibean', photo: require('../../assets/creators/fumibean.jpg'), photoFocus: 30, line: 'An artist on and off stream.' },
       { name: 'm0rals_', photo: require('../../assets/creators/m0rals-cover.jpg'), photoFocus: 22, line: 'Roblox creator. The sweet one.' },
-      { name: 'jackypoowoo', photo: require('../../assets/creators/jackypoowoo-cover.jpg'), line: 'Filmmaker on stream. Film nerd off it.' },
+      { name: 'jackypoowoo', photo: require('../../assets/creators/jackypoowoo-cover.jpg'), photoFocus: 40, line: 'Filmmaker on stream. Film nerd off it.' },
       { name: 'cloyyd', photo: require('../../assets/creators/cloyyd-cover.jpg'), line: 'IRL meets gaming. The chat plays too.' },
     ],
   },
 };
 
-export const marquee =
-  'INSIDE THIS ISSUE ★ NOVAPOVIE ★ FUMIBEAN ★ M0RALS_ ★ JACKYPOOWOO ★ CLOYYD ★ APPLICATIONS OPEN ★ BLNK.NAME ★';
+export const marquee = 'INSIDE THIS ISSUE ★ NOVAPOVIE ★ FUMIBEAN ★ M0RALS_ ★ JACKYPOOWOO ★ CLOYYD ★ APPLICATIONS OPEN ★ BLNK.NAME ★';
 
 export const rosterHead: SectionCopy & { link: string; partnerships: string } = {
   eyebrow: '01 — THE ROSTER',
@@ -92,8 +91,8 @@ export const roster: readonly Creator[] = [
       { label: 'YOUTUBE', icon: 'youtube', platform: 'YouTube', href: 'https://www.youtube.com/@NovaPoviee' },
     ],
     photoLabel: '[PHOTO — NOVAPOVIE]',
-    photo: require('../../assets/creators/novapovie.png'),
-    photoStyle: 'print',
+    photo: require('../../assets/creators/novapovie.jpg'),
+    photoFocus: 28,
   },
   {
     n: '02',
@@ -150,12 +149,10 @@ export const roster: readonly Creator[] = [
       { value: 'APPLE', label: 'FEATURED IN AN APPLE AD' },
       { value: 'AFFILIATE', label: 'TWITCH STATUS' },
     ],
-    socials: [
-      { label: 'TWITCH', icon: 'twitch', platform: 'Twitch', href: 'https://www.twitch.tv/jackypoowoo' },
-    ],
+    socials: [{ label: 'TWITCH', icon: 'twitch', platform: 'Twitch', href: 'https://www.twitch.tv/jackypoowoo' }],
     photoLabel: '[PHOTO — JACKYPOOWOO]',
-    photo: require('../../assets/creators/jackypoowoo.png'),
-    photoStyle: 'print',
+    photo: require('../../assets/creators/jackypoowoo.jpg'),
+    photoFocus: 30,
   },
   {
     n: '05',

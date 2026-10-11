@@ -17,6 +17,9 @@ export const ISSUE = { no: 'Nº 001', date: 'SEP 2026', domain: 'BLNK.NAME' } as
  */
 export const FORM_ENDPOINT = `https://formsubmit.co/ajax/${EMAIL}`;
 
+/** Where brands book an intro call (Calendly, 30 minutes). Opens in a new tab; nothing is embedded. */
+export const CALL_URL = 'https://calendly.com/business-blnk/30min';
+
 export function mailto(subject?: string): string {
   return subject ? `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}` : `mailto:${EMAIL}`;
 }

@@ -159,7 +159,7 @@ export const cases: { head: SectionCopy; items: readonly CaseStudy[] } = {
       creator: 'NovaPovie',
       // From andaseat.com: a white logo on charcoal, with their orange accent.
       brandColors: { bg: '#202223', fg: '#ffffff', accent: '#ff4200', dark: true },
-      coverImage: { source: require('../../assets/creators/novapovie-cover.jpg'), style: 'photo', focus: 45 },
+      coverImage: { source: require('../../assets/creators/novapovie.jpg'), style: 'photo', focus: 25 },
       rows: [
         ['FORMAT', 'YOUTUBE'],
         ['REACH', 'TBD'],

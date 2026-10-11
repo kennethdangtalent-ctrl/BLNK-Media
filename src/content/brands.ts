@@ -1,5 +1,6 @@
 /* The For Brands page: the one link to send a business. Not in the main nav. */
 import { contactHref } from './contact';
+import { CALL_URL } from './site';
 
 export const brandsHero = {
   kicker: 'For brands · Nº 001',
@@ -10,6 +11,7 @@ export const brandsHero = {
     'BLNK is five Twitch-first creators and the team behind them. Bring us a launch and we’ll put it in front of their audiences, or run your socials and content ourselves. Most brands do both.',
   primary: { label: 'WORK WITH US →', href: contactHref('brief') },
   secondary: { label: 'GET THE MEDIA KIT', href: contactHref('media-kit') },
+  call: { label: 'BOOK A 30-MIN CALL ↗', href: CALL_URL },
 } as const;
 
 /** The first way in: the roster. The creator tiles come from the home cover's photos and the roster's stats. */
@@ -62,4 +64,5 @@ export const brandsClose = {
   body: 'Tell us what you’re working on. We reply within one business day.',
   primary: { label: 'WORK WITH US →', href: contactHref('brief') },
   secondary: { label: 'SEE CASE STUDIES', href: '/business?s=cases' },
+  call: { label: 'BOOK A 30-MIN CALL ↗', href: CALL_URL },
 } as const;

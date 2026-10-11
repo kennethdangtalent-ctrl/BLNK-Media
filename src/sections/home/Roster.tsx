@@ -28,11 +28,14 @@ function spreadFor(L: Layout): Spread {
   return { stacked: false, photoW, gap, textW: L.inner - photoW - gap };
 }
 
-/** The full-size portrait shot for the cover, when there is one; the roster's own picture otherwise. */
+/**
+ * The roster's own full-size photo when it has one, so the spread doesn't repeat the cover; the
+ * cover's portrait shot when the roster only has a small print.
+ */
 function portraitFor(creator: Creator): { photo: number; focus?: number } | null {
+  if (creator.photo && creator.photoStyle !== 'print') return { photo: creator.photo, focus: creator.photoFocus };
   const shot = cover.card.slides.find((s) => s.name.toLowerCase() === creator.name.toLowerCase());
   if (shot) return { photo: shot.photo, focus: shot.photoFocus };
-  if (creator.photo && creator.photoStyle !== 'print') return { photo: creator.photo, focus: creator.photoFocus };
   return null;
 }
 
