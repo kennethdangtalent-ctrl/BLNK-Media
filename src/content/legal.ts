@@ -1,6 +1,6 @@
 /*
  * Privacy policy, terms of service and the cookie notice. Written for the site as built:
- * no accounts, no analytics, no cookies; one roster application form, delivered to our inbox.
+ * no accounts, no analytics, no cookies; two forms (roster applications, brand requests), delivered to our inbox.
  * If tracking or a newsletter is ever added, update the privacy policy first.
  */
 import { EMAIL } from './site';
@@ -21,7 +21,7 @@ export const privacy: LegalDoc = {
   title: 'Privacy policy.',
   updated: LEGAL_UPDATED,
   intro:
-    "The short version: we don't use tracking cookies, we don't run analytics, and we don't sell your information. The only personal information we get is what you choose to send us, by email or through our application form.",
+    "The short version: we don't use tracking cookies, we don't run analytics, and we don't sell your information. The only personal information we get is what you choose to send us, by email or through the forms on this site.",
   sections: [
     {
       heading: 'Who we are',
@@ -32,9 +32,9 @@ export const privacy: LegalDoc = {
     {
       heading: 'What we collect',
       body: [
-        'Information you send us. If you apply to the roster through our application form, or email us to apply or to start a brief, we receive what you include: your name, email address, social links, a clip link, your streaming schedule, and anything else you choose to share.',
+        'Information you send us. If you apply to the roster through our application form, or email us to apply or to start a brief, we receive what you include: your name, email address, social links, a clip link, your streaming schedule, and anything else you choose to share. If you contact us as a brand through our contact form, we receive your name, work email, company, website, and the details of your request.',
         'Technical information. Like any website, our hosting provider automatically records basic request data, such as IP address, browser type and the pages requested, to keep the site running and secure.',
-        "Our application form sends what you enter to our email inbox through a form-delivery service. We don't have accounts, newsletters or payment pages on this site.",
+        "Our application and contact forms send what you enter to our email inbox through a form-delivery service. We don't have accounts, newsletters or payment pages on this site.",
       ],
     },
     {

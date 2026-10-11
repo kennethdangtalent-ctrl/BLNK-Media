@@ -9,6 +9,14 @@ export const DOMAIN_URL = 'https://BLNK.name';
 
 export const ISSUE = { no: 'Nº 001', date: 'SEP 2026', domain: 'BLNK.NAME' } as const;
 
+/**
+ * Where the site's forms (roster applications, brand requests) post: FormSubmit's AJAX endpoint,
+ * which emails each submission to `EMAIL`. The very first submission makes FormSubmit send a
+ * one-time activation email to that inbox; once the link in it is clicked, submissions arrive as
+ * emails. Set this to '' to fall back to opening the sender's email app with everything filled in.
+ */
+export const FORM_ENDPOINT = `https://formsubmit.co/ajax/${EMAIL}`;
+
 export function mailto(subject?: string): string {
   return subject ? `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}` : `mailto:${EMAIL}`;
 }
@@ -42,6 +50,11 @@ export const meta = {
     description: 'Apply to join the BLNK Media roster. Tell us who you are, link your Twitch and one clip that shows what you make. We read every application.',
     path: '/apply',
   },
+  contact: {
+    title: 'BLNK Media — Work with us',
+    description: 'Brands and sponsors: start a brief, request the media kit, creator one-sheets or a full case study. We reply within 1 business day.',
+    path: '/contact',
+  },
   services: {
     title: 'BLNK Media — Services',
     description: 'What BLNK does for brands (sponsored streams, short- and long-form, campaigns) and for the creators it signs (brand deals, growth, the business side).',
@@ -60,6 +73,7 @@ export const masthead = {
   mission: { issue: 'Nº 001 — THE MISSION', badge: 'APPLICATIONS OPEN' },
   services: { issue: 'Nº 001 — THE SERVICES', badge: 'NOW BOOKING' },
   apply: { issue: 'Nº 002 — CASTING NOW', badge: 'APPLICATIONS OPEN' },
+  contact: { issue: 'Nº 001 — THE BRAND DESK', badge: 'NOW BOOKING' },
 } as const;
 
 export const footer = {
@@ -71,6 +85,7 @@ export const footer = {
     legal: 'Questions about these pages? Email business@BLNK.name.',
     services: 'Every project is scoped to you. We reply within 1 business day.',
     apply: 'We read every application ourselves.',
+    contact: 'Every request is read by a person. We reply within 1 business day.',
     case: 'Campaign results are added when each campaign wraps.',
   },
   legal: [

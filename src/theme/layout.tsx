@@ -63,7 +63,7 @@ const noSubscription = () => () => {};
  * (false), so the first client render uses the board width and matches the server markup,
  * then re-renders once with the client snapshot (true). Native has no server render.
  */
-function useHydrated(): boolean {
+export function useHydrated(): boolean {
   return useSyncExternalStore(
     noSubscription,
     () => true,

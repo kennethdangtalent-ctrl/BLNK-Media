@@ -12,7 +12,7 @@ import { useLayout } from '@/theme/layout';
 import { ToneProvider } from '@/theme/tone';
 import { color } from '@/theme/tokens';
 
-type Current = 'home' | 'business' | 'mission' | 'services' | 'apply' | 'other';
+type Current = 'home' | 'business' | 'mission' | 'services' | 'apply' | 'contact' | 'other';
 
 /** Nav items in order. `section` items are bands on Issue 001; `route` items are pages of their own. */
 const NAV = [
@@ -20,6 +20,7 @@ const NAV = [
   { kind: 'route', id: 'mission', label: 'MISSION', href: '/mission' },
   { kind: 'route', id: 'business', label: 'BUSINESS', href: '/business' },
   { kind: 'route', id: 'services', label: 'SERVICES', href: '/services' },
+  { kind: 'route', id: 'contact', label: 'CONTACT', href: '/contact' },
   { kind: 'route', id: 'apply', label: 'APPLY', href: '/apply' },
 ] as const;
 
@@ -31,7 +32,10 @@ export function Masthead({ current }: { current: Current }) {
   const L = useLayout();
   const sections = useSections();
   const onHome = current === 'home';
-  const copy = current === 'business' || current === 'mission' || current === 'services' || current === 'apply' ? masthead[current] : masthead.home;
+  const copy =
+    current === 'business' || current === 'mission' || current === 'services' || current === 'apply' || current === 'contact'
+      ? masthead[current]
+      : masthead.home;
 
   const stay = (action: () => void) => (event: GestureResponderEvent) => {
     event.preventDefault();
@@ -58,31 +62,37 @@ export function Masthead({ current }: { current: Current }) {
   );
 
   const nav = (
-    <View
-      role="navigation"
-      aria-label="Sections"
-      style={[styles.nav, L.isPhone ? styles.navSpread : { columnGap: L.isDesktop ? 40 : 32 }]}>
-      {NAV.map((item) =>
-        item.kind === 'section' ? (
-          <NavLink
-            size={L.isPhone ? 12 : 14}
-            key={item.id}
-            label={item.label}
-            href={`/?s=${item.id}`}
-            dismissTo={!onHome}
-            onPress={onHome ? stay(() => sections?.scrollTo(item.id)) : undefined}
-          />
+    <View role="navigation" aria-label="Sections" style={[styles.nav, L.isPhone ? styles.navSpread : { columnGap: L.isDesktop ? 40 : 32 }]}>
+      {NAV.map((item, i) => {
+        const link =
+          item.kind === 'section' ? (
+            <NavLink
+              size={L.isPhone ? 12 : 14}
+              key={item.id}
+              label={item.label}
+              href={`/?s=${item.id}`}
+              dismissTo={!onHome}
+              onPress={onHome ? stay(() => sections?.scrollTo(item.id)) : undefined}
+            />
+          ) : (
+            <NavLink
+              size={L.isPhone ? 12 : 14}
+              key={item.id}
+              label={item.label}
+              href={item.href}
+              current={current === item.id}
+              onPress={current === item.id ? stay(() => sections?.scrollToTop()) : undefined}
+            />
+          );
+        // Six links don't fit one phone row, so there they sit in two rows of three, edges aligned.
+        return L.isPhone ? (
+          <View key={item.id} style={[styles.navCell, { alignItems: PHONE_ALIGN[i % 3] }]}>
+            {link}
+          </View>
         ) : (
-          <NavLink
-            size={L.isPhone ? 12 : 14}
-            key={item.id}
-            label={item.label}
-            href={item.href}
-            current={current === item.id}
-            onPress={current === item.id ? stay(() => sections?.scrollToTop()) : undefined}
-          />
-        ),
-      )}
+          link
+        );
+      })}
     </View>
   );
 
@@ -123,13 +133,16 @@ export function Masthead({ current }: { current: Current }) {
   );
 }
 
+const PHONE_ALIGN = ['flex-start', 'center', 'flex-end'] as const;
+
 const styles = StyleSheet.create({
   bar: { backgroundColor: color.stock },
   rowDesktop: { height: 84, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 24 },
   rowTop: { height: 72, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 16 },
-  rowNav: { height: 48, justifyContent: 'center', borderTopWidth: 2, borderColor: color.ink, borderStyle: 'dashed' },
+  rowNav: { minHeight: 48, paddingVertical: 12, justifyContent: 'center', borderTopWidth: 2, borderColor: color.ink, borderStyle: 'dashed' },
   logo: { flexDirection: 'row', alignItems: 'flex-end', gap: 10 },
   nav: { flexDirection: 'row', alignItems: 'center' },
-  navSpread: { justifyContent: 'space-between' },
+  navSpread: { flexWrap: 'wrap', rowGap: 10 },
+  navCell: { width: '33.333%' },
   meta: { flexDirection: 'row', alignItems: 'center', gap: 20 },
 });

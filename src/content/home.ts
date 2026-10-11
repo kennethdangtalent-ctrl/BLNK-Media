@@ -1,5 +1,4 @@
 /* Issue 001 copy, verbatim from the "BLNK.name — Desktop" board. Bracketed text is a placeholder the board ships with. */
-import { mailto } from './site';
 import type { IconName } from '@/components/Icons';
 import type { PhotoSubject } from '@/components/PhotoSlot';
 
@@ -47,7 +46,7 @@ export const cover: {
   title: 'We sign the\ncreators\nbefore the\nalgorithm\ndoes.',
   lede: 'Five creators, one team behind every one of them.',
   cta: { label: 'APPLY TO THE ROSTER →', href: '/apply' },
-  brands: { label: 'Brands & sponsors → business@BLNK.name', href: mailto() },
+  brands: { label: 'Brands & sponsors → work with us', href: '/contact' },
   card: {
     meta: ['Nº 001', 'SEP 2026', 'BLNK.NAME'],
     slides: [

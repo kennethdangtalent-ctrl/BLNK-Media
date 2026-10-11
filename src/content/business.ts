@@ -2,13 +2,13 @@
 import type { ImageSourcePropType } from 'react-native';
 
 import type { SectionCopy } from './home';
-import { mailto } from './site';
+import { contactHref } from './contact';
 
 export const bizHero = {
   eyebrow: '04 — THE BUSINESS PAGES',
   title: 'Put your brand\non the cover.',
   lede: 'Clients, sponsors, case studies, decks and services. Everything a brand team needs to say yes, on one page.',
-  cta: { label: 'START A BRIEF →', href: mailto('BLNK Brand Brief') },
+  cta: { label: 'START A BRIEF →', href: contactHref('brief') },
   back: { label: '← Back to Issue 001', href: '/' },
   kit: {
     title: 'Media kit',
@@ -141,7 +141,7 @@ export const cases: { head: SectionCopy; items: readonly CaseStudy[] } = {
         ['REACH', 'TBD'],
         ['RESULT', 'TBD'],
       ],
-      cta: { label: 'REQUEST THE FULL CASE →', href: mailto('BLNK Case Study 01') },
+      cta: { label: 'REQUEST THE FULL CASE →', href: contactHref('case-gfuel') },
     },
     {
       slug: 'razer',
@@ -154,7 +154,7 @@ export const cases: { head: SectionCopy; items: readonly CaseStudy[] } = {
         ['REACH', 'TBD'],
         ['RESULT', 'TBD'],
       ],
-      cta: { label: 'REQUEST THE FULL CASE →', href: mailto('BLNK Case Study 02') },
+      cta: { label: 'REQUEST THE FULL CASE →', href: contactHref('case-razer') },
     },
     {
       slug: 'anadaseat',
@@ -167,7 +167,7 @@ export const cases: { head: SectionCopy; items: readonly CaseStudy[] } = {
         ['REACH', 'TBD'],
         ['RESULT', 'TBD'],
       ],
-      cta: { label: 'REQUEST THE FULL CASE →', href: mailto('BLNK Case Study 03') },
+      cta: { label: 'REQUEST THE FULL CASE →', href: contactHref('case-anadaseat') },
     },
   ],
 };
@@ -194,7 +194,7 @@ export const decks: { head: SectionCopy; items: readonly Deck[] } = {
       body: 'Roster, reach, formats and rates. The one deck to send a brand team first.',
       coverLabel: '[DECK COVER]',
       cover: require('../../assets/decks/media-kit.jpg'),
-      cta: { label: 'REQUEST THE DECK →', href: mailto('BLNK Media Kit request') },
+      cta: { label: 'REQUEST THE DECK →', href: contactHref('media-kit') },
     },
     {
       label: 'DECK 02',
@@ -202,7 +202,7 @@ export const decks: { head: SectionCopy; items: readonly Deck[] } = {
       body: 'One page per creator: audience, schedule, past sponsors, three clips. NovaPovie, fumibean, m0rals_, jackypoowoo, cloyyd.',
       coverLabel: '[DECK COVER]',
       cover: require('../../assets/decks/creator-one-sheets.jpg'),
-      cta: { label: 'REQUEST THE ONE-SHEETS →', href: mailto('BLNK Creator one-sheets request') },
+      cta: { label: 'REQUEST THE ONE-SHEETS →', href: contactHref('one-sheets') },
     },
     {
       label: 'DECK 03',
@@ -210,7 +210,7 @@ export const decks: { head: SectionCopy; items: readonly Deck[] } = {
       body: "The shape of a BLNK proposal, brief to report — so your team knows what they're signing before the first call.",
       coverLabel: '[DECK COVER]',
       cover: require('../../assets/decks/campaign-proposal.jpg'),
-      cta: { label: 'REQUEST AN EXAMPLE →', href: mailto('BLNK Proposal example request') },
+      cta: { label: 'REQUEST AN EXAMPLE →', href: contactHref('proposal') },
     },
   ],
 };
@@ -258,6 +258,6 @@ export const brief = {
   eyebrow: 'BOOKING',
   title: 'Start\na brief.',
   body: 'Send the product, a budget range, and the creator you have in mind. We reply within 1 business day.',
-  primary: { label: 'BUSINESS@BLNK.NAME →', href: mailto('BLNK Brand Brief') },
+  primary: { label: 'START A BRIEF →', href: contactHref('brief') },
   secondary: { label: 'BACK TO ISSUE 001', href: '/' },
 } as const;

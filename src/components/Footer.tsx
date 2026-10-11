@@ -10,7 +10,7 @@ import { DOMAIN_URL, ISSUE, footer, mailto } from '@/content/site';
 import { useLayout } from '@/theme/layout';
 import { color } from '@/theme/tokens';
 
-export function Footer({ variant }: { variant: 'home' | 'business' | 'mission' | 'services' | 'apply' | 'legal' | 'case' }) {
+export function Footer({ variant }: { variant: 'home' | 'business' | 'mission' | 'services' | 'apply' | 'contact' | 'legal' | 'case' }) {
   const L = useLayout();
   const sections = useSections();
   const stacked = L.isPhone;
