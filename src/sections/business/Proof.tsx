@@ -21,41 +21,52 @@ const STICKER_TILTS = [-6, 4, -3, 7];
 /**
  * Who we work with, pasted up like a magazine page: each partner (the companies BLNK works with
  * directly) on a taped paper clipping, then the brands BLNK's creators have been sponsored by as
- * die-cut stickers slapped on at angles.
+ * die-cut stickers slapped on at angles. `compact` (the For Brands page) keeps only the stickers,
+ * under their own heading, so that page and Our Work don't repeat each other.
  */
-export function Proof() {
+export function Proof({ compact = false }: { compact?: boolean }) {
   const L = useLayout();
   const tone = useTone();
   const sticker = L.isPhone ? 112 : 136;
   return (
     <Band tone="stock" id="clients" label="Who we work with">
       <View style={{ gap: L.fl(72, 48) }}>
-        <Display level={2} size={fitWords(proof.title, L.inner, L.fl(80, 44), -0.03)} lh={1.05} upper={false}>
-          <Accented text={proof.title} word={proof.accent} />
-        </Display>
-
-        <View style={{ gap: L.fl(36, 24) }}>
-          <View style={{ gap: 8 }}>
-            <Display level={3} size={L.fl(34, 26)} lh={1} upper={false}>
-              {proof.partners.title}
-            </Display>
-            <Copy size={L.fl(17, 15)} color={tone.mute}>
-              {proof.partners.dek}
-            </Copy>
-          </View>
-          <Grid cols={L.isPhone ? 1 : 2} gap={L.fl(48, 24)} rowGap={36}>
-            {clients.items.map((client, i) => (
-              <Clipping key={client.name} tilt={CLIP_TILTS[i % CLIP_TILTS.length]} pad={L.fl(28, 20)}>
-                <Partner client={client} />
-              </Clipping>
-            ))}
-          </Grid>
-        </View>
-
-        <View style={{ gap: L.fl(36, 24) }}>
-          <Display level={3} size={L.fl(34, 26)} lh={1} upper={false}>
-            {proof.brands.title}
+        {compact ? null : (
+          <Display level={2} size={fitWords(proof.title, L.inner, L.fl(80, 44), -0.03)} lh={1.05} upper={false}>
+            <Accented text={proof.title} word={proof.accent} />
           </Display>
+        )}
+
+        {compact ? null : (
+          <View style={{ gap: L.fl(36, 24) }}>
+            <View style={{ gap: 8 }}>
+              <Display level={3} size={L.fl(34, 26)} lh={1} upper={false}>
+                {proof.partners.title}
+              </Display>
+              <Copy size={L.fl(17, 15)} color={tone.mute}>
+                {proof.partners.dek}
+              </Copy>
+            </View>
+            <Grid cols={L.isPhone ? 1 : 2} gap={L.fl(48, 24)} rowGap={36}>
+              {clients.items.map((client, i) => (
+                <Clipping key={client.name} tilt={CLIP_TILTS[i % CLIP_TILTS.length]} pad={L.fl(28, 20)}>
+                  <Partner client={client} />
+                </Clipping>
+              ))}
+            </Grid>
+          </View>
+        )}
+
+        <View style={{ gap: L.fl(36, 24) }}>
+          {compact ? (
+            <Display level={2} size={fitWords(proof.brands.title, L.inner, L.fl(56, 34), -0.03)} lh={1.05} upper={false}>
+              {proof.brands.title}
+            </Display>
+          ) : (
+            <Display level={3} size={L.fl(34, 26)} lh={1} upper={false}>
+              {proof.brands.title}
+            </Display>
+          )}
           <View style={[styles.stickers, { gap: L.fl(40, 20) }]}>
             {sponsors.items.map((brand, i) => (
               <View key={brand.name} style={styles.stickerCell}>

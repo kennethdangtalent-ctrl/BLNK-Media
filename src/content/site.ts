@@ -23,15 +23,13 @@ export function mailto(subject?: string): string {
 
 export const meta = {
   home: {
-    title: 'BLNK Media — Issue 001',
-    description:
-      'BLNK Media is a creator management house, Twitch first. Five creators, one roster, no tiers. Applications for Issue 002 are open.',
+    title: 'BLNK Media — Twitch-first creator management',
+    description: 'BLNK Media is a creator management house, Twitch first. Five creators, one roster, no tiers. Applications for Issue 002 are open.',
     path: '/',
   },
   business: {
-    title: 'BLNK Media — Business',
-    description:
-      'Clients, sponsors, case studies, decks and services. Everything a brand team needs to say yes to a BLNK campaign, on one page.',
+    title: 'BLNK Media — Our work',
+    description: 'Clients, sponsors, case studies, decks and services. Everything a brand team needs to say yes to a BLNK campaign, on one page.',
     path: '/business',
   },
   mission: {
@@ -50,6 +48,12 @@ export const meta = {
     description: 'Apply to join the BLNK Media roster. Tell us who you are, link your Twitch and one clip that shows what you make. We read every application.',
     path: '/apply',
   },
+  brands: {
+    title: 'BLNK Media — For brands',
+    description:
+      'Work with BLNK Media: sponsored streams and content with our five Twitch-first creators, plus social media and campaigns run by the BLNK team.',
+    path: '/brands',
+  },
   contact: {
     title: 'BLNK Media — Work with us',
     description: 'Brands and sponsors: start a brief, request the media kit, creator one-sheets or a full case study. We reply within 1 business day.',
@@ -57,7 +61,8 @@ export const meta = {
   },
   services: {
     title: 'BLNK Media — Services',
-    description: 'What BLNK does for brands (sponsored streams, short- and long-form, campaigns) and for the creators it signs (brand deals, growth, the business side).',
+    description:
+      'What BLNK does for brands (sponsored streams, short- and long-form, campaigns) and for the creators it signs (brand deals, growth, the business side).',
     path: '/services',
   },
   terms: {
@@ -69,11 +74,12 @@ export const meta = {
 
 export const masthead = {
   home: { issue: 'Nº 001 — THE CREATOR ISSUE', badge: 'APPLICATIONS OPEN' },
-  business: { issue: 'Nº 001 — THE BUSINESS PAGES', badge: 'NOW BOOKING' },
+  business: { issue: 'Nº 001 — OUR WORK', badge: 'NOW BOOKING' },
   mission: { issue: 'Nº 001 — THE MISSION', badge: 'APPLICATIONS OPEN' },
   services: { issue: 'Nº 001 — THE SERVICES', badge: 'NOW BOOKING' },
   apply: { issue: 'Nº 002 — CASTING NOW', badge: 'APPLICATIONS OPEN' },
   contact: { issue: 'Nº 001 — THE BRAND DESK', badge: 'NOW BOOKING' },
+  brands: { issue: 'Nº 001 — FOR BRANDS', badge: 'NOW BOOKING' },
 } as const;
 
 export const footer = {
@@ -85,6 +91,7 @@ export const footer = {
     legal: 'Questions about these pages? Email business@BLNK.name.',
     services: 'Every project is scoped to you. We reply within 1 business day.',
     apply: 'We read every application ourselves.',
+    brands: 'Follower counts from public trackers, September 2026.',
     contact: 'Every request is read by a person. We reply within 1 business day.',
     case: 'Campaign results are added when each campaign wraps.',
   },
@@ -94,3 +101,28 @@ export const footer = {
     { label: 'COOKIES', href: '/privacy#cookies' },
   ],
 } as const;
+
+/** Every page a reader can turn to, for the "Continued on" links and the footer's contents. */
+export const pages = {
+  home: { no: '01', title: 'Home', line: 'Meet the five creators on the roster.', href: '/' },
+  brands: { no: '02', title: 'For brands', line: 'Work with our creators, and with us.', href: '/brands' },
+  business: { no: '03', title: 'Our work', line: 'Who we work with, case studies and media decks.', href: '/business' },
+  services: { no: '04', title: 'Services', line: 'Everything we do for brands and for creators.', href: '/services' },
+  mission: { no: '05', title: 'The mission', line: 'Why BLNK exists, and what we look for.', href: '/mission' },
+  contact: { no: '06', title: 'Contact', line: 'Start a brief or ask for a deck.', href: '/contact' },
+  apply: { no: '07', title: 'Apply', line: 'Join the roster for Issue 002.', href: '/apply' },
+} as const;
+
+export type PageId = keyof typeof pages;
+
+/** Where each page sends the reader next, in the order the cards appear. */
+export const continueTo: Record<PageId | 'case', readonly PageId[]> = {
+  home: ['brands', 'mission', 'business'],
+  brands: ['business', 'services', 'contact'],
+  business: ['brands', 'services', 'contact'],
+  services: ['brands', 'business', 'contact'],
+  mission: ['home', 'apply', 'brands'],
+  contact: ['business', 'services', 'brands'],
+  apply: ['mission', 'home', 'services'],
+  case: ['business', 'brands', 'contact'],
+};

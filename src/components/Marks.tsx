@@ -1,6 +1,8 @@
 import { Platform, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { Copy } from './Type';
+import { introSeen } from '@/theme/intro';
+import { useHydrated } from '@/theme/layout';
 import { useTone } from '@/theme/tone';
 import { color } from '@/theme/tokens';
 
@@ -18,15 +20,18 @@ export function Stamp({
   label: string;
   tilt?: number;
   tint?: string;
-  /** Web only: slam the stamp down once the intro has played, then pulse a soft red glow. */
+  /** Web only: slam the stamp down once the intro has played (or at once, if it already has), then pulse a soft red glow. */
   pop?: boolean;
   style?: StyleProp<ViewStyle>;
 }) {
   const tone = useTone();
+  const hydrated = useHydrated();
   const ink = tint ?? tone.fg;
+  // After the first page the intro no longer plays, so there is nothing to wait for.
+  const quick = pop && hydrated && introSeen();
   return (
     <View style={[{ transform: [{ rotate: `${tilt}deg` }] }, styles.stampSlot, style]}>
-      <View style={[styles.stamp, { borderColor: ink }, pop && Platform.OS === 'web' ? motion.pop : null]}>
+      <View style={[styles.stamp, { borderColor: ink }, pop && Platform.OS === 'web' ? motion.pop : null, quick ? motion.popQuick : null]}>
         <Copy size={13} weight={600} upper lh={1.1} color={ink}>
           {label}
         </Copy>
@@ -61,6 +66,7 @@ const motion = StyleSheet.create({
     animationIterationCount: '1, infinite',
     animationFillMode: 'both, none',
   } as unknown as ViewStyle,
+  popQuick: { animationDelay: '250ms, 850ms' } as unknown as ViewStyle,
 });
 
 /**

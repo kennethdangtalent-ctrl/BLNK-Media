@@ -6,16 +6,16 @@ import { A, ULink } from './Link';
 import { useSections } from './Page';
 import { Copy } from './Type';
 import { Wordmark } from './Wordmark';
-import { DOMAIN_URL, ISSUE, footer, mailto } from '@/content/site';
+import { ISSUE, footer, mailto, pages, type PageId } from '@/content/site';
 import { useLayout } from '@/theme/layout';
 import { color } from '@/theme/tokens';
 
-export function Footer({ variant }: { variant: 'home' | 'business' | 'mission' | 'services' | 'apply' | 'contact' | 'legal' | 'case' }) {
+export function Footer({ variant }: { variant: 'home' | 'business' | 'mission' | 'services' | 'apply' | 'contact' | 'brands' | 'legal' | 'case' }) {
   const L = useLayout();
   const sections = useSections();
   const stacked = L.isPhone;
   const onHome = variant === 'home';
-  // On Issue 001 the logo scrolls back up instead of reloading the page it is already on.
+  // On the home page the logo scrolls back up instead of reloading the page it is already on.
   const toTop = (event: GestureResponderEvent) => {
     event.preventDefault();
     sections?.scrollToTop();
@@ -30,28 +30,23 @@ export function Footer({ variant }: { variant: 'home' | 'business' | 'mission' |
             <A
               href="/"
               dismissTo={!onHome}
-              accessibilityLabel={onHome ? 'BLNK Media, back to top' : 'BLNK Media, back to Issue 001'}
+              accessibilityLabel={onHome ? 'BLNK Media, back to top' : 'BLNK Media, home'}
               onPress={onHome ? toTop : undefined}
               style={styles.logo}>
               {({ hovered, pressed }) => <Wordmark size={L.fl(120, 72)} color={color.paper} open={hovered || pressed} />}
             </A>
+            {/* The issue's contents: every page, so the bottom of any page leads anywhere. */}
+            <View role="navigation" aria-label="Contents" style={styles.links}>
+              {(Object.keys(pages) as PageId[]).map((id) => (
+                <ULink key={id} href={pages[id].href} dismissTo={id === 'home'} newTab={false} size={14}>
+                  {pages[id].title.replace(/^The /, '').toUpperCase()}
+                </ULink>
+              ))}
+            </View>
             <View style={styles.links}>
-              <ULink href={DOMAIN_URL} newTab={false} size={14}>
-                BLNK.NAME
-              </ULink>
               <ULink href={mailto()} size={14}>
                 BUSINESS@BLNK.NAME
               </ULink>
-              {variant === 'home' ? null : (
-                <ULink href="/" dismissTo size={14}>
-                  ISSUE 001
-                </ULink>
-              )}
-              {variant === 'business' ? null : (
-                <ULink href="/business" size={14}>
-                  BUSINESS
-                </ULink>
-              )}
             </View>
           </View>
           <View style={[styles.colophon, stacked && styles.colophonStacked]}>

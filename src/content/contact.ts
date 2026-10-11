@@ -13,7 +13,7 @@ export const topics = [
   { id: 'proposal', label: 'Campaign proposal example' },
   { id: 'case-gfuel', label: 'Case study: GFuel' },
   { id: 'case-razer', label: 'Case study: Razer' },
-  { id: 'case-anadaseat', label: 'Case study: AnadaSeat' },
+  { id: 'case-andaseat', label: 'Case study: Anda Seat' },
   { id: 'other', label: 'Something else' },
 ] as const;
 

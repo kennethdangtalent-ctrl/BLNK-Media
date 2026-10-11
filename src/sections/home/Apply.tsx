@@ -34,12 +34,12 @@ export function Apply() {
           <Grid cols={L.isPhone ? 2 : 4} gap={L.fl(32, 16)} rowGap={24}>
             {apply.send.map((item, i) => (
               <View key={item} style={styles.item}>
-                <Copy size={12} weight={600} ls={0.16}>
+                <Copy size={12} weight={600} ls={0.16} color={color.crimson}>
                   {String(i + 1).padStart(2, '0')}
                 </Copy>
-                <Deck size={L.fl(26, 21)} lh={1.15}>
+                <Copy size={L.fl(24, 19)} weight={600} lh={1.2}>
                   {item}
-                </Deck>
+                </Copy>
               </View>
             ))}
           </Grid>

@@ -17,6 +17,30 @@ a { -webkit-tap-highlight-color: transparent; text-underline-offset: 0.18em; tex
 }
 `;
 
+/**
+ * Tells search engines who BLNK Media is: the site's name (Google shows it above the result) and
+ * the organization behind it, so a search for "BLNK Media" lands here.
+ */
+const STRUCTURED_DATA = JSON.stringify([
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'BLNK Media',
+    alternateName: ['BLNK', 'blnk.name'],
+    url: 'https://blnk.name/',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'BLNK Media',
+    alternateName: 'BLNK',
+    url: 'https://blnk.name',
+    logo: 'https://blnk.name/og.png',
+    email: 'business@blnk.name',
+    description: 'BLNK Media is a Twitch-first creator management company: five creators, brand partnerships, social media and content.',
+  },
+]);
+
 /** Web-only document shell. Runs in Node during static rendering, never in the browser. */
 export default function Root({ children }: PropsWithChildren) {
   return (
@@ -30,6 +54,7 @@ export default function Root({ children }: PropsWithChildren) {
         <meta property="og:site_name" content="BLNK Media" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: STRUCTURED_DATA }} />
         <style dangerouslySetInnerHTML={{ __html: GLOBAL_CSS }} />
       </head>
       <body>{children}</body>

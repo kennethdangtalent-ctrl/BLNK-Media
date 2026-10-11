@@ -1,8 +1,9 @@
 import { StyleSheet, View } from 'react-native';
 
 import { Band, Frame } from '@/components/Band';
-import { CaseCover } from '@/components/CaseCover';
+import { CaseCover, coverFor } from '@/components/CaseCover';
 import { Crumple } from '@/components/Crumple';
+import { ContinuedOn } from '@/components/ContinuedOn';
 import { Footer } from '@/components/Footer';
 import { Grid } from '@/components/Grid';
 import { Btn, ULink } from '@/components/Link';
@@ -24,25 +25,39 @@ import { color } from '@/theme/tokens';
  * A case study laid out like a magazine feature: a paper-tone opener with the brand set huge
  * and the cover beside it, the numbers, the creator, then the ask and the next story.
  */
+/** A row is shown once it has a real value; until then the content files hold 'TBD'. */
+const isKnown = ([, value]: readonly [string, string]) => value.trim() !== '' && value !== 'TBD';
+
+function knownFormat(item: CaseStudy) {
+  const row = item.rows.find(([term]) => term === 'FORMAT');
+  return row && isKnown(row) ? row[1] : undefined;
+}
+
+/** The numbers band only appears once there is at least one real figure beyond the format. */
+function hasResults(item: CaseStudy) {
+  return item.rows.some((row) => row[0] !== 'FORMAT' && isKnown(row));
+}
+
 export function CaseStory({ index }: { index: number }) {
   const item = cases.items[index];
   const next = cases.items[(index + 1) % cases.items.length];
   const title = `${item.brand} × ${item.creator}`;
-  const format = item.rows.find(([term]) => term === 'FORMAT')?.[1] ?? 'TBD';
+  const format = knownFormat(item);
   return (
     <>
       <PageHead
         title={`BLNK Media — ${title}`}
-        description={`Case study: ${title}. Format: ${format}. Results are published when the campaign wraps.`}
+        description={`Case study: ${title}.${format ? ` Format: ${format.toLowerCase()}.` : ''} Results are published when the campaign wraps.`}
         path={`/cases/${item.slug}`}
       />
       <Page>
         <Masthead current="other" />
         <Main>
           <Opener item={item} index={index} />
-          <Numbers item={item} />
+          {hasResults(item) ? <Numbers item={item} /> : null}
           <Creator item={item} />
           <Ask item={item} next={next} />
+          <ContinuedOn from="case" />
         </Main>
         <Footer variant="case" />
       </Page>
@@ -56,34 +71,44 @@ function Opener({ item, index }: { item: CaseStudy; index: number }) {
   const coverW = L.isDesktop ? Math.round(340 * L.s) : 240;
   const textW = showCover ? L.inner - coverW - L.fl(64, 32) : L.inner;
   const brandSize = fitWords(item.brand, textW, L.fl(200, 88), -0.01);
+  // The opener takes its cover's color, so clicking a red cover opens onto a red page.
+  const cover = coverFor(item, index);
+  const onPaper = cover.bg === color.paper;
+  const fg = cover.fg;
+  const brandColor = cover.mast;
+  const creatorColor = onPaper ? color.ink : fg;
   return (
-    <ToneProvider tone="stock">
-      <View role="region" aria-label="Cover story" style={[styles.opener, { backgroundColor: color.stock }]}>
-        <Crumple />
+    <ToneProvider tone={cover.tone}>
+      <View role="region" aria-label="Cover story" style={[styles.opener, { backgroundColor: cover.bg }]}>
+        {onPaper ? <Crumple /> : null}
         <Frame style={{ paddingTop: L.fl(96, 56), paddingBottom: L.fl(96, 56) }}>
           <View style={[styles.openerRow, { gap: L.fl(64, 32) }]}>
             <View style={styles.openerText}>
-              <Display level={1} size={brandSize} lh={0.85} ls={-0.01} color={color.ink}>
+              <Display level={1} size={brandSize} lh={0.85} ls={-0.01} color={brandColor}>
                 {item.brand}
               </Display>
-              <Deck italic size={L.fl(56, 34)} lh={1} color={color.crimson}>
+              <Deck italic size={L.fl(56, 34)} lh={1} color={creatorColor}>
                 × {item.creator}
               </Deck>
               {item.objective ? (
-                <Deck size={L.fl(28, 22)} lh={1.2} maxCh={36} color={color.ink}>
+                <Deck size={L.fl(28, 22)} lh={1.2} maxCh={36} color={fg}>
                   {item.objective}
                 </Deck>
               ) : null}
-              <Stamp label={`${item.label.replace('CASE', 'CASE STUDY')} · RESULTS SOON`} tint={color.ink} />
-
+              {knownFormat(item) ? (
+                <Copy size={13} weight={600} upper color={fg}>
+                  {`Format: ${knownFormat(item)}`}
+                </Copy>
+              ) : null}
+              <Stamp label={`${item.label.replace('CASE', 'CASE STUDY')} · RESULTS SOON`} tint={fg} />
             </View>
             {showCover ? (
               <View style={{ width: coverW }}>
                 <TiltCard rotate={index % 2 === 0 ? 3 : -3}>
-                  <View style={styles.coverFrame}>
+                  <View style={[styles.coverFrame, { borderColor: onPaper ? color.ink : color.paper }]}>
                     <CaseCover
                       item={item}
-                      index={index + 1}
+                      index={index}
                       brandSize={fitWords(item.brand, coverW - 44, 64, -0.01)}
                       pad={18}
                       minHeight={Math.round(coverW * 1.3)}
@@ -106,7 +131,7 @@ function Numbers({ item }: { item: CaseStudy }) {
       <View style={{ gap: L.fl(48, 32) }}>
         <Display level={2} size={L.fl(64, 40)} lh={0.9}>The numbers</Display>
         <Grid cols={L.isPhone ? 1 : 3} gap={L.fl(32, 20)} rowGap={24}>
-          {item.rows.map(([term, value]) => (
+          {item.rows.filter(isKnown).map(([term, value]) => (
             <Stat key={term} term={term} value={value} />
           ))}
         </Grid>

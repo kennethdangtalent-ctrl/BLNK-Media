@@ -1,3 +1,4 @@
+import { ContinuedOn } from '@/components/ContinuedOn';
 import { Footer } from '@/components/Footer';
 import { Main, Page } from '@/components/Page';
 import { PageHead } from '@/components/PageHead';
@@ -14,6 +15,7 @@ export default function Services() {
         <Masthead current="services" />
         <Main>
           <ServiceList />
+          <ContinuedOn from="services" />
         </Main>
         <Footer variant="services" />
       </Page>

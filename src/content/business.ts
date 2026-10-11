@@ -5,21 +5,13 @@ import type { SectionCopy } from './home';
 import { contactHref } from './contact';
 
 export const bizHero = {
-  eyebrow: '04 — THE BUSINESS PAGES',
-  title: 'Put your brand\non the cover.',
-  lede: 'Clients, sponsors, case studies, decks and services. Everything a brand team needs to say yes, on one page.',
+  eyebrow: '04 — OUR WORK',
+  title: 'The work\nso far.',
+  /** The word printed in crimson in the title. */
+  accent: 'work',
+  lede: 'Who we work with, the campaigns we’ve run, and the decks to send your team.',
   cta: { label: 'START A BRIEF →', href: contactHref('brief') },
-  back: { label: '← Back to Issue 001', href: '/' },
-  kit: {
-    title: 'Media kit',
-    issue: 'Nº 001 · SEP 2026',
-    rows: [
-      { label: 'ROSTER', value: '5 CREATORS · ONE ROSTER' },
-      { label: 'REACH', value: '~50K COMBINED TWITCH FOLLOWERS' },
-      { label: 'PLATFORMS', value: 'TWITCH · TIKTOK · YOUTUBE · INSTAGRAM' },
-      { label: 'CONTACT', value: 'BUSINESS@BLNK.NAME' },
-    ],
-  },
+  back: { label: '← Back to home', href: '/' },
 } as const;
 
 export type Client = {
@@ -82,11 +74,6 @@ export const proof = {
 } as const;
 
 /** The brand half of the services, as previewed on the business page. */
-export const brandServices = {
-  title: 'How we work with brands.',
-  link: { label: 'SEE ALL SERVICES →', href: '/services' },
-} as const;
-
 export const sponsors: {
   head: SectionCopy;
   logoLabel: string;
@@ -119,6 +106,11 @@ export type CaseStudy = {
   coverImage?: { source: ImageSourcePropType; style: 'photo' | 'sticker'; focus?: number };
   /** One line on what the brand wanted. Optional: the card leaves the line out until it is known. */
   objective?: string;
+  /**
+   * The brand's own colors for its cover and the top of its case page: `bg` the ground, `fg` the type,
+   * `accent` the BLNK masthead and the brand name. Leave out to use BLNK's colors.
+   */
+  brandColors?: { bg: string; fg: string; accent: string; dark: boolean };
   rows: readonly (readonly [term: string, value: string])[];
   cta: { label: string; href: string };
 };
@@ -135,6 +127,8 @@ export const cases: { head: SectionCopy; items: readonly CaseStudy[] } = {
       label: 'CASE 01',
       brand: 'GFuel',
       creator: 'fumibean',
+      // From the GFuel logo: sky blue with deep purple (white type would be too faint on the blue).
+      brandColors: { bg: '#3cbef2', fg: '#3d0e9a', accent: '#3d0e9a', dark: false },
       coverImage: { source: require('../../assets/creators/fumibean.jpg'), style: 'photo', focus: 30 },
       rows: [
         ['FORMAT', 'TBD'],
@@ -148,6 +142,8 @@ export const cases: { head: SectionCopy; items: readonly CaseStudy[] } = {
       label: 'CASE 02',
       brand: 'Razer',
       creator: 'NovaPovie',
+      // Razer's signature green on black.
+      brandColors: { bg: '#000000', fg: '#ffffff', accent: '#44d62c', dark: true },
       coverImage: { source: require('../../assets/creators/novapovie-cover.jpg'), style: 'photo', focus: 25 },
       rows: [
         ['FORMAT', 'TWITCH · TIKTOK'],
@@ -157,17 +153,19 @@ export const cases: { head: SectionCopy; items: readonly CaseStudy[] } = {
       cta: { label: 'REQUEST THE FULL CASE →', href: contactHref('case-razer') },
     },
     {
-      slug: 'anadaseat',
+      slug: 'andaseat',
       label: 'CASE 03',
-      brand: 'AnadaSeat',
+      brand: 'Anda Seat',
       creator: 'NovaPovie',
+      // From andaseat.com: a white logo on charcoal, with their orange accent.
+      brandColors: { bg: '#202223', fg: '#ffffff', accent: '#ff4200', dark: true },
       coverImage: { source: require('../../assets/creators/novapovie-cover.jpg'), style: 'photo', focus: 45 },
       rows: [
         ['FORMAT', 'YOUTUBE'],
         ['REACH', 'TBD'],
         ['RESULT', 'TBD'],
       ],
-      cta: { label: 'REQUEST THE FULL CASE →', href: contactHref('case-anadaseat') },
+      cta: { label: 'REQUEST THE FULL CASE →', href: contactHref('case-andaseat') },
     },
   ],
 };
@@ -254,10 +252,11 @@ export const services: {
   note: "Every project is scoped to you. Send a brief and we'll reply within 1 business day.",
 };
 
-export const brief = {
-  eyebrow: 'BOOKING',
-  title: 'Start\na brief.',
-  body: 'Send the product, a budget range, and the creator you have in mind. We reply within 1 business day.',
-  primary: { label: 'START A BRIEF →', href: contactHref('brief') },
-  secondary: { label: 'BACK TO ISSUE 001', href: '/' },
+/** The short close at the end of Our Work: one ask, and the way to the pitch. */
+export const workClose = {
+  title: 'Like what you see?',
+  accent: 'see',
+  body: 'Tell us what you’re launching and we’ll put together the creators and the plan.',
+  primary: { label: 'WORK WITH US →', href: contactHref('brief') },
+  secondary: { label: 'What we do for brands →', href: '/brands' },
 } as const;

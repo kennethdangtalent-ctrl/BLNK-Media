@@ -34,6 +34,8 @@ export const cover: {
   eyebrow: string;
   title: string;
   lede: string;
+  /** One plain sentence saying what BLNK is, for a first-time visitor. */
+  about: string;
   cta: { label: string; href: string };
   brands: { label: string; href: string };
   /**
@@ -45,8 +47,9 @@ export const cover: {
   eyebrow: 'A CREATOR MANAGEMENT HOUSE · TWITCH FIRST',
   title: 'We sign the\ncreators\nbefore the\nalgorithm\ndoes.',
   lede: 'Five creators, one team behind every one of them.',
+  about: 'BLNK Media is a Twitch-first creator management company. We sign streamers, grow their channels and connect them with brands.',
   cta: { label: 'APPLY TO THE ROSTER →', href: '/apply' },
-  brands: { label: 'Brands & sponsors → work with us', href: '/contact' },
+  brands: { label: 'Brands & sponsors → work with us', href: '/brands' },
   card: {
     meta: ['Nº 001', 'SEP 2026', 'BLNK.NAME'],
     slides: [

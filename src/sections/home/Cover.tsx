@@ -36,8 +36,8 @@ const STRIPS: readonly { bg: string; fg: string; tilt: number; nudge: number }[]
 const SIDE_BY_SIDE = 900;
 /** Height of the masthead row on desktop, so the cover can fill the rest of the screen. */
 const MASTHEAD_H = 84;
-/** Everything in the text column besides the headline: pitch scrap, call to action and gaps. */
-const FIXED_H = 290;
+/** Everything in the text column besides the headline: pitch scrap, the plain "what BLNK is" line, call to action and gaps. */
+const FIXED_H = 360;
 /** The magazine cover's proportions, width over height. */
 const CARD_RATIO = 0.74;
 /** How much wider and taller the fanned pile is than the issue on top. */
@@ -111,6 +111,12 @@ export function Cover() {
             {/* Tape last, so it lies over the note's corners and onto the page. */}
             <View aria-hidden style={[styles.tape, styles.tapeLeft]} />
             <View aria-hidden style={[styles.tape, styles.tapeRight]} />
+          </Reveal>
+          {/* The headline is the attitude; this line is the plain answer to "what is BLNK?". */}
+          <Reveal index={lines.length} style={{ maxWidth: Math.min(460, textW) }}>
+            <Copy size={wide ? 17 : 16} lh={1.5} color={color.muteOnStock}>
+              {cover.about}
+            </Copy>
           </Reveal>
           <Reveal index={lines.length + 1} style={[styles.ctas, { columnGap: 24, rowGap: 14 }]}>
             <Btn href={cover.cta.href} label={cover.cta.label} />

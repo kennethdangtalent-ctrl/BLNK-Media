@@ -1,6 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
 import { View } from 'react-native';
 
+import { ContinuedOn } from '@/components/ContinuedOn';
 import { Footer } from '@/components/Footer';
 import { FormPage, NumberedPoints } from '@/components/FormPage';
 import { ULink } from '@/components/Link';
@@ -35,6 +36,7 @@ export default function Contact() {
               </NumberedPoints>
             }
           />
+          <ContinuedOn from="contact" />
         </Main>
         <Footer variant="contact" />
       </Page>

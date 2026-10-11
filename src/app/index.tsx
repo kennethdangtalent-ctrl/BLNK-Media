@@ -2,6 +2,7 @@ import { Redirect, useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect } from 'react';
 import { Platform } from 'react-native';
 
+import { ContinuedOn } from '@/components/ContinuedOn';
 import { Footer } from '@/components/Footer';
 import { Main, Page } from '@/components/Page';
 import { PageHead } from '@/components/PageHead';
@@ -36,6 +37,7 @@ export default function IssueOne() {
           <Marquee />
           <Roster />
           <Apply />
+          <ContinuedOn from="home" />
         </Main>
         <Footer variant="home" />
       </Page>

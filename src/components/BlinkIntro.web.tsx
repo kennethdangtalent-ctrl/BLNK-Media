@@ -1,9 +1,9 @@
-import { usePathname } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, View, type ViewStyle } from 'react-native';
 
 import { Copy, Display } from './Type';
 import { BlinkMark } from './Wordmark';
+import { introSeen, markIntroSeen } from '@/theme/intro';
 import { useLayout } from '@/theme/layout';
 import { color } from '@/theme/tokens';
 import { webProps, webStyle } from '@/theme/web';
@@ -22,31 +22,36 @@ const INTRO_MS = 1800;
 
 /**
  * The opening: the logo's eye opens, looks left, looks right, then the view dives into the pupil
- * and comes out on the page. Plays on every page load and every move to another page (keyed by
- * pathname, so a `?s=` scroll on the same page does not replay it). It plays for every visitor, Reduce
- * Motion included, by the owner's choice: it is marked motion-safe so the site's reduced-motion rule
- * leaves it running. A tap skips it.
+ * and comes out on the page. It plays once per visit (per browser tab), on whichever page the
+ * visitor arrives at, so moving around the site afterwards is instant. It plays for every visitor,
+ * Reduce Motion included, by the owner's choice: it is marked motion-safe so the site's
+ * reduced-motion rule leaves it running. A tap skips it.
  */
 export function BlinkIntro() {
   const L = useLayout();
-  const pathname = usePathname();
-  // The page whose intro has finished (or was skipped). A new pathname makes it play again.
-  const [donePath, setDonePath] = useState<string | null>(null);
-  const show = L.hydrated && donePath !== pathname;
+  // Read once, on the client; the server render never shows the intro (it waits for hydration).
+  const [done, setDone] = useState(introSeen);
+  const show = L.hydrated && !done;
+
+  const finish = () => {
+    markIntroSeen();
+    setDone(true);
+  };
 
   useEffect(() => {
     if (!show) return;
-    const timer = setTimeout(() => setDonePath(pathname), INTRO_MS);
+    const timer = setTimeout(() => {
+      markIntroSeen();
+      setDone(true);
+    }, INTRO_MS);
     return () => clearTimeout(timer);
-  }, [show, pathname]);
+  }, [show]);
 
   if (!show) return null;
   return (
-    // Keyed by page, so the CSS animations restart from the first frame on each navigation.
     <Pressable
-      key={pathname}
       accessibilityLabel="Skip intro"
-      onPress={() => setDonePath(pathname)}
+      onPress={finish}
       {...webProps({ dataSet: { motionsafe: 'true' } })}
       style={[styles.screen, fixedFill, motion.screen]}>
       <View style={styles.stack}>

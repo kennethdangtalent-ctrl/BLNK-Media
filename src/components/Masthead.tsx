@@ -12,15 +12,15 @@ import { useLayout } from '@/theme/layout';
 import { ToneProvider } from '@/theme/tone';
 import { color } from '@/theme/tokens';
 
-type Current = 'home' | 'business' | 'mission' | 'services' | 'apply' | 'contact' | 'other';
+type Current = 'home' | 'business' | 'mission' | 'services' | 'apply' | 'contact' | 'brands' | 'other';
 
 /** Nav items in order. `section` items are bands on Issue 001; `route` items are pages of their own. */
 const NAV = [
   { kind: 'section', id: 'roster', label: 'ROSTER' },
   { kind: 'route', id: 'mission', label: 'MISSION', href: '/mission' },
-  { kind: 'route', id: 'business', label: 'BUSINESS', href: '/business' },
+  { kind: 'route', id: 'business', label: 'OUR WORK', href: '/business' },
   { kind: 'route', id: 'services', label: 'SERVICES', href: '/services' },
-  { kind: 'route', id: 'contact', label: 'CONTACT', href: '/contact' },
+  { kind: 'route', id: 'brands', label: 'FOR BRANDS', href: '/brands' },
   { kind: 'route', id: 'apply', label: 'APPLY', href: '/apply' },
 ] as const;
 
@@ -33,7 +33,7 @@ export function Masthead({ current }: { current: Current }) {
   const sections = useSections();
   const onHome = current === 'home';
   const copy =
-    current === 'business' || current === 'mission' || current === 'services' || current === 'apply' || current === 'contact'
+    current === 'business' || current === 'mission' || current === 'services' || current === 'apply' || current === 'contact' || current === 'brands'
       ? masthead[current]
       : masthead.home;
 
@@ -47,7 +47,7 @@ export function Masthead({ current }: { current: Current }) {
     <A
       href="/"
       dismissTo={!onHome}
-      accessibilityLabel={onHome ? 'BLNK Media, back to top' : 'BLNK Media, back to Issue 001'}
+      accessibilityLabel={onHome ? 'BLNK Media, back to top' : 'BLNK Media, home'}
       onPress={onHome ? stay(() => sections?.scrollToTop()) : undefined}
       style={styles.logo}>
       {({ hovered, pressed }) => (
@@ -62,7 +62,7 @@ export function Masthead({ current }: { current: Current }) {
   );
 
   const nav = (
-    <View role="navigation" aria-label="Sections" style={[styles.nav, L.isPhone ? styles.navSpread : { columnGap: L.isDesktop ? 40 : 32 }]}>
+    <View role="navigation" aria-label="Sections" style={[styles.nav, L.isPhone ? styles.navSpread : { columnGap: L.isDesktop && L.width >= 1300 ? 40 : 28 }]}>
       {NAV.map((item, i) => {
         const link =
           item.kind === 'section' ? (
@@ -98,7 +98,7 @@ export function Masthead({ current }: { current: Current }) {
 
   const meta = (
     <View style={styles.meta}>
-      {L.isPhone ? null : (
+      {L.isPhone || (L.isDesktop && L.width < ISSUE_MIN_W) ? null : (
         <Copy size={13} weight={600} upper>
           {copy.issue}
         </Copy>
@@ -132,6 +132,9 @@ export function Masthead({ current }: { current: Current }) {
     </ToneProvider>
   );
 }
+
+/** Below this width the desktop row has no room for the issue line beside the six links and the stamp. */
+const ISSUE_MIN_W = 1440;
 
 const PHONE_ALIGN = ['flex-start', 'center', 'flex-end'] as const;
 

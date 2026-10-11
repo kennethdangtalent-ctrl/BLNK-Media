@@ -33,7 +33,7 @@ export function NotFoundPage() {
               <Deck size={L.fl(30, 21)} lh={1.2} maxCh={40}>
                 The page you asked for was never printed. The current issue is one tap away.
               </Deck>
-              <Btn href="/" label="BACK TO ISSUE 001" shadow="ink" dismissTo />
+              <Btn href="/" label="BACK TO HOME" shadow="ink" dismissTo />
             </View>
           </Band>
         </Main>

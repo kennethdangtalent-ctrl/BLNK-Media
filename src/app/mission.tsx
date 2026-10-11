@@ -1,3 +1,4 @@
+import { ContinuedOn } from '@/components/ContinuedOn';
 import { Footer } from '@/components/Footer';
 import { Main, Page } from '@/components/Page';
 import { PageHead } from '@/components/PageHead';
@@ -20,6 +21,7 @@ export default function Mission() {
           <Chain />
           <Values />
           <Founder />
+          <ContinuedOn from="mission" />
         </Main>
         <Footer variant="mission" />
       </Page>
