@@ -41,3 +41,7 @@ yarn-error.*
 /android
 .vercel
 .env*
+
+# local env files (never commit secrets)
+.env
+.env*.local

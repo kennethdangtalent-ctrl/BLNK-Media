@@ -66,6 +66,8 @@ export function FormPage({ copy, aside, initial }: { copy: FormCopy; aside?: Rea
   const [edited, setEdited] = useState<Record<string, string>>({});
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
   const [status, setStatus] = useState<Status>('idle');
+  // Spam trap: a field people never see. Bots that fill every box fill this too, and FormSubmit drops those.
+  const [honey, setHoney] = useState('');
   const values: Record<string, string> = Object.fromEntries(
     copy.fields.map((f) => [f.key, f.key in edited ? edited[f.key] : hydrated ? (initial?.[f.key] ?? '') : '']),
   );
@@ -107,6 +109,7 @@ export function FormPage({ copy, aside, initial }: { copy: FormCopy; aside?: Rea
           _subject: subject,
           ...(emailKey ? { _replyto: values[emailKey].trim() } : null),
           _template: 'table',
+          _honey: honey,
         }),
       });
       // FormSubmit answers 200 with `success: "false"` when it refuses (e.g. before activation).
@@ -155,6 +158,9 @@ export function FormPage({ copy, aside, initial }: { copy: FormCopy; aside?: Rea
               </View>
             ) : (
               <View role="form" aria-label={copy.form.title} style={{ gap: L.fl(34, 26) }}>
+                <View aria-hidden style={styles.trap}>
+                  <TextInput value={honey} onChangeText={setHoney} tabIndex={-1} autoComplete="off" accessibilityLabel="Leave this empty" />
+                </View>
                 <View style={styles.formHead}>
                   <View style={styles.formHeadRow}>
                     <Display level={2} size={L.fl(30, 24)} lh={1} upper={false}>
@@ -285,6 +291,7 @@ function Field({ field, value, error, onChangeText }: { field: FormField; value:
         placeholderTextColor="#8a8a86"
         multiline={multiline}
         numberOfLines={multiline ? 4 : 1}
+        maxLength={multiline ? 3000 : 300}
         keyboardType={kind === 'email' ? 'email-address' : kind === 'url' ? 'url' : 'default'}
         autoCapitalize={kind ? 'none' : 'sentences'}
         autoComplete={kind === 'email' ? 'email' : undefined}
@@ -362,6 +369,7 @@ function SubmitButton({ label, busy, onPress }: { label: string; busy: boolean; 
 }
 
 const styles = StyleSheet.create({
+  trap: { position: 'absolute', left: -10000, width: 1, height: 1, overflow: 'hidden', opacity: 0 },
   row: { alignItems: 'flex-start' },
   side: { flex: 5, minWidth: 0 },
   formCol: { flex: 6, minWidth: 0 },
